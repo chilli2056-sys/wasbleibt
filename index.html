@@ -368,23 +368,48 @@
   let tiltX = 0;
   document.addEventListener('mousemove', e => { tiltX = (e.clientX / W - 0.5) * 2; });
 
+  let gyroAktiv = false;
   function aktiviereGyro() {
+    if (gyroAktiv) return;
+    gyroAktiv = true;
     window.addEventListener('deviceorientation', e => {
       tiltX = Math.max(-1, Math.min(1, (e.gamma || 0) / 30));
     });
   }
 
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  if (isIOS && typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+  // Feature-Detection statt UA-String: iPadOS 13+ meldet sich als "Macintosh",
+  // maxTouchPoints fängt das ab.
+  const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+  const brauchtFreigabe = typeof DeviceOrientationEvent !== 'undefined'
+    && typeof DeviceOrientationEvent.requestPermission === 'function';
+
+  if (brauchtFreigabe || isTouch) {
+    // iOS: Freigabe per Nutzergeste nötig.
+    // Android: keine Abfrage, aber Button trotzdem zeigen, damit die
+    // Aktivierung zuverlässig per Tap passiert (manche Browser liefern
+    // Sensordaten erst nach einer Nutzergeste).
     gyroBtn.style.display = 'block';
-    gyroBtn.addEventListener('click', () => {
-      DeviceOrientationEvent.requestPermission().then(s => {
-        if (s === 'granted') { aktiviereGyro(); gyroBtn.style.display = 'none'; }
-      });
-    });
-  } else if (!isIOS) {
+  } else {
+    // Desktop: Maus steuert die Neigung bereits.
     aktiviereGyro();
   }
+
+  let freigabeAngefragt = false;
+  function gyroFreigeben(ev) {
+    if (ev) ev.stopPropagation();          // verhindert, dass der Tap das Intro wegzieht
+    if (freigabeAngefragt) return;
+    freigabeAngefragt = true;
+    if (brauchtFreigabe) {
+      DeviceOrientationEvent.requestPermission()
+        .then(s => { if (s === 'granted') aktiviereGyro(); })
+        .catch(() => {});
+    } else {
+      aktiviereGyro();
+    }
+    gyroBtn.style.display = 'none';
+  }
+  gyroBtn.addEventListener('touchstart', ev => ev.stopPropagation(), { passive: true });
+  gyroBtn.addEventListener('click', gyroFreigeben);
 
   // ── ANIMATION ──
   let introGone = false;
