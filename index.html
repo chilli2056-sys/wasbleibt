@@ -379,7 +379,11 @@
   // ── SENSOR ──
   let tiltZiel = 0;   // roher Zielwert (-1..1) von Maus oder Sensor
   let tiltX    = 0;   // geglätteter Wert, der die Bewegung steuert
-  document.addEventListener('mousemove', e => { tiltZiel = (e.clientX / W - 0.5) * 2; });
+  // Maus-Parallax nur auf echten Zeigegeräten – auf Touch-Geräten erzeugt
+  // ein synthetisches mousemove beim Tippen sonst einen falschen Anfangsruck.
+  if (!(('ontouchstart' in window) || navigator.maxTouchPoints > 0)) {
+    document.addEventListener('mousemove', e => { tiltZiel = (e.clientX / W - 0.5) * 2; });
+  }
 
   // Ausschlag der Neigung – skaliert mit der Bildschirmbreite, damit es auf
   // dem Handy spürbar ist. Container bewegen sich stärker als die Wörter (Parallax).
