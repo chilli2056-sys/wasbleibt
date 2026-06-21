@@ -133,6 +133,7 @@ nav a:not(:first-child) {
   top: 0;
   left: 0;
   right: 0;
+  bottom: 0;
   height: calc(100vh - 40px - 48px);
   -webkit-user-select: none;
   user-select: none;
