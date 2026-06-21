@@ -32,11 +32,11 @@ const stations = [
     fakten: ["Hauptnutzungszeit: ca. 1895–heute",
   "Nutzung beendet: nicht beendet",
   "Steinerner Löwenkopf als Relikt der historischen Hafenanlagen an der Schlachte."],
-    foto: "fotos/loewe/loewe.JPG",
+    foto: "fotos/loewe/loewe.jpg",
     fotos: [
-      "fotos/loewe/loewe.JPG",
-      "fotos/loewe/loewe_histo.JPG",
-      "fotos/loewe/loewe_histo2.JPG"
+      "fotos/loewe/loewe.jpg",
+      "fotos/loewe/loewe_histo.jpg",
+      "fotos/loewe/loewe_histo2.jpg"
     ],
     themen: ["Hafenreste"],
     routen: ["fahrradroute"],
@@ -53,11 +53,11 @@ const stations = [
     fakten: ["Hauptnutzungszeit: 1964–2017",
   "Einzige Kellogg's-Produktionsstätte Deutschlands.",
   "Produktion der letzten Schicht am 23.11.2017."],
-    foto: "fotos/Kelloggs/kelloggs3.JPG",
+    foto: "fotos/Kelloggs/kelloggs3.jpg",
     fotos: [
-      "fotos/Kelloggs/kelloggs1.JPG",
-      "fotos/Kelloggs/kelloggs2.JPG",
-      "fotos/Kelloggs/kelloggs3.JPG"
+      "fotos/Kelloggs/kelloggs1.jpg",
+      "fotos/Kelloggs/kelloggs2.jpg",
+      "fotos/Kelloggs/kelloggs3.jpg"
     ],
     themen: ["Arbeitsorte"],
     routen: ["fahrradroute", "einzelort"],
@@ -84,12 +84,12 @@ const stations = [
     adresse: "4P4X+F3",
     fakten: ["Hauptnutzungszeit: seit 1906",
   "Markierte die Einfahrt in die Hafenbecken."],
-    foto: "fotos/molenturm/molenturm1.JPG",
+    foto: "fotos/molenturm/molenturm1.jpg",
     fotos: [
-      "fotos/molenturm/molenturm1.JPG",
-      "fotos/Molenturm/molenturm2.JPG",
-      "fotos/Molenturm/molenturm3.JPG",
-      "fotos/Molenturm/molen_histo.JPG"
+      "fotos/molenturm/molenturm1.jpg",
+      "fotos/Molenturm/molenturm2.jpg",
+      "fotos/Molenturm/molenturm3.jpg",
+      "fotos/Molenturm/molen_histo.jpg"
     ],
     themen: ["Hafenreste"],
     routen: ["fahrradroute"],
@@ -103,8 +103,8 @@ const stations = [
     fakten: [ "Hauptnutzungszeit: ca. 1915–1980er Jahre",
   "Nutzung beendet: Ende 20. Jahrhundert",
   "Diente der Lagerung gekühlter Importwaren.",],
-    foto: "fotos/Kuehlhaus/Kuehlhaus.JPG",
-    fotos: ["fotos/Kuehlhaus/Kuehlhaus.JPG"],
+    foto: "fotos/Kuehlhaus/Kuehlhaus.jpg",
+    fotos: ["fotos/Kuehlhaus/Kuehlhaus.jpg"],
     themen: ["Hafenreste"],
     routen: ["fahrradroute"],
     quellen: [
@@ -134,14 +134,14 @@ const stations = [
   "Nutzung beendet: 1998",
   "Teil des Überseehafens.",
   "Für die Entwicklung der Überseestadt verfüllt."],
-    foto: "fotos/Hafenbecken/Hafenbecken1.JPG",
+    foto: "fotos/Hafenbecken/Hafenbecken1.jpg",
     fotos: [
-      "fotos/Hafenbecken/Hafenbecken1.JPG",
-      "fotos/Hafenbecken/Hafenbecken2.JPG",
-      "fotos/Hafenbecken/Hafenbecken3.JPG",
-      "fotos/Hafenbecken/Hafenbecken4.JPG",
-      "fotos/Hafenbecken/Hafenbecken5.JPG",
-      "fotos/Hafenbecken/Hafenbecken6.JPG"
+      "fotos/Hafenbecken/Hafenbecken1.jpg",
+      "fotos/Hafenbecken/Hafenbecken2.jpg",
+      "fotos/Hafenbecken/Hafenbecken3.jpg",
+      "fotos/Hafenbecken/Hafenbecken4.jpg",
+      "fotos/Hafenbecken/Hafenbecken5.jpg",
+      "fotos/Hafenbecken/Hafenbecken6.jpg"
     ],
     themen: ["Hafenreste"],
     routen: ["fahrradroute"],
@@ -157,8 +157,8 @@ const stations = [
   "1912/13 als Hafenschuppen errichtet.",
   "1942–1944 als Lager für französische Kriegsgefangene und Zwangsarbeiter genutzt.",
   "2024 wurde am Standort ein Gedenkort eröffnet."],
-    foto: "fotos/ulrichsschuppen/ulrich.JPG",
-    fotos: ["fotos/ulrichsschuppen/ulrich.JPG"],
+    foto: "fotos/ulrichsschuppen/ulrich.jpg",
+    fotos: ["fotos/ulrichsschuppen/ulrich.jpg"],
     themen: ["Unterkünfte"],
     routen: ["fahrradroute", "einzelort"],
   },
@@ -171,9 +171,9 @@ const stations = [
     fakten: ["Hauptnutzungszeit: seit Mitte 20. Jahrhundert",
   "Unterkunft für Beschäftigte und Gäste des Hafenbereichs.",
 "heute leerstehend"],
-    foto: "fotos/gaestehaus.JPG",
+    foto: "fotos/gaestehaus.jpg",
     fotos: [
-      "fotos/gaestehaus.JPG"
+      "fotos/gaestehaus.jpg"
     ],
     themen: ["Gebäude", "Unterkünfte", "Zusammenkünfte"],
     routen: ["fahrradroute"],
@@ -187,31 +187,15 @@ const stations = [
     fakten: ["Hauptnutzungszeit: ca. 1888–1998",
   "Nutzung beendet: 1998",
   "Verbanden Hafenanlagen mit dem Bremer Eisenbahnnetz."],
-    foto: "fotos/Gleisespeicher/Gleise2.JPG",
+    foto: "fotos/Gleisespeicher/Gleise2.jpg",
     fotos: [
-      "fotos/Gleisespeicher/Gleise2.JPG",
-      "fotos/Gleisespeicher/Gleise1.JPG"
+      "fotos/Gleisespeicher/Gleise2.jpg",
+      "fotos/Gleisespeicher/Gleise1.jpg"
     ],
     themen: ["gleise"],
     routen: ["fahrradroute"],
   },
-  {
-    id: 11,
-    name: "Atlas Werft",
-    coords: [53.09092176034009, 8.766275630771801],
-    info: "ehemalige Gleise",
-    adresse: "Stephanikirchenweide 19",
-    fakten: ["Hauptnutzungszeit: 1911–1983",
-  "Bedeutende Bremer Schiffswerft.",
-  "Schiffbau und Reparatur für Hochseeschiffe."],
-    foto: "fotos/Werften/Gleise2.JPG",
-    fotos: [
-      "fotos/Werften/Gleise2.JPG",
-      "fotos/Werften/Gleise1.JPG"
-    ],
-    themen: ["Arbeitsorte"],
-    routen: ["fahrradroute"],
-  },
+  
   {
     id: 12,
     name: "Gleis\u00ADsysteme Übersee\u00ADhafen",
@@ -221,11 +205,11 @@ const stations = [
     fakten: ["Hauptnutzungszeit: ca. 1888–1998",
   "Nutzung beendet: größtenteils Ende der 1990er Jahre",
   "Umfangreiches Rangier- und Hafenbahnsystem."],
-    foto: "fotos/Gleisespeicher/Gleisehfk1.JPG",
+    foto: "fotos/Gleisespeicher/Gleisehfk1.jpg",
     fotos: [
-      "fotos/Gleisespeicher/Gleisehfk1.JPG",
-      "fotos/Gleisespeicher/Gleisehfk.JPG",
-       "fotos/Gleisespeicher/speicher_histo.JPG"
+      "fotos/Gleisespeicher/Gleisehfk1.jpg",
+      "fotos/Gleisespeicher/Gleisehfk.jpg",
+       "fotos/Gleisespeicher/speicher_histo.jpg"
     ],
     themen: ["industrie"],
     routen: ["fahrradroute"],
@@ -239,16 +223,16 @@ const stations = [
     fakten: ["Hauptnutzungszeit: ca. 1890–1970",
   "Nutzung beendet: 1970er Jahre",
   "Export und Import von Schlacht- und Nutzvieh."],
-    foto: "fotos/vieh/vieh1.JPG",
+    foto: "fotos/vieh/vieh1.jpg",
     fotos: [
-      "fotos/vieh/vieh1.JPG",
-      "fotos/vieh/vieh2.JPG",
-      "fotos/vieh/vieh3.JPG",
-      "fotos/vieh/vieh4.JPG",
-      "fotos/vieh/vieh5.JPG",
-      "fotos/vieh/vieh_histo.JPG",
-      "fotos/vieh/vieh_histo2.JPG",
-      "fotos/vieh/vieh_histo3.JPG",
+      "fotos/vieh/vieh1.jpg",
+      "fotos/vieh/vieh2.jpg",
+      "fotos/vieh/vieh3.jpg",
+      "fotos/vieh/vieh4.jpg",
+      "fotos/vieh/vieh5.jpg",
+      "fotos/vieh/vieh_histo.jpg",
+      "fotos/vieh/vieh_histo2.jpg",
+      "fotos/vieh/vieh_histo3.jpg",
     ],
     themen: ["Hafenreste"],
     routen: ["fahrradroute"],
@@ -262,11 +246,11 @@ const stations = [
     fakten: ["Hauptnutzungszeit: 1944–1945",
   "Unvollendeter U-Boot-Bunker.",
   "Errichtet durch Zwangsarbeiter im Zweiten Weltkrieg."],
-    foto: "fotos/hornisse/hornisse3.JPG",
+    foto: "fotos/hornisse/hornisse3.jpg",
     fotos: [
-      "fotos/hornisse/hornisse1.JPG",
-      "fotos/hornisse/hornisse2.JPG",
-      "fotos/hornisse/hornisse3.JPG"
+      "fotos/hornisse/hornisse1.jpg",
+      "fotos/hornisse/hornisse2.jpg",
+      "fotos/hornisse/hornisse3.jpg"
     ],
     themen: ["Gebäude"],
     routen: ["fahrradroute"],
@@ -281,9 +265,13 @@ const stations = [
   "Nutzung beendet: 2007",
   "Grenze des zollrechtlichen Freihafengebiets.",
   "Nach Aufhebung des Freihafens weitgehend entfernt."],
-    foto: "fotos/hornisse/hornise3.JPG",
+    foto: "fotos/zoll/zoll1.jpg",
     fotos: [
-      "fotos/zoll/zoll_histo.JPG"
+      
+      "fotos/zoll/zoll1.jpg",
+      "fotos/zoll/zoll2.jpg",
+      "fotos/zoll/zoll3.jpg",
+      "fotos/zoll/zoll_histo.jpg"
     ],
     themen: ["Zoll", "Arbeitsorte"],
     routen: ["fahrradroute"],
@@ -300,13 +288,13 @@ const stations = [
   "Eine der größten Werften Deutschlands.",
   "Bau von Handels- und Kriegsschiffen.",
   "Stilllegung nach der Werftenkrise."],
-    foto: "fotos/agweser/agweser2.JPG",
+    foto: "fotos/agweser/agweser2.jpg",
     fotos: [
-      "fotos/agweser/agweser1.JPG",
-      "fotos/agweser/agweser2.JPG",
-      "fotos/agweser/agweser3.JPG",
-      "fotos/agweser/agweser4.JPG",
-      "fotos/agweser/agweser_histo.JPG"
+      "fotos/agweser/agweser1.jpg",
+      "fotos/agweser/agweser2.jpg",
+      "fotos/agweser/agweser3.jpg",
+      "fotos/agweser/agweser4.jpg",
+      "fotos/agweser/agweser_histo.jpg"
     ],
     themen: ["Arbeitsorte"],
     routen: ["fahrradroute"],
@@ -322,12 +310,12 @@ const stations = [
   "Standort im historischen Hafen- und Überseestadtgebiet Bremens.",
   "Diente der Aus- und Weiterbildung von Beschäftigten der Hafenwirtschaft.",
   "Später als Hafenfachschule bzw. maritimes Weiterbildungszentrum genutzt.",],
-    foto: "fotos/hafenschule/hafenschule1.JPG",
+    foto: "fotos/hafenschule/hafenschule1.jpg",
     fotos: [
-      "fotos/hafenschule/hafenschule1.JPG",
-      "fotos/hafenschule/hafenschule2.JPG",
-      "fotos/hafenschule/hafenschule3.JPG",
-      "fotos/hafenschule/schule_histo.JPG"
+      "fotos/hafenschule/hafenschule1.jpg",
+      "fotos/hafenschule/hafenschule2.jpg",
+      "fotos/hafenschule/hafenschule3.jpg",
+      "fotos/hafenschule/schule_histo.jpg"
     ],
     themen: ["Arbeitsorte", "Zusammenkünfte"],
     routen: ["fahrradroute"],
@@ -344,9 +332,9 @@ const stations = [
   "Eine der größten Werften Deutschlands.",
   "Bau von Handels- und Kriegsschiffen.",
   "Stilllegung nach der Werftenkrise."],
-    foto: "fotos/sexarbeiterinnen/unterstand.JPG",
+    foto: "fotos/sexarbeiterinnen/unterstand.jpg",
     fotos: [
-      "fotos/sexarbeiterinnen/unterstand.JPG",
+      "fotos/sexarbeiterinnen/unterstand.jpg",
     ],
     themen: ["Arbeitsorte", "Zusammenkünfte"],
     routen: ["fahrradroute"],
