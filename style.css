@@ -884,7 +884,6 @@ body:has(#info-panel.open) #archiv-zoom-controls {
   background: white;
   overflow-y: auto;
   overflow-x: hidden;
-  padding-bottom: 64px; /* Platz für die fixe Stations-Leiste (44px) + Footer (20px) */
   transform: translateY(100%);
   transition: transform 0.35s ease;
 }
@@ -1001,18 +1000,13 @@ margin-right: 5px;
   animation: drift-bottom 6s ease-in-out infinite;
 }
 
-/* Fixe Stations-Leiste am unteren Fensterrand – wie der Header, über dem Footer */
+/* Stations-Leiste am Ende des Inhalts – wie der Header */
 #stations-nav {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 20px;                       /* genau über der 20px-Footer-Leiste */
-  height: 44px;
-  z-index: 30;                        /* über dem Scroll-Inhalt & Kommentarfeld */
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 16px;
+  padding: 0 14px;
   background: rgba(74, 39, 234, 0.6); /* wie der Header */
   backdrop-filter: blur(4px);
 }
@@ -1021,19 +1015,19 @@ margin-right: 5px;
   border: none;
   padding: 4px 10px;
   cursor: pointer;
-  color: #4A27EA;
+  color: #ffffff;
   display: flex;
   align-items: center;
 }
 #stations-nav svg path,
 #stations-nav svg polyline {
-  stroke: #4A27EA;
+  stroke: #ffffff;
   stroke-width: var(--icon-stroke);
 }
 
 .name-inner {
   font-family: 'ABC Camera Rounded Unlicensed Trial Black', Helvetica, Arial, sans-serif;
-  font-size: clamp(70px, 7vw, 90px); /* ⬅ DESKTOP-Überschriftgröße hier ändern */
+  font-size: clamp(70px, 7vw, 80px); /* ⬅ DESKTOP-Überschriftgröße hier ändern */
   font-weight: normal;
   line-height: 0.9;
   display: block;
@@ -1376,7 +1370,7 @@ margin-right: 5px;
    ============================================================ */
 
 #kommentar-formular {
-  position: static; /* am Ende des Inhalts – erscheint beim Runterscrollen unter Text & Co. */
+  position: static;          /* am Ende des Inhalts – beim Runterscrollen erreichbar */
   background: #4A27EA; /* außen vollblau */
   border-top: 1px solid #4A27EA;
   padding: 10px max(12px, calc(50% - 31ch));
