@@ -55,7 +55,7 @@ const stations = [
   "Produktion der letzten Schicht am 23.11.2017."],
     foto: "fotos/Kelloggs/kelloggs3.jpg",
     fotos: [
-      "fotos/Kelloggs/kelloggs1.jpg",
+      "fotos/Kelloggs/Kelloggs1.jpg",
       "fotos/Kelloggs/kelloggs2.jpg",
       "fotos/Kelloggs/kelloggs3.jpg"
     ],
@@ -137,7 +137,7 @@ const stations = [
     foto: "fotos/Hafenbecken/Hafenbecken1.jpg",
     fotos: [
       "fotos/Hafenbecken/Hafenbecken1.jpg",
-      "fotos/Hafenbecken/Hafenbecken2.jpg",
+      "fotos/Hafenbecken/hafenbecken2.jpg",
       "fotos/Hafenbecken/Hafenbecken3.jpg",
       "fotos/Hafenbecken/Hafenbecken4.jpg",
       "fotos/Hafenbecken/Hafenbecken5.jpg",
@@ -230,7 +230,7 @@ const stations = [
       "fotos/vieh/vieh3.jpg",
       "fotos/vieh/vieh4.jpg",
       "fotos/vieh/vieh5.jpg",
-      "fotos/vieh/vieh_histo.jpg",
+      "fotos/vieh/Vieh_histo.jpg",
       "fotos/vieh/vieh_histo2.jpg",
       "fotos/vieh/vieh_histo3.jpg",
     ],
