@@ -55,7 +55,7 @@ const stations = [
   "Produktion der letzten Schicht am 23.11.2017."],
     foto: "fotos/Kelloggs/kelloggs3.jpg",
     fotos: [
-      "fotos/Kelloggs/kelloggs1.jpg",
+      "fotos/Kelloggs/Kelloggs1.jpg",
       "fotos/Kelloggs/kelloggs2.jpg",
       "fotos/Kelloggs/kelloggs3.jpg"
     ],
@@ -84,9 +84,9 @@ const stations = [
     adresse: "4P4X+F3",
     fakten: ["Hauptnutzungszeit: seit 1906",
   "Markierte die Einfahrt in die Hafenbecken."],
-    foto: "fotos/molenturm/molenturm1.jpg",
+    foto: "fotos/molenturm/Molenturm1.jpg",
     fotos: [
-      "fotos/molenturm/molenturm1.jpg",
+      "fotos/molenturm/Molenturm1.jpg",
       "fotos/Molenturm/molenturm2.jpg",
       "fotos/Molenturm/molenturm3.jpg",
       "fotos/Molenturm/molen_histo.jpg"
@@ -171,9 +171,9 @@ const stations = [
     fakten: ["Hauptnutzungszeit: seit Mitte 20. Jahrhundert",
   "Unterkunft für Beschäftigte und Gäste des Hafenbereichs.",
 "heute leerstehend"],
-    foto: "fotos/gaestehaus.jpg",
+    foto: "fotos/Gaestehaus.jpg",
     fotos: [
-      "fotos/gaestehaus.jpg"
+      "fotos/Gaestehaus.jpg"
     ],
     themen: ["Gebäude", "Unterkünfte", "Zusammenkünfte"],
     routen: ["fahrradroute"],
