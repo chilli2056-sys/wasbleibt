@@ -55,7 +55,7 @@ const stations = [
   "Produktion der letzten Schicht am 23.11.2017."],
     foto: "fotos/Kelloggs/kelloggs3.jpg",
     fotos: [
-      "fotos/Kelloggs/Kelloggs1.jpg",
+      "fotos/Kelloggs/kelloggs1.jpg",
       "fotos/Kelloggs/kelloggs2.jpg",
       "fotos/Kelloggs/kelloggs3.jpg"
     ],
@@ -84,12 +84,12 @@ const stations = [
     adresse: "4P4X+F3",
     fakten: ["Hauptnutzungszeit: seit 1906",
   "Markierte die Einfahrt in die Hafenbecken."],
-    foto: "fotos/molenturm/Molenturm1.jpg",
+    foto: "fotos/molenturm/molenturm1.jpg",
     fotos: [
-      "fotos/molenturm/Molenturm1.jpg",
-      "fotos/molenturm/Molenturm2.jpg",
-      "fotos/molenturm/Molenturm3.jpg",
-      "fotos/molenturm/molen_histo.jpg"
+      "fotos/molenturm/molenturm1.jpg",
+      "fotos/Molenturm/molenturm2.jpg",
+      "fotos/Molenturm/molenturm3.jpg",
+      "fotos/Molenturm/molen_histo.jpg"
     ],
     themen: ["Hafenreste"],
     routen: ["fahrradroute"],
@@ -137,7 +137,7 @@ const stations = [
     foto: "fotos/Hafenbecken/Hafenbecken1.jpg",
     fotos: [
       "fotos/Hafenbecken/Hafenbecken1.jpg",
-      "fotos/Hafenbecken/hafenbecken2.jpg",
+      "fotos/Hafenbecken/Hafenbecken2.jpg",
       "fotos/Hafenbecken/Hafenbecken3.jpg",
       "fotos/Hafenbecken/Hafenbecken4.jpg",
       "fotos/Hafenbecken/Hafenbecken5.jpg",
@@ -171,9 +171,9 @@ const stations = [
     fakten: ["Hauptnutzungszeit: seit Mitte 20. Jahrhundert",
   "Unterkunft für Beschäftigte und Gäste des Hafenbereichs.",
 "heute leerstehend"],
-    foto: "fotos/Gaestehaus.jpg",
+    foto: "fotos/gaestehaus.jpg",
     fotos: [
-      "fotos/Gaestehaus.jpg"
+      "fotos/gaestehaus.jpg"
     ],
     themen: ["Gebäude", "Unterkünfte", "Zusammenkünfte"],
     routen: ["fahrradroute"],
@@ -230,7 +230,7 @@ const stations = [
       "fotos/vieh/vieh3.jpg",
       "fotos/vieh/vieh4.jpg",
       "fotos/vieh/vieh5.jpg",
-      "fotos/vieh/Vieh_histo.jpg",
+      "fotos/vieh/vieh_histo.jpg",
       "fotos/vieh/vieh_histo2.jpg",
       "fotos/vieh/vieh_histo3.jpg",
     ],
