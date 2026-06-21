@@ -80,7 +80,17 @@ Heute befinden sich das Grundstück und das markante Bauwerk im Besitz der Wirts
   14: ``,
 
   // ehemaliger Zollzaun Bremen
-  15: ``,
+  15: [
+    { intro:   "Ein ehemaliger Zollbeamter erzählt." },
+    { antwort:   "Und ja, dann sind wir Streife gelaufen, nachts sogar zum Teil alleine durch den Hafen am Zaun entlang. Das wäre heute undenkbar." },
+    { frage: "Aber dann auch an den Hafenbecken entlang , oder? " },
+    { antwort:   "Ja, also hoch, runter, quer rüber. Erst gab es den Dienst nach Vorschrift, da wurde vorgeschrieben, wo man hergehen sollte. Und dann gab es auch später nach Ermessen. Da konnte man sich aussuchen, wie man wollte oder wo man kontrolliert." },
+{ frage: "Was war dann so die Hauptware, die geschmuggelt wurde, Drogen oder eher Zigaretten und Alkohol?  " },
+  { antwort: "Die Seeleute, die hatten zum Beispiel Zigaretten aus Ägypten, die kosten da ja nichts. Ja, ja. Aber hier bei uns ja durch die hohe Steuer ja schon. Und die versuchten dann die rauszuschmuggeln oder zu verscheuern, z.B. im Golden City, eine der Hafenkneipen. Die Hafenarbeiter haben das auch versucht, die haben aber auch dann im Raum geraucht oder die Zigaretten in versteuerte Schachteln umgepackt. Das konnte man nicht nachweisen. Und dann gab es auch Diebstahl im Hafen. Es gab ja genug Waren, die damals auch schon aus allen Ländern kamen. Nicht nur Kaffee, Tabak und Baumwolle, was ja hier das Hauptgeschäft war. Auch kleine Sachen aus China. Ich hatte auch mal einen Fall, dass jemand da aus dem Speicher 1hier rauskam, mit einem Karton unter dem Arm. Das wird ja normalerweise im LKW verladen, aber mit einem einzelnen Karton, das war ungewöhnlich. Den haben wir dann beobachtet, der fuhr weg mit dem Fahrrad, glaube ich. Den haben wir dann den Abend festgehalten." },
+  { frage: "Was war da drin?" },
+  { antwort: "Eine Kindernähmaschine. Das wollte er rausschmuggeln, nur die Kindernähmaschine. Wir dachten dann, dass er Kinder hat. Der Mann war ein Hafenarbeiter, dort haben wir dann eine Hausdurchsuchung gemacht, bei ihm und dann auch im Keller. Und dann haben wir im Keller Unmengen an Spielzeug gefunden. In Kartons verpackt. Aus, weiß nicht, Japan war das, glaube ich, viel Kinderspielzeug. Also nicht nur diese Nähmaschine, anderes Spielzeug auch. Und da haben wir ihn dann gefragt warum und er meinte das habe ich für meine Enkelkinder. Da haben wir dann gefragt, wie alt die seien und er meinte Nee, die gibt es noch nicht, aber wenn es mal so weit ist. Dann hat er immer mal wieder ein bisschen was abgeschleppt. Zur Seite geschafft von dem Spielzeug. Das war eine verrückte Nacht." },
+{ antwort: "Ja. Und man versuchte z.B. auch Roh-Kaffee rauszuschmuggeln. Den konnte man zuhause selber rösten. Ja, ja. Rohkaffee-schmuggel wurde viel versucht. Aber im generellen war Hafendiebstahl bei der BLG eigentlich eher selten, weil da war die BLG rigoros. Jemand, der was gestohlen hatte, der wurde gleich entlassen." }
+],
 
   // damals AG-Weser
   16: ``,
