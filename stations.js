@@ -84,7 +84,7 @@ const stations = [
     adresse: "4P4X+F3",
     fakten: ["Hauptnutzungszeit: seit 1906",
   "Markierte die Einfahrt in die Hafenbecken."],
-    foto: "fotos/molenturm/molenturm1.jpg",
+    foto: "fotos/molenturm/Molenturm1.jpg",
     fotos: [
       "fotos/molenturm/Molenturm1.jpg",
       "fotos/molenturm/Molenturm2.jpg",
@@ -171,7 +171,7 @@ const stations = [
     fakten: ["Hauptnutzungszeit: seit Mitte 20. Jahrhundert",
   "Unterkunft für Beschäftigte und Gäste des Hafenbereichs.",
 "heute leerstehend"],
-    foto: "fotos/gaestehaus.jpg",
+    foto: "fotos/Gaestehaus.jpg",
     fotos: [
       "fotos/Gaestehaus.jpg"
     ],
