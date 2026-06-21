@@ -258,12 +258,24 @@
     left: 50%;
     transform: translateX(-50%);
     z-index: 5;
-    background: white;
+    padding: 8px 18px;
     border: 1px solid #4A27EA;
-    padding: 8px 16px;
-    font-family: 'Heming', Helvetica, Arial, sans-serif;
-    font-size: 12px;
+    border-radius: 999px !important;   /* Pill wie die Themen-Chips, überschreibt globale border-radius:0 */
+    background: #4b27ea34;             /* halbtransparentes Lila wie die Chips */
+    color: #4A27EA;
+    font-family: 'ABC Camera Rounded Plain Bold Trial', Helvetica, Arial, sans-serif;
+    font-size: 18px;
+    line-height: 1;
+    text-transform: uppercase;
+    white-space: nowrap;
     cursor: pointer;
+    backdrop-filter: blur(5px);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  #intro-gyro-btn:active {
+    background: #4A27EA;
+    color: white;
   }
 </style>
 
@@ -365,15 +377,22 @@
   }
 
   // ── SENSOR ──
-  let tiltX = 0;
-  document.addEventListener('mousemove', e => { tiltX = (e.clientX / W - 0.5) * 2; });
+  let tiltZiel = 0;   // roher Zielwert (-1..1) von Maus oder Sensor
+  let tiltX    = 0;   // geglätteter Wert, der die Bewegung steuert
+  document.addEventListener('mousemove', e => { tiltZiel = (e.clientX / W - 0.5) * 2; });
+
+  // Ausschlag der Neigung – skaliert mit der Bildschirmbreite, damit es auf
+  // dem Handy spürbar ist. Container bewegen sich stärker als die Wörter (Parallax).
+  const TILT_CONTAINER = Math.max(80, W * 0.28);
+  const TILT_WORT      = Math.max(45, W * 0.15);
 
   let gyroAktiv = false;
   function aktiviereGyro() {
     if (gyroAktiv) return;
     gyroAktiv = true;
     window.addEventListener('deviceorientation', e => {
-      tiltX = Math.max(-1, Math.min(1, (e.gamma || 0) / 30));
+      // gamma = Links-/Rechts-Neigung in Grad; voller Ausschlag schon bei ~25°
+      tiltZiel = Math.max(-1, Math.min(1, (e.gamma || 0) / 25));
     });
   }
 
@@ -420,11 +439,14 @@
     const dt = Math.min(ts - lastTime, 50);
     lastTime = ts;
 
+    // Sensorwert weich nachziehen → flüssige, nicht zappelige Bewegung
+    tiltX += (tiltZiel - tiltX) * 0.10;
+
     containerData.forEach(c => {
       c.y -= c.speed * (dt / 16);
       if (c.y + c.ch < -20) { c.y = H + Math.random() * 80; c.x = Math.random() * (W - c.cw); }
       const wave   = Math.sin(ts * c.dFreq + c.dOff) * c.dAmp;
-      const sensor = tiltX * 18;
+      const sensor = tiltX * TILT_CONTAINER;
       c.el.style.left = (c.x + wave + sensor) + 'px';
       c.el.style.top  = c.y + 'px';
     });
@@ -433,7 +455,7 @@
       w.y -= w.speed * (dt / 16);
       if (w.y < -120) { w.y = H + Math.random() * 60; w.x = Math.random() * W * 0.7; }
       const wave   = Math.sin(ts * w.dFreq + w.dOff) * w.dAmp;
-      const sensor = tiltX * 12;
+      const sensor = tiltX * TILT_WORT;
       w.el.style.left = (w.x + wave + sensor) + 'px';
       w.el.style.top  = w.y + 'px';
     });
