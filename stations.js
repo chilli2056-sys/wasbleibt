@@ -173,7 +173,7 @@ const stations = [
 "heute leerstehend"],
     foto: "fotos/gaestehaus.jpg",
     fotos: [
-      "fotos/gaestehaus.jpg"
+      "fotos/Gaestehaus.jpg"
     ],
     themen: ["Gebäude", "Unterkünfte", "Zusammenkünfte"],
     routen: ["fahrradroute"],
