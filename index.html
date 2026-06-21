@@ -386,6 +386,17 @@
   const TILT_CONTAINER = Math.max(80, W * 0.28);
   const TILT_WORT      = Math.max(45, W * 0.15);
 
+  // ── DIAGNOSE (temporär – kann später raus) ──
+  let dbgMotion = 0, dbgOrient = 0, dbgAx = null, dbgGamma = null;
+  const dbg = document.createElement('div');
+  dbg.id = 'gyro-debug';
+  dbg.style.cssText =
+    'position:fixed;top:8px;left:8px;z-index:6000;background:rgba(255,255,255,.9);' +
+    'color:#4A27EA;font:11px/1.4 monospace;padding:6px 8px;border:1px solid #4A27EA;' +
+    'border-radius:0;pointer-events:none;white-space:pre;';
+  dbg.textContent = 'warte auf Freigabe…';
+  document.body.appendChild(dbg);
+
   let gyroAktiv = false;
   function aktiviereGyro() {
     if (gyroAktiv) return;
@@ -398,7 +409,9 @@
     // Voller Ausschlag bei ~5 (entspricht ca. 30° Kippen).
     window.addEventListener('devicemotion', e => {
       const g = e.accelerationIncludingGravity;
+      dbgMotion++;
       if (!g || g.x == null) return;
+      dbgAx = g.x;
       motionOk = true;
       tiltZiel = Math.max(-1, Math.min(1, -g.x / 5));   // Vorzeichen umdrehen, falls invertiert
     });
@@ -406,6 +419,8 @@
     // Fallback: deviceorientation (gamma). Nur aktiv, solange devicemotion
     // noch keine Daten liefert.
     window.addEventListener('deviceorientation', e => {
+      dbgOrient++;
+      dbgGamma = e.gamma;
       if (motionOk || e.gamma == null) return;
       tiltZiel = Math.max(-1, Math.min(1, e.gamma / 25));
     });
@@ -456,6 +471,12 @@
 
     // Sensorwert weich nachziehen → flüssige, nicht zappelige Bewegung
     tiltX += (tiltZiel - tiltX) * 0.10;
+
+    // Diagnose-Anzeige aktualisieren
+    dbg.textContent =
+      'motion-events: ' + dbgMotion + '   x: ' + (dbgAx == null ? '–' : dbgAx.toFixed(2)) + '\n' +
+      'orient-events: ' + dbgOrient + '   gamma: ' + (dbgGamma == null ? '–' : dbgGamma.toFixed(1)) + '\n' +
+      'tiltZiel: ' + tiltZiel.toFixed(2) + '   tiltX: ' + tiltX.toFixed(2);
 
     containerData.forEach(c => {
       c.y -= c.speed * (dt / 16);
