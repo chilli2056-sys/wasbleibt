@@ -86,10 +86,10 @@ const stations = [
   "Markierte die Einfahrt in die Hafenbecken."],
     foto: "fotos/molenturm/molenturm1.jpg",
     fotos: [
-      "fotos/molenturm/molenturm1.jpg",
-      "fotos/Molenturm/molenturm2.jpg",
-      "fotos/Molenturm/molenturm3.jpg",
-      "fotos/Molenturm/molen_histo.jpg"
+      "fotos/molenturm/Molenturm1.jpg",
+      "fotos/molenturm/Molenturm2.jpg",
+      "fotos/molenturm/Molenturm3.jpg",
+      "fotos/molenturm/molen_histo.jpg"
     ],
     themen: ["Hafenreste"],
     routen: ["fahrradroute"],
