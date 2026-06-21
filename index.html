@@ -104,7 +104,7 @@
       <div id="info-scroll-spacer"></div>
     </div>
 
-    <!-- 3. KOMMENTAR-FORMULAR sticky -->
+    <!-- Kommentar-Formular am Ende des Inhalts -->
     <div id="kommentar-formular">
       <textarea id="kommentar-text" placeholder="Kommentar schreiben…" maxlength="300"></textarea>
       <div id="kommentar-formular-footer">
@@ -114,12 +114,12 @@
       </div>
     </div>
 
-  </div>
+    <!-- Stations-Leiste am Ende des Inhalts -->
+    <div id="stations-nav">
+      <button id="info-prev" type="button" aria-label="Vorherige Station"><svg width="28" height="28" viewBox="0 0 20 20" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><polyline points="12,4 7,10 12,16"/></svg></button>
+      <button id="info-next" type="button" aria-label="Nächste Station"><svg width="28" height="28" viewBox="0 0 20 20" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><polyline points="8,4 13,10 8,16"/></svg></button>
+    </div>
 
-  <!-- Fixe Stations-Leiste unten – wie der Header, über dem Footer -->
-  <div id="stations-nav">
-    <button id="info-prev" type="button" aria-label="Vorherige Station"><svg width="28" height="28" viewBox="0 0 20 20" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><polyline points="12,4 7,10 12,16"/></svg></button>
-    <button id="info-next" type="button" aria-label="Nächste Station"><svg width="28" height="28" viewBox="0 0 20 20" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><polyline points="8,4 13,10 8,16"/></svg></button>
   </div>
 </div>
 
@@ -366,23 +366,34 @@
 
   // ── SENSOR ──
   let tiltX = 0;
-  document.addEventListener('mousemove', e => { tiltX = (e.clientX / W - 0.5) * 2; });
+  let tiltY = 0;
+  document.addEventListener('mousemove', e => {
+    tiltX = (e.clientX / W - 0.5) * 2;
+    tiltY = (e.clientY / H - 0.5) * 2;
+  });
 
   function aktiviereGyro() {
     window.addEventListener('deviceorientation', e => {
-      tiltX = Math.max(-1, Math.min(1, (e.gamma || 0) / 30));
+      // gamma = links/rechts kippen, beta = vor/zurück kippen
+      tiltX = Math.max(-1, Math.min(1, (e.gamma || 0) / 20));
+      tiltY = Math.max(-1, Math.min(1, (e.beta  || 0) / 25));
     });
   }
 
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  if (isIOS && typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+  // Kein UA-Sniffing (iPads melden sich ab iPadOS 13 als "Macintosh"):
+  // iOS 13+ (iPhone & iPad) hat requestPermission → Button zeigen,
+  // alles andere (Android, Desktop) braucht keine Erlaubnis.
+  if (typeof DeviceOrientationEvent !== 'undefined' &&
+      typeof DeviceOrientationEvent.requestPermission === 'function') {
     gyroBtn.style.display = 'block';
     gyroBtn.addEventListener('click', () => {
-      DeviceOrientationEvent.requestPermission().then(s => {
-        if (s === 'granted') { aktiviereGyro(); gyroBtn.style.display = 'none'; }
-      });
+      DeviceOrientationEvent.requestPermission()
+        .then(s => {
+          if (s === 'granted') { aktiviereGyro(); gyroBtn.style.display = 'none'; }
+        })
+        .catch(err => console.warn('Gyro-Erlaubnis abgelehnt/Fehler:', err));
     });
-  } else if (!isIOS) {
+  } else {
     aktiviereGyro();
   }
 
@@ -398,19 +409,21 @@
     containerData.forEach(c => {
       c.y -= c.speed * (dt / 16);
       if (c.y + c.ch < -20) { c.y = H + Math.random() * 80; c.x = Math.random() * (W - c.cw); }
-      const wave   = Math.sin(ts * c.dFreq + c.dOff) * c.dAmp;
-      const sensor = tiltX * 18;
-      c.el.style.left = (c.x + wave + sensor) + 'px';
-      c.el.style.top  = c.y + 'px';
+      const wave    = Math.sin(ts * c.dFreq + c.dOff) * c.dAmp;
+      const sensorX = tiltX * 45;   // vorher 18
+      const sensorY = tiltY * 30;   // neu: vertikal – sensorY-Zeilen entfernen falls unerwünscht
+      c.el.style.left = (c.x + wave + sensorX) + 'px';
+      c.el.style.top  = (c.y + sensorY) + 'px';
     });
 
     wortData.forEach(w => {
       w.y -= w.speed * (dt / 16);
       if (w.y < -120) { w.y = H + Math.random() * 60; w.x = Math.random() * W * 0.7; }
-      const wave   = Math.sin(ts * w.dFreq + w.dOff) * w.dAmp;
-      const sensor = tiltX * 12;
-      w.el.style.left = (w.x + wave + sensor) + 'px';
-      w.el.style.top  = w.y + 'px';
+      const wave    = Math.sin(ts * w.dFreq + w.dOff) * w.dAmp;
+      const sensorX = tiltX * 32;   // vorher 12
+      const sensorY = tiltY * 20;   // neu
+      w.el.style.left = (w.x + wave + sensorX) + 'px';
+      w.el.style.top  = (w.y + sensorY) + 'px';
     });
 
     if (!introGone) requestAnimationFrame(animate);
