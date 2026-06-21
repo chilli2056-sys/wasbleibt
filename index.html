@@ -390,9 +390,24 @@
   function aktiviereGyro() {
     if (gyroAktiv) return;
     gyroAktiv = true;
+
+    let motionOk = false;
+
+    // Hauptquelle: devicemotion feuert kontinuierlich (zuverlässig auf iOS).
+    // accelerationIncludingGravity.x ≈ -9.8..9.8 → Neigung links/rechts.
+    // Voller Ausschlag bei ~5 (entspricht ca. 30° Kippen).
+    window.addEventListener('devicemotion', e => {
+      const g = e.accelerationIncludingGravity;
+      if (!g || g.x == null) return;
+      motionOk = true;
+      tiltZiel = Math.max(-1, Math.min(1, -g.x / 5));   // Vorzeichen umdrehen, falls invertiert
+    });
+
+    // Fallback: deviceorientation (gamma). Nur aktiv, solange devicemotion
+    // noch keine Daten liefert.
     window.addEventListener('deviceorientation', e => {
-      // gamma = Links-/Rechts-Neigung in Grad; voller Ausschlag schon bei ~25°
-      tiltZiel = Math.max(-1, Math.min(1, (e.gamma || 0) / 25));
+      if (motionOk || e.gamma == null) return;
+      tiltZiel = Math.max(-1, Math.min(1, e.gamma / 25));
     });
   }
 
