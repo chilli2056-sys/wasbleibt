@@ -822,6 +822,7 @@ body:has(#info-panel.open) #archiv-zoom-controls {
   overflow-x: hidden;
   transform: translateY(100%);
   transition: transform 0.35s ease;
+  padding-bottom: 110px; /* Platz, damit der Text nicht hinter den unteren Leisten liegt */
 }
 
 #info-panel.open #info-panel-inner {
@@ -937,28 +938,46 @@ margin-right: 5px;
   animation: drift-bottom 6s ease-in-out infinite;
 }
 
-/* Stations-Leiste am Ende des Inhalts – wie der Header */
+/* Container: hält Stations- und Kommentarleiste unten am Bildschirmrand.
+   Sitzt im #info-panel-inner (hat transform) → fixed wird relativ dazu. */
+#info-leisten {
+  position: fixed;
+  left: 5px;                 /* gleicher Abstand wie der Button oben (.overlay-btn-group: 5px) */
+  right: 5px;
+  bottom: 5px;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;      /* freier Bereich blockiert nichts dahinter */
+}
+#info-leisten > * { pointer-events: auto; }
+
+/* Stations-Leiste – jetzt im Pill-Look der anderen Buttons */
 #stations-nav {
-  height: 30px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 14px;
-  background: rgba(74, 39, 234, 0.6); /* wie der Header */
-  backdrop-filter: blur(4px);
+  padding: 0 6px;
+  border: 1px solid #4A27EA;
+  border-radius: 999px !important;    /* nötig wegen * { border-radius:0 !important } */
+  background: #4b27ea34;              /* gleicher transparenter Blauton wie die Icon-Buttons */
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
 }
 #stations-nav button {
-  background: none;                   /* blaue Pfeile, ohne Button */
+  background: none;
   border: none;
-  padding: 4px 10px;
+  padding: 4px 12px;
   cursor: pointer;
-  color: #ffffff;
+  color: #4A27EA;                     /* blaue Pfeile statt weiß */
   display: flex;
   align-items: center;
 }
 #stations-nav svg path,
 #stations-nav svg polyline {
-  stroke: #ffffff;
+  stroke: #4A27EA;                    /* Icons blau */
   stroke-width: var(--icon-stroke);
 }
 
@@ -1307,9 +1326,10 @@ margin-right: 5px;
    ============================================================ */
 
 #kommentar-formular {
-  position: static;          /* am Ende des Inhalts – beim Runterscrollen erreichbar */
+  position: static;          /* sitzt jetzt im #info-leisten-Container, unten am Rand */
   background: #4A27EA; /* außen vollblau */
   border-top: 1px solid #4A27EA;
+  border-radius: 18px !important;  /* leichte Ecken, passt zum Pill-Look daneben */
   padding: 10px max(12px, calc(50% - 31ch));
   font-size: 16px;
   font-family: 'Young Serif', Georgia, 'Times New Roman', serif; /* gleiche ch-Breite wie der Text */
