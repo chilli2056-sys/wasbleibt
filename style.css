@@ -380,7 +380,7 @@ footer {
   font-size: 25px;
   line-height: 1;
   cursor: pointer;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(10px);
   white-space: nowrap;
   text-transform: uppercase;
 }
@@ -926,6 +926,7 @@ margin-right: 5px;
   font-size: 18px;
   cursor: pointer;
   padding: 0;
+  backdrop-filter: blur(10px);
 }
 
 .overlay-btn-group button:last-child {
