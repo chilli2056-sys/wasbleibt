@@ -650,7 +650,7 @@ vollbildNext.addEventListener('click', () => {
 // ---- Supabase-Konfiguration ----
 // Den anon-public-Key aus Supabase → Project Settings → API hier einsetzen:
 const SUPABASE_URL  = 'https://frxclqyeimupmaiuvndl.supabase.co';
-const SUPABASE_ANON = 'sb_publishable_zeBajWW8Ab2TjAYboip_yg_il422nwf';
+const SUPABASE_ANON = 'HIER_DEINEN_ANON_PUBLIC_KEY_EINSETZEN';
 const KOMMENTAR_API = SUPABASE_URL + '/rest/v1/kommentare';
 const SB_HEADERS = {
   'apikey': SUPABASE_ANON,
@@ -790,13 +790,18 @@ if (kommentarSendenBtn) {
   kommentarSendenBtn.addEventListener('click', async () => {
     const textEl = document.getElementById('kommentar-text');
     const nameEl = document.getElementById('kommentar-name');
+    if (!textEl || !nameEl) return;
     const text = textEl.value.trim();
     const name = nameEl.value.trim() || 'Anonym';
     if (!text || !aktuelleStationId) return;
 
     kommentarSendenBtn.disabled = true;
-    const ok = await sendeKommentar(aktuelleStationId, name, text);
-    kommentarSendenBtn.disabled = false;
+    let ok = false;
+    try {
+      ok = await sendeKommentar(aktuelleStationId, name, text);
+    } finally {
+      kommentarSendenBtn.disabled = false;   // Button wird IMMER wieder freigegeben
+    }
 
     if (!ok) {
       textEl.placeholder = '⚠ Konnte nicht gesendet werden. Bitte nochmal versuchen.';
