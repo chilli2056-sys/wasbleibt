@@ -647,40 +647,55 @@ vollbildNext.addEventListener('click', () => {
 // KOMMENTARE
 // ============================================================
 
-const ADMIN_PW = 'hafen2026';
-let istAdmin = sessionStorage.getItem('hafen_admin') === '1';
-
-(function() {
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('admin') === ADMIN_PW) {
-    sessionStorage.setItem('hafen_admin', '1');
-    istAdmin = true;
-    window.history.replaceState({}, '', window.location.pathname);
-  }
-})();
-
-const KommentarStore = {
-  laden(id) {
-    try { return JSON.parse(localStorage.getItem('k_' + id) || '[]'); }
-    catch { return []; }
-  },
-  speichern(id, k) {
-    const alle = this.laden(id);
-    alle.push(k);
-    localStorage.setItem('k_' + id, JSON.stringify(alle));
-  },
-  freischalten(id, kid) {
-    const alle = this.laden(id);
-    const k = alle.find(k => k.id === kid);
-    if (k) { k.freigegeben = true; localStorage.setItem('k_' + id, JSON.stringify(alle)); }
-  },
-  loeschen(id, kid) {
-    const alle = this.laden(id).filter(k => k.id !== kid);
-    localStorage.setItem('k_' + id, JSON.stringify(alle));
-  },
-  freigeschaltet(id) { return this.laden(id).filter(k => k.freigegeben); },
-  pending(id)        { return this.laden(id).filter(k => !k.freigegeben); }
+// ---- Supabase-Konfiguration ----
+// Den anon-public-Key aus Supabase → Project Settings → API hier einsetzen:
+const SUPABASE_URL  = 'https://frxclqyeimupmaiuvndl.supabase.co';
+const SUPABASE_ANON = 'sb_publishable_zeBajWW8Ab2TjAYboip_yg_il422nwf';
+const KOMMENTAR_API = SUPABASE_URL + '/rest/v1/kommentare';
+const SB_HEADERS = {
+  'apikey': SUPABASE_ANON,
+  'Authorization': 'Bearer ' + SUPABASE_ANON,
+  'Content-Type': 'application/json'
 };
+
+function formatDatum(iso) {
+  const d = iso ? new Date(iso) : new Date();
+  return d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: '2-digit' });
+}
+
+// Nur freigegebene Kommentare einer Station laden
+async function ladeKommentare(stationId) {
+  const url = KOMMENTAR_API
+    + '?station_id=eq.' + encodeURIComponent(stationId)
+    + '&freigegeben=eq.true'
+    + '&order=created_at.asc'
+    + '&select=id,name,text,created_at';
+  try {
+    const res = await fetch(url, { headers: SB_HEADERS });
+    if (!res.ok) { console.error('Supabase laden:', res.status, await res.text()); return []; }
+    const rows = await res.json();
+    return rows.map(r => ({ id: r.id, name: r.name, text: r.text, datum: formatDatum(r.created_at) }));
+  } catch (e) {
+    console.error('Supabase laden (Netzwerk):', e);
+    return [];
+  }
+}
+
+// Neuen Kommentar absenden – immer unbestätigt (freigegeben = false)
+async function sendeKommentar(stationId, name, text) {
+  try {
+    const res = await fetch(KOMMENTAR_API, {
+      method: 'POST',
+      headers: Object.assign({}, SB_HEADERS, { 'Prefer': 'return=minimal' }),
+      body: JSON.stringify({ station_id: String(stationId), name: name, text: text, freigegeben: false })
+    });
+    if (!res.ok) { console.error('Supabase senden:', res.status, await res.text()); return false; }
+    return true;
+  } catch (e) {
+    console.error('Supabase senden (Netzwerk):', e);
+    return false;
+  }
+}
 
 let kommentareSichtbar = false;
 
@@ -696,11 +711,10 @@ const POSITIONEN = [
   { top: '70%', right: '15%', rot: -2   },
 ];
 
-function kommentareZuruecksetzen(stationId) {
+async function kommentareZuruecksetzen(stationId) {
   kommentareSichtbar = true; // beim Öffnen des Overlays direkt geöffnet
   const zettel = document.getElementById('kommentar-notizzettel');
   const toggleBtn = document.getElementById('kommentar-foto-toggle');
-  const anzahl = document.getElementById('kommentar-anzahl');
   if (!zettel) return;
 
   zettel.classList.add('sichtbar');
@@ -708,69 +722,53 @@ function kommentareZuruecksetzen(stationId) {
   if (formular) formular.classList.add('sichtbar');
   if (toggleBtn) toggleBtn.classList.add('aktiv');
 
-  renderKommentare(stationId);
-
-  const n = KommentarStore.freigeschaltet(stationId).length
-          + (istAdmin ? KommentarStore.pending(stationId).length : 0);
-  if (anzahl) anzahl.textContent = n > 0 ? n + (n === 1 ? ' Kommentar' : ' Kommentare') : '';
+  await renderKommentare(stationId);
 }
 
-function renderKommentare(stationId) {
+async function renderKommentare(stationId) {
   const zettel = document.getElementById('kommentar-notizzettel');
   if (!zettel) return;
-  zettel.innerHTML = '';
 
-  const freigegeben = KommentarStore.freigeschaltet(stationId);
-  const pending     = KommentarStore.pending(stationId);
-  const alle        = [...freigegeben, ...(istAdmin ? pending : [])];
+  const alle = await ladeKommentare(stationId);
+  // Falls inzwischen eine andere Station geöffnet wurde: Ergebnis verwerfen
+  if (stationId !== aktuelleStationId) return;
+
+  zettel.innerHTML = '';
 
   alle.forEach((k, i) => {
     const pos = POSITIONEN[i % POSITIONEN.length];
     const z = document.createElement('div');
     z.className = 'notizzettel';
-    if (!k.freigegeben) z.style.opacity = '0.55';
 
-    // Position setzen
     Object.entries(pos).forEach(([prop, val]) => {
-      if (prop === 'rot') {
-        z.style.transform = `rotate(${val}deg)`;
-      } else {
-        z.style[prop] = val;
-      }
+      if (prop === 'rot') z.style.transform = `rotate(${val}deg)`;
+      else z.style[prop] = val;
     });
 
-    z.innerHTML = `<div class="notizzettel-text">${k.text}</div>
-      <div class="notizzettel-meta"><span>${k.name}</span><span>${k.datum}</span></div>
-      ${!k.freigegeben && istAdmin ? `
-        <div style="display:flex;gap:4px;margin-top:4px;">
-          <button class="nz-freischalten" data-id="${k.id}">✓</button>
-          <button class="nz-loeschen" data-id="${k.id}">✕</button>
-        </div>` : ''}
-      ${k.freigegeben && istAdmin ? `<button class="nz-loeschen" data-id="${k.id}" style="margin-top:4px;">✕</button>` : ''}`;
+    // Inhalt per textContent setzen – kein HTML aus Nutzereingaben einschleusbar
+    const textEl = document.createElement('div');
+    textEl.className = 'notizzettel-text';
+    textEl.textContent = k.text;
+
+    const metaEl = document.createElement('div');
+    metaEl.className = 'notizzettel-meta';
+    const nameSpan = document.createElement('span');
+    nameSpan.textContent = k.name;
+    const datumSpan = document.createElement('span');
+    datumSpan.textContent = k.datum;
+    metaEl.appendChild(nameSpan);
+    metaEl.appendChild(datumSpan);
+
+    z.appendChild(textEl);
+    z.appendChild(metaEl);
 
     z.addEventListener('click', () => z.classList.toggle('expanded'));
     zettel.appendChild(z);
   });
 
-  zettel.querySelectorAll('.nz-freischalten').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      KommentarStore.freischalten(stationId, btn.dataset.id);
-      renderKommentare(stationId);
-      const n = KommentarStore.freigeschaltet(stationId).length + KommentarStore.pending(stationId).length;
-      document.getElementById('kommentar-anzahl').textContent = n > 0 ? n + ' Kommentar' + (n !== 1 ? 'e' : '') : '';
-    });
-  });
-
-  zettel.querySelectorAll('.nz-loeschen').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      KommentarStore.loeschen(stationId, btn.dataset.id);
-      renderKommentare(stationId);
-      const n = KommentarStore.freigeschaltet(stationId).length + KommentarStore.pending(stationId).length;
-      document.getElementById('kommentar-anzahl').textContent = n > 0 ? n + ' Kommentar' + (n !== 1 ? 'e' : '') : '';
-    });
-  });
+  const anzahl = document.getElementById('kommentar-anzahl');
+  if (anzahl) anzahl.textContent = alle.length > 0
+    ? alle.length + (alle.length === 1 ? ' Kommentar' : ' Kommentare') : '';
 }
 
 // Sprechblasen-Toggle
@@ -787,37 +785,32 @@ if (kommentarFotoToggle) {
 }
 
 // Kommentar senden
-document.getElementById('kommentar-senden').addEventListener('click', () => {
-  const text = document.getElementById('kommentar-text').value.trim();
-  const name = document.getElementById('kommentar-name').value.trim() || 'Anonym';
-  if (!text || !aktuelleStationId) return;
+const kommentarSendenBtn = document.getElementById('kommentar-senden');
+if (kommentarSendenBtn) {
+  kommentarSendenBtn.addEventListener('click', async () => {
+    const textEl = document.getElementById('kommentar-text');
+    const nameEl = document.getElementById('kommentar-name');
+    const text = textEl.value.trim();
+    const name = nameEl.value.trim() || 'Anonym';
+    if (!text || !aktuelleStationId) return;
 
-  KommentarStore.speichern(aktuelleStationId, {
-    id: Date.now().toString(),
-    text,
-    name,
-    datum: new Date().toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: '2-digit' }),
-    freigegeben: istAdmin
+    kommentarSendenBtn.disabled = true;
+    const ok = await sendeKommentar(aktuelleStationId, name, text);
+    kommentarSendenBtn.disabled = false;
+
+    if (!ok) {
+      textEl.placeholder = '⚠ Konnte nicht gesendet werden. Bitte nochmal versuchen.';
+      setTimeout(() => { textEl.placeholder = 'Kommentar schreiben…'; }, 4000);
+      return;
+    }
+
+    textEl.value = '';
+    nameEl.value = '';
+    // Neuer Kommentar ist noch nicht freigegeben → erscheint erst nach Freischaltung
+    textEl.placeholder = '✓ Danke! Wird nach Freischaltung angezeigt.';
+    setTimeout(() => { textEl.placeholder = 'Kommentar schreiben…'; }, 3000);
   });
-
-  document.getElementById('kommentar-text').value = '';
-  document.getElementById('kommentar-name').value = '';
-
-  const anzahl = document.getElementById('kommentar-anzahl');
-  const n = KommentarStore.freigeschaltet(aktuelleStationId).length
-          + (istAdmin ? KommentarStore.pending(aktuelleStationId).length : 0);
-  if (anzahl) anzahl.textContent = n > 0 ? n + ' Kommentar' + (n !== 1 ? 'e' : '') : '';
-
-  // Kurze Bestätigung im Textarea
-  document.getElementById('kommentar-text').placeholder = istAdmin
-    ? '✓ Veröffentlicht.'
-    : '✓ Danke! Wird nach Freischaltung angezeigt.';
-  setTimeout(() => {
-    document.getElementById('kommentar-text').placeholder = 'Kommentar schreiben…';
-  }, 3000);
-
-  if (kommentareSichtbar) renderKommentare(aktuelleStationId);
-});
+}
 
 // ============================================================
 // START
