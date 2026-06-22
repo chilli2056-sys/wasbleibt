@@ -23,13 +23,13 @@ const texte = {
   1998 wurden bei der Weserufer-Sanierung zwei der vier Löwenköpfe auf dem Flussgrund wiederentdeckt.`,
 
   // Ehemalige Kellogg's-Fabrik
-  2: [{ intro:   "MORE COMING SOON..." }],
+  2: [{ intro:   "TEXT COMING SOON..." }],
 
   // ehemalige Zollkantine
   3: ``,
 
   // Molenfeuer
-  4: [{ intro:   "MORE COMING SOON..." }],
+  4: [{ intro:   "TEXT COMING SOON..." }],
 
   // ehemaliges Kühlhaus
   5: `Das ehemalige Kühllager in der Bremer Überseestadt entstand zwischen 1946 und 1949 in der unmittelbaren Nachkriegszeit. Angesichts der damals befürchteten Lebensmittel- und insbesondere Fleischknappheit plante die Stadt Bremen den Bau großer Kühlkapazitäten, um tiefgefrorene Warenlieferungen – unter anderem aus den USA – über längere Zeit lagern zu können. Noch während der Bauarbeiten verbesserte sich jedoch die Versorgungslage, sodass die ursprünglichen Pläne nur teilweise verwirklicht wurden und einige der vorgesehenen Nutzungen bereits früh wieder an Bedeutung verloren.
@@ -37,23 +37,23 @@ Trotzdem prägte das Kühllager über Jahrzehnte die Hafenlandschaft der Überse
 Heute befinden sich das Grundstück und das markante Bauwerk im Besitz der Wirtschaftsförderung Bremen (WFB). Ein geplanter Abriss wurde bislang nicht umgesetzt, da das Gebäude stark schadstoffbelastet ist und ein Rückbau mit erheblichem Aufwand verbunden wäre. Stattdessen gibt es Überlegungen, den Standort künftig als Energieleitzentrale zu nutzen, die die umliegenden Industrie- und Gewerbeflächen versorgen soll. Wann diese Pläne umgesetzt werden, ist derzeit jedoch noch offen.`,
 
   // Hafencasino
-  6: [{ intro:   "MORE COMING SOON..." }],
+  6: [{ intro:   "TEXT COMING SOON..." }],
 
   // Altes Hafenbecken
   7: ``,
 
   // Ulrichsschuppen
-  8: [{ intro:   "MORE COMING SOON..." }],
+  8:  [{ intro:   "TEXT COMING SOON..." }],
 
   // Gästehaus
-  9: [{ intro:   "MORE COMING SOON..." }],
+  9:  [{ intro:   "TEXT COMING SOON..." }],
 
   // Gleise Überseehafen
-  10: ``,
+  10:  [{ intro:   "TEXT COMING SOON..." }],
 
 
   // Gleissysteme Überseehafen
-  12: [{ intro:   "MORE COMING SOON..." }],
+  12: [{ intro:   "TEXT COMING SOON..." }],
 
   // Vieh-Laderampe  ── INTERVIEW ──
   13: [
@@ -63,7 +63,7 @@ Heute befinden sich das Grundstück und das markante Bauwerk im Besitz der Wirts
   ],
 
   // Bunker Hornisse
-  14: [{ intro:   "MORE COMING SOON..." }],
+  14:  [{ intro:   "TEXT COMING SOON..." }],
 
   // ehemaliger Zollzaun Bremen
   15: [
@@ -82,10 +82,10 @@ Heute befinden sich das Grundstück und das markante Bauwerk im Besitz der Wirts
   16: ``,
 
   // ehemalige Hafenschule
-  17: [{ intro:   "MORE COMING SOON..." }],
+  17:  [{ intro:   "TEXT COMING SOON..." }],
 
   // Unterstand
-  18: [{ intro:   "MORE COMING SOON..." }],
+  18: [{ intro:   "TEXT COMING SOON..." }],
 
 };
 
