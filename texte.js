@@ -1,13 +1,4 @@
-// ============================================================
-// TEXTE ZU DEN STATIONEN
-// ============================================================
-// Jeder Eintrag entspricht einer Station in stations.js.
-// Der Schlüssel muss mit der station.id übereinstimmen.
-//
-// Absätze mit Leerzeile trennen:
-//   1: `Erster Absatz.
-//
-// Zweiter Absatz.`,
+
 //
 // ── ZWEI SCHREIBWEISEN ──────────────────────────────────────
 // A) Normaler Text  → String, komplett 100 % blau:
@@ -41,7 +32,7 @@ Der nächste Planungsschritt war die Erstellung eines städtebaulichen Rahmenpla
   3: ``,
 
   // Molenfeuer
-  4: ``,
+  4: `{ intro:   "MORE COMING SOON..." }`,
 
   // ehemaliges Kühlhaus
   5: `Das ehemalige Kühllager in der Bremer Überseestadt entstand zwischen 1946 und 1949 in der unmittelbaren Nachkriegszeit. Angesichts der damals befürchteten Lebensmittel- und insbesondere Fleischknappheit plante die Stadt Bremen den Bau großer Kühlkapazitäten, um tiefgefrorene Warenlieferungen – unter anderem aus den USA – über längere Zeit lagern zu können. Noch während der Bauarbeiten verbesserte sich jedoch die Versorgungslage, sodass die ursprünglichen Pläne nur teilweise verwirklicht wurden und einige der vorgesehenen Nutzungen bereits früh wieder an Bedeutung verloren.
@@ -49,25 +40,23 @@ Trotzdem prägte das Kühllager über Jahrzehnte die Hafenlandschaft der Überse
 Heute befinden sich das Grundstück und das markante Bauwerk im Besitz der Wirtschaftsförderung Bremen (WFB). Ein geplanter Abriss wurde bislang nicht umgesetzt, da das Gebäude stark schadstoffbelastet ist und ein Rückbau mit erheblichem Aufwand verbunden wäre. Stattdessen gibt es Überlegungen, den Standort künftig als Energieleitzentrale zu nutzen, die die umliegenden Industrie- und Gewerbeflächen versorgen soll. Wann diese Pläne umgesetzt werden, ist derzeit jedoch noch offen.`,
 
   // Hafencasino
-  6: ``,
+  6: `{ intro:   "MORE COMING SOON..." }`,
 
   // Altes Hafenbecken
   7: ``,
 
   // Ulrichsschuppen
-  8: ``,
+  8: `{ intro:   "MORE COMING SOON..." }`,
 
   // Gästehaus
-  9: ``,
+  9: `{ intro:   "MORE COMING SOON..." }`,
 
   // Gleise Überseehafen
   10: ``,
 
-  // Atlas Werft
-  11: ``,
 
   // Gleissysteme Überseehafen
-  12: ``,
+  12: `{ intro:   "MORE COMING SOON..." }`,
 
   // Vieh-Laderampe  ── INTERVIEW ──
   13: [
@@ -77,7 +66,7 @@ Heute befinden sich das Grundstück und das markante Bauwerk im Besitz der Wirts
   ],
 
   // Bunker Hornisse
-  14: ``,
+  14: `{ intro:   "MORE COMING SOON..." }`,
 
   // ehemaliger Zollzaun Bremen
   15: [
@@ -96,10 +85,10 @@ Heute befinden sich das Grundstück und das markante Bauwerk im Besitz der Wirts
   16: ``,
 
   // ehemalige Hafenschule
-  17: ``,
+  17: `{ intro:   "MORE COMING SOON..." }`,
 
   // Unterstand
-  18: ``,
+  18: `{ intro:   "MORE COMING SOON..." }`,
 
 };
 
