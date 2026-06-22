@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>WAS VOM HAFEN BLEIBT</title>
+  <title>Bremen Route</title>
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <link rel="stylesheet" href="style.css">
@@ -104,25 +104,25 @@
       <div id="info-scroll-spacer"></div>
     </div>
 
-    <!-- Untere Leisten: bleiben unten am Bildschirmrand -->
-    <div id="info-leisten">
+  </div>
 
-      <!-- Kommentar-Formular -->
-      <div id="kommentar-formular">
-        <textarea id="kommentar-text" placeholder="Kommentar schreiben…" maxlength="300"></textarea>
-        <div id="kommentar-formular-footer">
-          <input id="kommentar-name" type="text" placeholder="Name (optional)" maxlength="40" />
-          <span id="kommentar-anzahl"></span>
-          <button id="kommentar-senden">Senden</button>
-        </div>
+  <!-- Untere Leisten: liegen ÜBER dem Scrollbereich, nicht darin -->
+  <div id="info-leisten">
+
+    <!-- Kommentar-Formular -->
+    <div id="kommentar-formular">
+      <textarea id="kommentar-text" placeholder="Kommentar schreiben…" maxlength="300"></textarea>
+      <div id="kommentar-formular-footer">
+        <input id="kommentar-name" type="text" placeholder="Name (optional)" maxlength="40" />
+        <span id="kommentar-anzahl"></span>
+        <button id="kommentar-senden">Senden</button>
       </div>
+    </div>
 
-      <!-- Stations-Leiste -->
-      <div id="stations-nav">
-        <button id="info-prev" type="button" aria-label="Vorherige Station"><svg width="28" height="28" viewBox="0 0 20 20" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><polyline points="12,4 7,10 12,16"/></svg></button>
-        <button id="info-next" type="button" aria-label="Nächste Station"><svg width="28" height="28" viewBox="0 0 20 20" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><polyline points="8,4 13,10 8,16"/></svg></button>
-      </div>
-
+    <!-- Stations-Leiste -->
+    <div id="stations-nav">
+      <button id="info-prev" type="button" aria-label="Vorherige Station"><svg width="28" height="28" viewBox="0 0 20 20" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><polyline points="12,4 7,10 12,16"/></svg></button>
+      <button id="info-next" type="button" aria-label="Nächste Station"><svg width="28" height="28" viewBox="0 0 20 20" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><polyline points="8,4 13,10 8,16"/></svg></button>
     </div>
 
   </div>
