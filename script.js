@@ -650,13 +650,19 @@ vollbildNext.addEventListener('click', () => {
 // ---- Supabase-Konfiguration ----
 // Den anon-public-Key aus Supabase → Project Settings → API hier einsetzen:
 const SUPABASE_URL  = 'https://frxclqyeimupmaiuvndl.supabase.co';
-const SUPABASE_ANON = 'HIER_DEINEN_ANON_PUBLIC_KEY_EINSETZEN';
+const SUPABASE_ANON = 'sb_publishable_zeBajWW8Ab2TjAYboip_yg_il422nwf';
 const KOMMENTAR_API = SUPABASE_URL + '/rest/v1/kommentare';
-const SB_HEADERS = {
-  'apikey': SUPABASE_ANON,
-  'Authorization': 'Bearer ' + SUPABASE_ANON,
-  'Content-Type': 'application/json'
-};
+
+// Header passend zum Key-Typ bauen:
+// - Legacy anon-Key ist ein JWT (beginnt mit "eyJ") und darf auch im Authorization-Header stehen.
+// - Neuer publishable Key (sb_publishable_…) darf NUR im apikey-Header stehen, nicht als Bearer.
+function buildHeaders(extra) {
+  const h = { 'apikey': SUPABASE_ANON, 'Content-Type': 'application/json' };
+  if (SUPABASE_ANON.indexOf('eyJ') === 0) {
+    h['Authorization'] = 'Bearer ' + SUPABASE_ANON;
+  }
+  return Object.assign(h, extra || {});
+}
 
 function formatDatum(iso) {
   const d = iso ? new Date(iso) : new Date();
@@ -671,7 +677,7 @@ async function ladeKommentare(stationId) {
     + '&order=created_at.asc'
     + '&select=id,name,text,created_at';
   try {
-    const res = await fetch(url, { headers: SB_HEADERS });
+    const res = await fetch(url, { headers: buildHeaders() });
     if (!res.ok) { console.error('Supabase laden:', res.status, await res.text()); return []; }
     const rows = await res.json();
     return rows.map(r => ({ id: r.id, name: r.name, text: r.text, datum: formatDatum(r.created_at) }));
@@ -686,7 +692,7 @@ async function sendeKommentar(stationId, name, text) {
   try {
     const res = await fetch(KOMMENTAR_API, {
       method: 'POST',
-      headers: Object.assign({}, SB_HEADERS, { 'Prefer': 'return=minimal' }),
+      headers: buildHeaders({ 'Prefer': 'return=minimal' }),
       body: JSON.stringify({ station_id: String(stationId), name: name, text: text, freigegeben: false })
     });
     if (!res.ok) { console.error('Supabase senden:', res.status, await res.text()); return false; }
