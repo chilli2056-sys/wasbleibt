@@ -822,6 +822,1483 @@ body:has(#info-panel.open) #archiv-zoom-controls {
   overflow-x: hidden;
   transform: translateY(100%);
   transition: transform 0.35s ease;
+  padding-bottom: 72px; /* Grundabstand: nur für die Stations-Leiste */
+}
+
+/* Mehr Platz, wenn das Kommentarformular offen ist – sonst verdeckt es den Text
+   und der letzte Abschnitt ließe sich nicht hochscrollen. */
+#info-panel-inner:has(#kommentar-formular.sichtbar) {
+  padding-bottom: 200px;
+}
+
+#info-panel.open #info-panel-inner {
+  transform: translateY(0);
+}
+
+/* Schließen- und Vollbild-Button: sticky oben rechts */
+/* Overlay-Button-Gruppe (✕, ⤢, 💬) – gleicher Stil wie Karten-Buttons */
+.overlay-btn-group {
+  position: sticky;
+  top: 0;
+  float: right;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #4A27EA;
+  border-radius: 999px !important;
+  overflow: hidden;
+  background: #4b27ea34;
+  backdrop-filter: blur(5px);
+  margin-bottom: -120px; /* überlappt Foto-Bereich nicht im Flow */
+margin-top: 5px;
+margin-right: 5px;
+}
+
+.overlay-btn-group button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #4A27EA;
+  color: #4A27EA;
+  font-family: 'Heming', Helvetica, Arial, sans-serif;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0;
+-webkit-backdrop-filter: blur(5px);
+}
+
+.overlay-btn-group button:last-child {
+  border-bottom: none;
+}
+
+.overlay-btn-group button:hover {
+  background: #4b27ea22;
+}
+
+.overlay-btn-group button.aktiv {
+  background: #4A27EA;
+  color: white;
+}
+
+.overlay-btn-group button.aktiv svg path {
+  stroke: white;
+}
+
+/* Fixer oberer Bereich: Foto + Kasten */
+#info-fixed-header {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 5;
+}
+
+/* Kasten */
+#info-kasten {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid #4A27EA;
+  margin: 20px 0 0;
+  color: #4b27ea;
+  background: rgba(74, 39, 234, 0.15);
+  font-family: 'ABC Camera Rounded Plain Bold Trial', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+}
+
+#info-kasten-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  border-right: 1px solid #4A27EA;
+  color: #4A27EA;
+  
+}
+
+#info-kasten-rechts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+}
+
+/* Wrapper: Überschrift + Stations-Pfeile (übernimmt das sticky/Overlap der Überschrift) */
+#info-name {
+  position: sticky;
+  top: 12px;
+  z-index: 20;
+  background: transparent;
+  margin-top: -45px;   /* feste Foto-Überlappung */
+  margin-bottom: -45px; /* fester Gap-Ausgleich */
+  padding: 0 max(12px, calc(50% - 31ch));
+  font-size: 16px;
+  font-family: 'HAL Timezone', Helvetica, Arial, sans-serif;
+  color: #4A27EA;
+  text-transform: uppercase;
+  text-align: center;
+  pointer-events: none;
+  overflow: hidden;
+  animation: drift-bottom 6s ease-in-out infinite;
+}
+
+/* Container: hält Stations- und Kommentarleiste unten am Bildschirmrand.
+   Sitzt im #info-panel-inner (hat transform) → fixed wird relativ dazu. */
+#info-leisten {
+  position: fixed;
+  left: 5px;                 /* gleicher Abstand wie der Button oben (.overlay-btn-group: 5px) */
+  right: 5px;
+  bottom: 5px;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;      /* freier Bereich blockiert nichts dahinter */
+}
+#info-leisten > * { pointer-events: auto; }
+
+/* Stations-Leiste – jetzt im Pill-Look der anderen Buttons */
+#stations-nav {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6px;
+  border: 1px solid #4A27EA;
+  border-radius: 999px !important;    /* nötig wegen * { border-radius:0 !important } */
+  background: #4b27ea34;              /* gleicher transparenter Blauton wie die Icon-Buttons */
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+#stations-nav button {
+  background: none;
+  border: none;
+  padding: 4px 12px;
+  cursor: pointer;
+  color: #4A27EA;                     /* blaue Pfeile statt weiß */
+  display: flex;
+  align-items: center;
+}
+#stations-nav svg path,
+#stations-nav svg polyline {
+  stroke: #4A27EA;                    /* Icons blau */
+  stroke-width: var(--icon-stroke);
+}
+
+.name-inner {
+  font-family: 'ABC Camera Rounded Unlicensed Trial Black', Helvetica, Arial, sans-serif;
+  font-size: clamp(70px, 7vw, 80px); /* ⬅ DESKTOP-Überschriftgröße hier ändern */
+  font-weight: normal;
+  line-height: 0.9;
+  display: block;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+#info-koordinaten {
+  font-size: 12px;
+  line-height: 1.3;
+  color: #4A27EA;
+}
+
+/* 2. Adresse im Infokasten, unter den Koordinaten */
+#info-adresse {
+  font-size: 12px;
+  line-height: 1.3;
+  color: #4A27EA;
+}
+#info-adresse:empty { display: none; }
+
+#info-fakten {
+  font-size: 12px;
+  line-height: 1.4;
+}
+#info-fakten:empty { display: none; }
+.fakten-trennlinie {
+  border: none;
+  border-top: 1px solid #4A27EA;
+  margin: 4px -12px;
+}
+
+#info-scroll {
+  padding: 20px max(12px, calc(50% - 31ch)) 24px;
+  overflow: hidden;
+  font-size: 16px;
+  font-family: 'Young Serif', Georgia, 'Times New Roman', serif;
+}
+
+#info-foto-bereich {
+  position: relative;
+  background: white;
+  z-index: 2;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px max(12px, calc(50% - 31ch));
+  font-size: 16px;
+  font-family: 'Young Serif', Georgia, 'Times New Roman', serif; /* gleiche ch-Breite wie Text & Formular */
+}
+
+#info-foto-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+#info-foto-img {
+  width: 100%;
+  max-height: 50vh;
+  object-fit: contain;
+  display: block;
+  aspect-ratio: auto 4/3;
+}
+
+@media (max-width: 700px) {
+  #info-foto-img {
+    max-height: 40vh;
+  }
+  /* Fallback: Wrapper hat eine Mindesthöhe, damit #info-name (bottom:0)
+     nicht bei 0px landet, bevor das Bild geladen ist. JS setzt exakten Wert. */
+  #info-foto-wrapper {
+    min-height: 25vw;
+  }
+  #info-name {
+    animation: drift-bottom-mobile 6s ease-in-out infinite;
+  }
+  .name-inner {
+    font-size: clamp(55px, 12vw, 60px); /* ⬅ HANDY-Überschriftgröße hier ändern */
+  }
+}
+
+#info-foto-controls {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: transparent;
+  pointer-events: none;
+}
+
+#info-foto-controls button {
+  background: #4b27ea34;
+  border: 1px solid #4A27EA;
+  border-radius: 999px !important;
+  backdrop-filter: blur(5px);
+  font-size: 24px;
+  width: 38px;
+  height: 38px;
+  color: #4A27EA;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Heming', Helvetica, Arial, sans-serif;
+  pointer-events: all;
+  flex-shrink: 0;
+}
+
+#info-foto-controls button:hover {
+  background: #4b27ea55;
+}
+
+#info-foto-prev { margin-left: 4px; }
+#info-foto-next { margin-right: 4px; }
+
+#info-beschreibung {
+  font-size: 16px;
+  line-height: 1.7;
+  font-family: 'Libre Baskerville', Georgia, 'Times New Roman', serif;
+  font-weight: 400;
+  color: #4A27EA;
+  white-space: pre-wrap;
+  text-align: justify;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  margin: 24px 0 0;
+  display: block;
+}
+
+/* ── Interview im Beschreibungstext ───────────────────────── */
+#info-beschreibung .interview-intro {
+  color: #4A27EA;                 /* 100 % blau */
+  font-family: 'ABC Camera Rounded Plain Black Trial', Helvetica, Arial, sans-serif;
+  font-size: 25px;                /* wie Header */
+  line-height: 1.1;               /* enger */
+  text-transform: none;           /* keine Großbuchstaben */
+  font-weight: 400;
+  text-align: justify;
+  margin: 0 0 14px;
+  white-space: normal;
+}
+#info-beschreibung .interview-frage {
+  color: #4A27EA;                 /* 100 % blau */
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-weight: 400;              /* regulär */
+  text-align: justify;
+  margin: 0 0 14px;
+  white-space: normal;
+}
+#info-beschreibung .interview-antwort {
+  color: #4A27EA;                 /* 100 % blau */
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-weight: 700;              /* fett */
+  text-align: justify;
+  margin: 0 0 14px;
+  text-indent: 2em;               /* nur erste Zeile eingerückt */
+  white-space: normal;
+}
+
+#info-quellen {
+  font-size: 11px;
+  line-height: 1.2;
+  color: #4A27EA;
+  margin: 30px 0 0;
+  font-family: 'Young Serif', Georgia, 'Times New Roman', serif;
+  clear: both;
+  display: block;
+}
+
+#info-quellen .quellen-titel {
+  display: block;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   VOLLBILD-OVERLAY
+   ============================================================ */
+
+#info-vollbild-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: white;
+  z-index: 3000;
+  align-items: center;
+  justify-content: center;
+  padding: 70px 40px;
+}
+
+#info-vollbild-overlay.open {
+  display: flex;
+}
+
+#info-vollbild-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+#info-vollbild-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: #4b27ea34;
+  backdrop-filter: blur(5px);
+  border: 1px solid #4A27EA;
+  border-radius: 999px !important;
+  color: #4A27EA;
+  font-size: 18px;
+  width: 38px;
+  height: 38px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#info-vollbild-prev,
+#info-vollbild-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #4b27ea34;
+  backdrop-filter: blur(5px);
+  border: 1px solid #4A27EA;
+  border-radius: 999px !important;
+  color: #4A27EA;
+  font-size: 28px;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#info-vollbild-prev { left: 16px; }
+#info-vollbild-next { right: 16px; }
+/* Sprechblasen-Toggle auf dem Foto */
+/* kommentar-foto-toggle Farbe wird über .overlay-btn-group gesteuert */
+#kommentar-foto-toggle svg path {
+  stroke: #4A27EA;
+  stroke-width: var(--icon-stroke);
+}
+
+/* Aktiver Kommentar-Button: blau ausgefüllt, Icon als weiße Outline */
+#kommentar-foto-toggle.aktiv {
+  background: #4A27EA;
+}
+#kommentar-foto-toggle.aktiv svg path {
+  stroke: #fff;
+}
+
+/* ============================================================
+   NOTIZZETTEL auf dem Foto
+   ============================================================ */
+
+#kommentar-notizzettel {
+  display: none;
+  position: absolute;
+  inset: 20px;
+  z-index: 8;
+  pointer-events: none;
+}
+
+#kommentar-notizzettel.sichtbar {
+  display: block;
+}
+
+.notizzettel {
+  position: absolute;
+  background: #4A27EA;
+  border: none; /* keine weiße Umrandung */
+  border-radius: 6px !important; /* leicht abgerundet (überschreibt globale 0-Regel) */
+  padding: 8px 10px;
+  width: fit-content;
+  height: fit-content;   /* Höhe nur so hoch wie der Inhalt */
+  max-width: 200px;      /* langer Text bricht um statt übers Foto zu laufen */
+  font-family: 'ABC Camera Rounded Plain Bold Trial', Helvetica, Arial, sans-serif; /* wie Infokasten */
+  font-size: 16px;
+  line-height: 1.4;
+  pointer-events: all;
+  cursor: pointer;
+}
+
+.notizzettel:nth-child(1) { top: 8%;  left: 5%;  transform: rotate(-2deg); }
+.notizzettel:nth-child(2) { top: 12%; right: 5%; transform: rotate(1.5deg); }
+.notizzettel:nth-child(3) { bottom: 10%; left: 8%;  transform: rotate(1deg); }
+.notizzettel:nth-child(4) { bottom: 8%;  right: 6%; transform: rotate(-1.5deg); }
+.notizzettel:nth-child(n+5) { top: 30%; left: 15%; transform: rotate(-1deg); }
+
+.notizzettel:hover { z-index: 9; transform: rotate(0deg) scale(1.04) !important; }
+
+.notizzettel-text {
+  color: white;
+  margin-bottom: 4px;
+  overflow: hidden;
+  white-space: normal;   /* Leerzeilen/Umbrüche im Kommentar nicht als Höhe rendern */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.notizzettel.expanded .notizzettel-text {
+  display: block;
+  overflow: visible;
+}
+
+.notizzettel-meta {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.75);
+  display: flex;
+  justify-content: space-between;
+}
+
+.nz-freischalten,
+.nz-loeschen {
+  margin-top: 4px;
+  padding: 2px 8px;
+  font-size: 10px;
+  cursor: pointer;
+  font-family: 'Heming', Helvetica, Arial, sans-serif;
+  border: 1px solid #4A27EA;
+  background: white;
+  color: #4A27EA;
+}
+
+.nz-freischalten {
+  background: #4A27EA;
+  color: white;
+  border-color: white;
+}
+
+/* ============================================================
+   KOMMENTAR-FORMULAR — sticky am unteren Rand
+   ============================================================ */
+
+#kommentar-formular {
+  position: static;          /* sitzt jetzt im #info-leisten-Container, unten am Rand */
+  background: #4A27EA; /* außen vollblau */
+  border-top: 1px solid #4A27EA;
+  border-radius: 18px !important;  /* leichte Ecken, passt zum Pill-Look daneben */
+  padding: 10px max(12px, calc(50% - 31ch));
+  font-size: 16px;
+  font-family: 'Young Serif', Georgia, 'Times New Roman', serif; /* gleiche ch-Breite wie der Text */
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#kommentar-formular.sichtbar {
+  display: flex;
+}
+
+#kommentar-text {
+  width: 100%;
+  height: 56px;
+  border: 1px solid #4A27EA;
+  padding: 8px 10px;
+  font-family: 'ABC Camera Rounded Plain Bold Trial', Helvetica, Arial, sans-serif; /* wie Infokasten */
+  font-size: 13px;
+  line-height: 1.4;
+  resize: none;
+  background: white;
+  color: #4A27EA;
+  box-sizing: border-box;
+}
+
+#kommentar-text:focus {
+  outline: none;
+  border-color: #4A27EA;
+}
+
+#kommentar-formular-footer {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  position: relative;
+}
+
+#kommentar-name {
+  flex: 1;
+  border: 1px solid #4A27EA;
+  padding: 6px 10px;
+  font-family: 'ABC Camera Rounded Plain Bold Trial', Helvetica, Arial, sans-serif; /* wie Infokasten */
+  font-size: 12px;
+  background: white;
+  color: #4A27EA;
+  min-width: 0;
+}
+
+#kommentar-name:focus {
+  outline: none;
+  border-color: #4A27EA;
+}
+
+/* Platzhaltertext in den Ausfüllfeldern: blau, halbtransparent */
+#kommentar-text::placeholder,
+#kommentar-name::placeholder {
+  color: rgba(74, 39, 234, 0.5); /* #4A27EA bei 50 % */
+  opacity: 1; /* nötig für Firefox, sonst zusätzlich abgedunkelt */
+}
+
+#kommentar-anzahl {
+  font-family: 'Heming', Helvetica, Arial, sans-serif;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.8);
+  white-space: nowrap;
+}
+
+#kommentar-senden {
+  background: white;
+  color: #4A27EA;
+  border: 1px solid #4A27EA;
+  padding: 6px 14px;
+  font-family: 'ABC Camera Rounded Plain Bold Trial', Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+#kommentar-senden:hover {
+  background: white;
+  border-color: #4A27EA;
+}
+
+@media (max-width: 500px) {
+  #kommentar-formular-footer {
+    flex-wrap: nowrap;
+  }
+  #kommentar-name {
+    flex: 1;
+    min-width: 0;
+  }
+  #kommentar-senden {
+    flex-shrink: 0;
+  }
+  #kommentar-anzahl {
+    position: absolute;
+    right: 0;
+    top: -18px;
+  }
+}
+/* ============================================================
+   KARTEN-BUTTONS oben rechts
+   ============================================================ */
+
+/* Leaflet-Standard-Zoom ausblenden (eigene Buttons stattdessen) */
+.leaflet-control-zoom { display: none !important; }
+
+#karten-buttons {
+  position: fixed;
+  top: 52px;
+  right: 8px;
+  z-index: 2500;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #4A27EA;
+  border-radius: 999px !important;
+  overflow: hidden;
+  background: #4b27ea34;
+  -webkit-backdrop-filter: blur(5px);
+}
+
+#karten-buttons button,
+#karten-buttons a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #4A27EA;
+  color: #4A27EA;
+  font-family: 'ABC Camera Rounded Plain Bold Trial', Helvetica, Arial, sans-serif;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  text-decoration: none;
+  padding: 0;
+ 
+}
+
+#karten-buttons button:last-child,
+#karten-buttons a:last-child {
+  border-bottom: none;
+}
+
+#karten-buttons button:hover,
+#karten-buttons a:hover {
+  background: #4b27ea22;
+}
+
+#karten-buttons .active {
+  background: #4A27EA;
+  color: white;
+}
+
+#karten-buttons svg * {
+  stroke: #4A27EA;
+  stroke-width: var(--icon-stroke);
+}
+
+#karten-buttons .active svg * {
+  stroke: white;
+}
+
+/* Icon-Buttons: Farbe folgt dem color-Wert (currentColor im SVG) */
+/* ============================================================
+   STANDBY – schwimmende Überschrift bei Inaktivität
+   ============================================================ */
+#standby {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;                          /* über der Karte, UNTER dem Header (2500) */
+  pointer-events: none;                   /* blockiert nichts; Aktivität blendet aus */
+  /* keine Hintergrundfläche – die Karte bleibt voll sichtbar */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+#standby.sichtbar {
+  opacity: 1;
+  visibility: visible;
+}
+
+#standby-text {
+  position: absolute;
+  top: 0;                                 /* vertikale Bewegung übernimmt das JS */
+  left: 5vw;
+  text-align: left;
+  transform-origin: top left;
+  font-family: 'ABC Camera Rounded Unlicensed Trial Black', Helvetica, Arial, sans-serif;
+  font-size: clamp(80px, 13vw, 140px);    /* etwas kleiner als zuvor */
+  line-height: 0.9;
+  color: rgba(74, 39, 234, 0.6);          /* #4A27EA, 60 % Deckkraft – Karte scheint durch */
+  text-transform: uppercase;
+  white-space: nowrap;
+  user-select: none;
+  will-change: transform;
+}  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--icon-stroke);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Typografie-System
+   Romense 72pt = 96px  → Header
+   Romense 50pt = 67px  → Footer, Buttons
+   Heming  62pt = 83px  → Überschriften
+   Heming  52pt = 69px  → Fließtext
+   Heming  52pt bold    → Markierungen
+   Heming  32pt = 43px  → Fußnoten / Fakten
+*/
+
+body {
+  margin: 0;
+  font-family: 'ABC Gramercy', Helvetica, Arial, sans-serif;
+  font-size: 16px; /* Heming 52pt → 16px */
+}
+
+
+
+/* HEADER */
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: rgba(74, 39, 234, 0.6);
+  z-index: 2500;
+  font-family: 'ABC Camera Rounded Plain Black Trial', Helvetica, Arial, sans-serif;
+  font-size: clamp(18px, 5vw, 25px);   /* skaliert mit dem Bildschirm */
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  padding: 12px clamp(8px, 3vw, 12px); /* Außenabstand schrumpft mit */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+nav a {
+  text-decoration: none;
+  color: #fff;
+  font-family: 'ABC Camera Rounded Plain Black Trial', Helvetica, Arial, sans-serif;
+  font-size: clamp(18px, 5vw, 21px);  /* statt fix 21px */
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+nav a:first-child {
+  margin-right: auto;
+}
+
+nav a:not(:first-child) {
+  margin-left: clamp(8px, 3vw, 24px);   /* statt fix 24px */
+}
+/* MAP */
+#map {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(100vh - 40px - 48px);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+
+
+/* SIDEBAR / INFOFENSTER */
+#sidebar,
+#archiv-sidebar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.22);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  z-index: 999;
+}
+
+#sidebar {
+  bottom: 96px;
+}
+
+#archiv-sidebar {
+  bottom: 96px;
+}
+
+/* HANDLE */
+#resize-handle,
+#archiv-handle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  height: 48px;
+  cursor: ns-resize;
+  user-select: none;
+  touch-action: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.18);
+  background: transparent;
+}
+
+#resize-handle span,
+#archiv-handle span {
+  font-weight: 600;
+  font-size: 14px;
+  background: transparent;
+  color: #4A27EA;
+  padding: 0;
+  border: none;
+}
+
+#toggle-icon,
+#archiv-toggle {
+  font-size: 18px;
+  line-height: 1;
+  background: transparent;
+  color: #4A27EA;
+  padding: 0;
+  border: none;
+}
+
+/* SIDEBAR INHALT */
+#sidebar-inner,
+#archiv-sidebar-inner {
+  padding: 15px 20px;
+  overflow-y: auto;
+  height: calc(100% - 48px);
+  background: transparent;
+}
+
+/* CARDS */
+.card {
+  padding: 12px;
+  margin-bottom: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.22);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.card h3 {
+  margin: 0 0 8px 0;
+  display: block;
+  color: #4A27EA;
+}
+
+.card p {
+  margin: 6px 0 0 0;
+  display: block;
+  color: #4A27EA;
+}
+
+.close {
+  float: right;
+  cursor: pointer;
+  color: #4A27EA;
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+
+/* FOOTER */
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 20px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  z-index: 1001;
+}
+
+.footer-content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.footer-link {
+  color: #4A27EA;
+  text-decoration: none;
+  font-family: 'ABC Camera Rounded Plain Black Trial', Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.footer-link:first-child {
+  margin-right: auto;
+}
+
+.footer-link:not(:first-child) {
+  margin-left: 20px;
+}
+
+.footer-link:hover { text-decoration: underline; }
+
+/* THEMENLEISTEN */
+#themen-bar,
+#map-themen-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 10px;
+  min-height: 56px;
+  background: transparent;
+  border-top: none;
+  border-bottom: none;
+  padding: 8px 12px;
+  z-index: 1000;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  align-items: center;
+  -webkit-overflow-scrolling: touch;
+}
+
+#themen-bar::-webkit-scrollbar,
+#map-themen-bar::-webkit-scrollbar {
+  height: 5px;
+}
+
+.themen-chip {
+  flex: 0 0 auto;
+  padding: 6px 14px;
+  border: 1px solid #4A27EA;
+  border-radius: 999px !important;
+  background: #4b27ea34;
+  color: #4A27EA;
+  font-family: 'ABC Camera Rounded Plain Bold Trial', Helvetica, Arial, sans-serif;
+  font-size: 25px;
+  line-height: 1;
+  cursor: pointer;
+ -webkit-backdrop-filter: blur(5px);
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+
+.themen-chip.active {
+  background: #4A27EA;
+  color: white;
+}
+
+/* Chips wackeln beim Hover + wenn ausgewählt – wie die Überschrift */
+.themen-chip:hover,
+.themen-chip.active {
+  animation: drift-bottom 6s ease-in-out infinite;
+}
+
+/* versetzter Takt, damit nicht alle synchron wackeln */
+.themen-chip:nth-child(4n)   { animation-delay: -0.5s; }
+.themen-chip:nth-child(4n+1) { animation-delay: -2.3s; }
+.themen-chip:nth-child(4n+2) { animation-delay: -3.7s; }
+.themen-chip:nth-child(4n+3) { animation-delay: -5.1s; }
+/* Leaflet kantig */
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  border-radius: 0 !important;
+}
+
+/* Routing-Anweisungen ausblenden */
+.leaflet-routing-container {
+  display: none !important;
+}
+
+/* Keine Outline/Shadow bei Markern */
+.leaflet-marker-icon,
+.leaflet-marker-shadow {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: none !important;
+}
+
+/* FOTO-PIN-MARKER (Linie zur Koordinate, Foto frei versetzt) */
+/* Das große Marker-Feld selbst fängt KEINE Klicks ab – nur Foto & Linie sind
+   klickbar. Sonst würde das (riesige) Begrenzungsfeld die ganze Karte überdecken. */
+.foto-pin-marker {
+  pointer-events: none !important;
+}
+
+/* FOTOS-Toggle: Fotos + Linien ausblenden, nur Punkte bleiben */
+.marker-nur-punkte .foto-pin-img,
+.marker-nur-punkte .foto-pin-fallback,
+.marker-nur-punkte .foto-pin-linie {
+  opacity: 0 !important;
+  transition: opacity 0.3s ease;
+  pointer-events: none !important;
+}
+.marker-nur-punkte .foto-pin-punkt {
+  pointer-events: auto !important;
+  cursor: pointer;
+  z-index: 9999 !important;
+}
+.marker-nur-punkte .foto-pin-marker,
+.marker-nur-punkte .foto-pin-wrapper {
+  pointer-events: none !important;
+}
+
+.foto-pin-wrapper {
+  position: relative;
+  pointer-events: none; /* leerer Bereich klickt zur Karte durch */
+  transform-origin: 50% 100%;      /* skaliert um den Koordinatenpunkt (unten-mittig) */
+  transition: transform 0.25s ease; /* weiches Mitwachsen statt Sprung */
+  will-change: transform;
+}
+
+.foto-pin-img {
+  position: absolute;
+  top: 0;
+  object-fit: cover;
+  display: block;
+  border: 2px solid #4A27EA;
+  pointer-events: auto;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.foto-pin-fallback {
+  position: absolute;
+  top: 0;
+  background: #ccc;
+  border: 2px solid #4A27EA;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.foto-pin-fallback span {
+  font-size: 8px;
+  text-align: center;
+  padding: 4px;
+  color: #555;
+}
+
+.foto-pin-linie {
+  position: absolute;
+  background: #4A27EA;
+  pointer-events: auto;
+  transform-origin: bottom center;
+  transition: opacity 0.3s ease;
+}
+
+.foto-pin-punkt {
+  position: absolute;
+  border-radius: 50% !important; /* überschreibt die globale border-radius:0-Regel → echter runder Punkt */
+  background: #4A27EA;
+  pointer-events: none;
+  transform: translate(-50%, -50%); /* Punkt sitzt mittig auf der Koordinate */
+}
+
+/* FOTO-MARKER */
+.foto-marker {
+  position: relative;
+  cursor: pointer;
+}
+
+.foto-marker-thumb {
+  overflow: hidden;
+  background: #eee;
+  border: 1px solid #4A27EA;
+}
+
+.foto-marker-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.foto-marker-expanded {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%) scaleY(0);
+  transform-origin: bottom center;
+  background: white;
+  overflow: visible;
+  opacity: 0;
+  transition: transform 0.25s ease, opacity 0.2s ease;
+  pointer-events: none;
+  z-index: 500;
+  border: 1px solid #4A27EA;
+}
+
+.foto-marker:hover .foto-marker-expanded {
+  transform: translateX(-50%) scaleY(1);
+  opacity: 1;
+}
+
+.foto-marker-expanded img {
+  display: block;
+}
+
+.foto-marker-label {
+  padding: 5px 8px;
+  font-size: 11px;
+  font-family: 'Heming', Helvetica, Arial, sans-serif;
+  line-height: 1.3;
+  background: white;
+  color: #4A27EA;
+  border-top: 1px solid #4A27EA;
+}
+
+.foto-marker-current .foto-marker-thumb,
+.foto-marker-current .foto-placeholder {
+  outline: 3px solid #4A27EA;
+  outline-offset: 3px;
+}
+
+/* Benutzerposition */
+.user-location-marker {
+  width: 18px;
+  height: 18px;
+  background: white;
+  border: 3px solid #4A27EA;
+  border-radius: 50% !important;
+  box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.25);
+}
+
+/* Platzhalter */
+.foto-placeholder {
+  width: 44px;
+  height: 44px;
+  background: #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px;
+  border: 1px solid #4A27EA;
+}
+
+.foto-placeholder span {
+  font-size: 7px;
+  text-align: center;
+  line-height: 1.2;
+  color: #333;
+  font-family: 'Heming', Helvetica, Arial, sans-serif;
+  overflow: hidden;
+}
+
+.foto-placeholder.large {
+  width: 200px;
+  height: 130px;
+  background: #e8e8e8;
+}
+
+.foto-placeholder.large span {
+  font-size: 12px;
+  padding: 8px;
+}
+
+.card-foto-placeholder {
+  width: 100%;
+  height: 140px;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 8px 0;
+  border: 1px solid #4A27EA;
+}
+
+.card-foto-placeholder span {
+  font-size: 13px;
+  color: #555;
+  font-family: 'Heming', Helvetica, Arial, sans-serif;
+}
+
+.card-foto {
+  max-height: 35vh;
+  width: auto;
+  max-width: 100%;
+  display: block;
+  margin: 8px 0;
+  object-fit: contain;
+  border: 1px solid #4A27EA;
+}
+
+/* ARCHIV */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+#archiv-grid {
+  margin-top: 40px;
+  margin-bottom: 96px;
+  padding: 8px;
+  column-count: 4;
+  column-gap: 6px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.kachel {
+  break-inside: avoid;
+  margin-bottom: 6px;
+  cursor: pointer;
+  position: relative;
+  max-width: 100%;
+  animation: drift 6s ease-in-out infinite;
+  transform-origin: center top;
+  container-type: inline-size; /* Basis für cqw – Schrift skaliert mit Kachelbreite */
+}
+
+.kachel:nth-child(3n)   { animation-delay: -2s; animation-duration: 7s; }
+.kachel:nth-child(3n+1) { animation-delay: -4s; animation-duration: 5s; }
+.kachel:nth-child(3n+2) { animation-delay: -1s; animation-duration: 8s; }
+
+@keyframes drift {
+  0%   { transform: rotate(-0.4deg); }
+  50%  { transform: rotate(0.4deg); }
+  100% { transform: rotate(-0.4deg); }
+}
+
+/* wie drift, behält aber den translateY-Versatz, damit die Überschrift am Fotorand sitzt */
+@keyframes drift-bottom {
+  0%   { transform: rotate(-1deg) translateX(-3px); }
+  50%  { transform: rotate(1deg)  translateX(3px); }
+  100% { transform: rotate(-1deg) translateX(-3px); }
+}
+@keyframes drift-bottom-mobile {
+  0%   { transform: rotate(-2deg) translateX(-6px); }
+  50%  { transform: rotate(2deg)  translateX(6px); }
+  100% { transform: rotate(-2deg) translateX(-6px); }
+}
+
+.kachel img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border: 1px solid #4A27EA;
+}
+
+.kachel-placeholder {
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #4A27EA;
+}
+
+.kachel-placeholder span {
+  font-size: 13px;
+  color: #555;
+  text-align: center;
+  padding: 10px;
+}
+
+.kachel-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
+  background: #fff;                    /* weiß gefüllt */
+  border: 1px solid #4A27EA;
+  border-top: none;                    /* keine doppelte Linie – Foto-Unterkante reicht */
+  margin-top: 0;                       /* direkt unter dem Foto */
+  padding: 6px 8px;
+}
+.kachel-label-text {
+  text-align: center;
+  font-family: 'ABC Camera Rounded Unlicensed Trial Black', Helvetica, Arial, sans-serif; /* wie Header im Info-Overlay */
+  font-size: clamp(12px, 9cqw, 56px); /* skaliert mit der Kachelbreite */
+  line-height: 1.05;
+  color: #4A27EA;
+}
+
+/* Zoom-Buttons – gleicher Look & Ort wie die Karten-Buttons */
+#archiv-zoom-controls {
+  position: fixed;
+  top: 52px;
+  right: 8px;
+  z-index: 2500;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #4A27EA;
+  border-radius: 999px !important;
+  overflow: hidden;
+  background: #4b27ea34;
+  backdrop-filter: blur(5px);
+}
+
+#archiv-zoom-controls button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #4A27EA;
+  color: #4A27EA;
+  font-family: 'ABC Camera Rounded Plain Bold Trial', Helvetica, Arial, sans-serif;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+
+#archiv-zoom-controls button:last-child {
+  border-bottom: none;
+}
+
+#archiv-zoom-controls button:hover {
+  background: #4b27ea22;
+}
+
+/* Zoom-Buttons ausblenden, wenn das Info-Overlay offen ist */
+body:has(#info-panel.open) #archiv-zoom-controls {
+  display: none !important;
+}
+
+/* RUNDE ROSTROTE MARKERPUNKTE */
+.punkt-marker {
+  width: 18px;
+  height: 18px;
+  background: #4A27EA;
+  border: 1px solid #4A27EA;
+  border-radius: 50% !important;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.punkt-marker:hover {
+  transform: scale(1.35);
+}
+
+.container-marker {
+  width: var(--marker-size, 45px);
+  height: var(--marker-size, 60px);
+  cursor: pointer;
+  transition: width 0.2s ease, height 0.2s ease, transform 0.15s ease;
+  min-width: 50px;   
+  min-height: 50px;
+}
+
+.container-marker svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.container-marker:hover {
+  transform: scale(1.25);
+}
+@media (max-width: 700px) {
+  #map {
+    height: calc(100vh - 40px - 56px - 40px - 48px);
+  }
+
+  #nav-menu {
+    top: 68px;
+    right: 8px;
+    width: 190px;
+  }
+
+  #nav-menu-toggle {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+
+  #nav-menu-inner button {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+
+  #nav-status {
+    font-size: 12px;
+  }
+
+  #sidebar,
+  #archiv-sidebar {
+    bottom: 108px;
+  }
+
+  #themen-bar,
+  #map-themen-bar {
+    padding: 8px 10px;
+  }
+
+  .themen-chip {
+    font-size: 21px; /* gleiche Größe wie der Header (nav a) */
+    padding: 8px 12px;
+  }
+
+  #archiv-grid {
+    margin-bottom: 108px;
+    padding: 6px;
+    column-count: 2;
+  }
+
+  .foto-marker-simple img {
+    display: block;
+    cursor: pointer;
+  }
+}
+
+/* ============================================================
+   INFO-PANEL
+   ============================================================ */
+
+#info-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+#info-panel.open {
+  pointer-events: all;
+  opacity: 1;
+}
+
+#info-panel-inner {
+  position: absolute;
+  top: 45px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: white;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transform: translateY(100%);
+  transition: transform 0.35s ease;
   padding-bottom: 110px; /* Platz, damit der Text nicht hinter den unteren Leisten liegt */
 }
 
