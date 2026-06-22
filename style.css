@@ -103,7 +103,7 @@ header {
 nav {
   display: flex;
   align-items: center;
-  padding: 12px clamp(10px, 4vw, 16px); /* Außenabstand schrumpft mit */
+  padding: 12px clamp(8px, 3vw, 12px); /* Außenabstand schrumpft mit */
   width: 100%;
   box-sizing: border-box;
 }
@@ -112,7 +112,7 @@ nav a {
   text-decoration: none;
   color: #fff;
   font-family: 'ABC Camera Rounded Plain Black Trial', Helvetica, Arial, sans-serif;
-  font-size: clamp(16px, 4.4vw, 21px);  /* statt fix 21px */
+  font-size: clamp(18px, 5vw, 21px);  /* statt fix 21px */
   text-transform: uppercase;
   letter-spacing: 0.05em;
   line-height: 1;
