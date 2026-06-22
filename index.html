@@ -393,14 +393,14 @@
       const g = e.accelerationIncludingGravity;
       if (!g || g.x == null) return;
       motionOk = true;
-      tiltZiel = Math.max(-1, Math.min(1, -g.x / 5));   // Vorzeichen umdrehen, falls invertiert
+      tiltZiel = Math.max(-1, Math.min(1, g.x / 5));    // Bewegung folgt der Kipprichtung
     });
 
     // Fallback: deviceorientation (gamma). Nur aktiv, solange devicemotion
     // noch keine Daten liefert.
     window.addEventListener('deviceorientation', e => {
       if (motionOk || e.gamma == null) return;
-      tiltZiel = Math.max(-1, Math.min(1, e.gamma / 25));
+      tiltZiel = Math.max(-1, Math.min(1, -e.gamma / 25));
     });
   }
 
