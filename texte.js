@@ -23,10 +23,7 @@ const texte = {
   1998 wurden bei der Weserufer-Sanierung zwei der vier Löwenköpfe auf dem Flussgrund wiederentdeckt.`,
 
   // Ehemalige Kellogg's-Fabrik
-  2: `Um eine vergleichende Beurteilung vornehmen zu können, wurden im Rahmen einer von der Stadtgemeinde Bremen, der Firma Kellogg sowie WPD initiierten Vorstudie sechs Teams beauftragt, mögliche Entwicklungen aufzuzeigen – zunächst bezogen auf die Gesamtfläche Europahafen-Süd. Diese Phase endete im Frühjahr 2018. Im nächsten Schritt wurde das Verfahren durch die Auswahl von drei auf das Kellogg-Grundstück beschränkte Entwürfe vertieft. Die Untersuchung dieser erfolgte dann durch die verbliebenenen beteiligten Parteien, Vertreter:innen der Stadt Bremen und den Unternehmen WPD sowie Robert C. Spies – das Immobilienunternehmen war zunächst durch Kellogg mandatiert und steht WPD bzw. einer mit der WPD verbundenen Projektgesellschaft zukünftig beratend zur Seite.
-
-Der nächste Planungsschritt war die Erstellung eines städtebaulichen Rahmenplans für die Gesamtfläche der Überseeinsel zwischen dem Europahafen und der Weser unter Einbeziehung des Kellogg-Grundstücks. Hierzu gab es parallel ein breites öffentliches Beteiligungsverfahren. Dieser Rahmenplan war wiederum in einem weiteren Schritt Grundlage bzw. Bestandteil des weiterzuentwickelnden Masterplans für die gesamte Überseestadt. 
-`,
+  2: `{ intro:   "MORE COMING SOON..." }`,
 
   // ehemalige Zollkantine
   3: ``,
