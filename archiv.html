@@ -149,6 +149,514 @@
       <div id="info-scroll-spacer"></div>
     </div>
 
+  </div>
+
+  <!-- Untere Leisten: liegen ÜBER dem Scrollbereich, nicht darin -->
+  <div id="info-leisten">
+
+    <!-- Kommentar-Formular -->
+    <div id="kommentar-formular">
+      <textarea id="kommentar-text" placeholder="Kommentar schreiben…" maxlength="300"></textarea>
+      <div id="kommentar-formular-footer">
+        <input id="kommentar-name" type="text" placeholder="Name (optional)" maxlength="40" />
+        <span id="kommentar-anzahl"></span>
+        <button id="kommentar-senden">Senden</button>
+      </div>
+    </div>
+
+    <!-- Stations-Leiste -->
+    <div id="stations-nav">
+      <button id="info-prev" type="button" aria-label="Vorherige Station"><svg width="28" height="28" viewBox="0 0 20 20" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><polyline points="12,4 7,10 12,16"/></svg></button>
+      <button id="info-next" type="button" aria-label="Nächste Station"><svg width="28" height="28" viewBox="0 0 20 20" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><polyline points="8,4 13,10 8,16"/></svg></button>
+    </div>
+
+  </div>
+</div>
+
+<div id="info-vollbild-overlay">
+  <button id="info-vollbild-close"><svg class="btn-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="5" x2="15" y2="15"/><line x1="15" y1="5" x2="5" y2="15"/></svg></button>
+  <button id="info-vollbild-prev"><svg class="btn-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><polyline points="12,4 7,10 12,16"/></svg></button>
+  <img id="info-vollbild-img" src="" alt="" />
+  <button id="info-vollbild-next"><svg class="btn-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><polyline points="8,4 13,10 8,16"/></svg></button>
+</div>
+
+<footer>
+  <div class="footer-content">
+    <a href="about.html" class="footer-link">About</a>
+    <a href="impressum.html" class="footer-link">Impressum</a>
+    <a href="datenschutz.html" class="footer-link">Datenschutz</a>
+  </div>
+</footer>
+
+<script src="stations.js"></script>
+<script src="texte.js"></script>
+<script>
+const grid = document.getElementById('archiv-grid');
+const themenBar = document.getElementById('themen-bar');
+
+const filters = {
+  selectedThemen: []
+};
+
+function toggleThema(thema) {
+  const index = filters.selectedThemen.indexOf(thema);
+  if (index > -1) {
+    filters.selectedThemen.splice(index, 1);
+  } else {
+    filters.selectedThemen.push(thema);
+  }
+  renderThemenBar();
+  updateArchiv();
+}
+
+function filterStations(allStations) {
+  if (filters.selectedThemen.length === 0) return allStations;
+  return allStations.filter(station => {
+    const stationThemen = station.themen || [];
+    return filters.selectedThemen.some(thema => stationThemen.includes(thema));
+  });
+}
+
+function renderThemenBar() {
+  themenBar.innerHTML = '';
+  (typeof kategorien !== 'undefined' ? kategorien : [])
+    .forEach(kat => {
+      const chip = document.createElement('button');
+      chip.className = 'themen-chip';
+      chip.textContent = kat.label;
+      if (filters.selectedThemen.includes(kat.wert)) chip.classList.add('active');
+      chip.addEventListener('click', () => toggleThema(kat.wert));
+      themenBar.appendChild(chip);
+    });
+}
+
+function renderArchiv(filteredStations) {
+  grid.innerHTML = '';
+
+  if (filteredStations.length === 0) {
+    grid.innerHTML = `
+      <p style="padding:10px;background:transparent;display:inline-block;border:1px solid black;">
+        Keine Orte für diese Auswahl gefunden.
+      </p>
+    `;
+    return;
+  }
+
+  filteredStations.forEach(station => {
+    const kachel = document.createElement('div');
+    kachel.className = 'kachel';
+
+    const fotoHtml = station.foto
+      ? `<img src="${station.foto}" alt="${station.name}" />`
+      : `<div class="kachel-placeholder"><span>${station.name}</span></div>`;
+
+    kachel.innerHTML = `
+      ${fotoHtml}
+      <div class="kachel-label"><span class="kachel-label-text">${station.name}</span></div>
+    `;
+
+    kachel.addEventListener('click', () => openDetail(station));
+    grid.appendChild(kachel);
+  });
+}
+
+function updateArchiv() {
+  const filtered = filterStations(stations);
+  renderArchiv(filtered);
+}
+
+// ── INFO-PANEL (gleich wie Karte) ────────────────────────────
+
+const infoPanel        = document.getElementById('info-panel');
+const infoClose        = document.getElementById('info-close');
+const infoFotoImg      = document.getElementById('info-foto-img');
+const infoPrev         = document.getElementById('info-foto-prev');
+const infoNext         = document.getElementById('info-foto-next');
+const infoVollbild     = document.getElementById('info-foto-vollbild');
+const infoName         = document.getElementById('info-name');
+const infoBeschreibung = document.getElementById('info-beschreibung');
+const infoFakten       = document.getElementById('info-fakten');
+const infoAdresse      = document.getElementById('info-adresse');
+const infoQuellen      = document.getElementById('info-quellen');
+const infoKoordinaten  = document.getElementById('info-koordinaten');
+const vollbildOverlay  = document.getElementById('info-vollbild-overlay');
+const vollbildImg      = document.getElementById('info-vollbild-img');
+const vollbildClose    = document.getElementById('info-vollbild-close');
+const vollbildPrev     = document.getElementById('info-vollbild-prev');
+const vollbildNext     = document.getElementById('info-vollbild-next');
+
+let aktiveFotos = [], aktiverFotoIndex = 0;
+
+function aktualisiereFoto() {
+  if (aktiveFotos.length === 0) { infoFotoImg.style.display='none'; document.getElementById('info-foto-controls').style.display='none'; return; }
+  infoFotoImg.style.display = 'block';
+  infoFotoImg.src = aktiveFotos[aktiverFotoIndex];
+  vollbildImg.src = aktiveFotos[aktiverFotoIndex];
+  const m = aktiveFotos.length > 1;
+  document.getElementById('info-foto-controls').style.display = m ? 'flex' : 'none';
+  infoPrev.style.display = m ? 'flex' : 'none';
+  infoNext.style.display = m ? 'flex' : 'none';
+}
+
+let aktuelleStationId = null;
+
+function openDetail(station) {
+  aktuelleStationId = station.id;
+  aktiveFotos = station.fotos && station.fotos.length > 0 ? station.fotos : (station.foto ? [station.foto] : []);
+  aktiverFotoIndex = 0;
+  infoName.innerHTML = '<span class="name-inner">'
+    + (station.name || '').replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    + '</span>';
+  infoBeschreibung.innerHTML = renderBeschreibung(
+    (typeof texte !== 'undefined' && texte[station.id]) ? texte[station.id] : (station.info || '')
+  );
+  if (infoAdresse) infoAdresse.textContent = station.adresse || '';
+  if (infoFakten) {
+    if (station.fakten && station.fakten.length > 0) {
+      infoFakten.innerHTML = station.fakten
+        .map(f => '<span class="fakt">' + f + '</span>')
+        .join('<hr class="fakten-trennlinie">');
+    } else {
+      infoFakten.innerHTML = '';
+    }
+  }
+  // Quellen unter dem Text auflisten
+  if (infoQuellen) {
+    const q = Array.isArray(station.quellen) ? station.quellen : [];
+    const esc = t => String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+    infoQuellen.innerHTML = q.length
+      ? '<span class="quellen-titel">Quellen</span>' + q.map(t => esc(t)).join('<br>')
+      : '';
+  }
+  if (infoKoordinaten) infoKoordinaten.textContent = station.coords ? station.coords[0].toFixed(4)+' N / '+station.coords[1].toFixed(4)+' O' : '';
+  aktualisiereFoto();
+  kommentareZuruecksetzen(station.id);
+  infoPanel.classList.add('open');
+}
+
+infoClose.addEventListener('click', () => {
+  infoPanel.classList.remove('open');
+});
+
+// ── Stations-Pfeile: zwischen Stationen wechseln ──
+function wechsleStation(richtung) {
+  if (aktuelleStationId == null) return;
+  const idx = stations.findIndex(s => s.id === aktuelleStationId);
+  if (idx === -1) return;
+  const neu = stations[(idx + richtung + stations.length) % stations.length];
+  openDetail(neu);
+  const inner = document.getElementById('info-panel-inner');
+  if (inner) inner.scrollTop = 0;
+}
+const infoPrevBtn = document.getElementById('info-prev');
+const infoNextBtn = document.getElementById('info-next');
+if (infoPrevBtn) infoPrevBtn.addEventListener('click', () => wechsleStation(-1));
+if (infoNextBtn) infoNextBtn.addEventListener('click', () => wechsleStation(1));
+
+let swipeStartX = 0;
+infoFotoImg.addEventListener('touchstart', e => { swipeStartX = e.touches[0].clientX; }, {passive:true});
+infoFotoImg.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - swipeStartX;
+  if (Math.abs(dx) > 40 && aktiveFotos.length > 1) {
+    aktiverFotoIndex = dx < 0 ? (aktiverFotoIndex+1)%aktiveFotos.length : (aktiverFotoIndex-1+aktiveFotos.length)%aktiveFotos.length;
+    aktualisiereFoto();
+  }
+}, {passive:true});
+
+infoPrev.addEventListener('click', () => { aktiverFotoIndex=(aktiverFotoIndex-1+aktiveFotos.length)%aktiveFotos.length; aktualisiereFoto(); });
+infoNext.addEventListener('click', () => { aktiverFotoIndex=(aktiverFotoIndex+1)%aktiveFotos.length; aktualisiereFoto(); });
+infoVollbild.addEventListener('click', () => { vollbildImg.src=aktiveFotos[aktiverFotoIndex]; vollbildOverlay.classList.add('open'); });
+vollbildClose.addEventListener('click', () => vollbildOverlay.classList.remove('open'));
+vollbildPrev.addEventListener('click', () => { aktiverFotoIndex=(aktiverFotoIndex-1+aktiveFotos.length)%aktiveFotos.length; aktualisiereFoto(); vollbildImg.src=aktiveFotos[aktiverFotoIndex]; });
+vollbildNext.addEventListener('click', () => { aktiverFotoIndex=(aktiverFotoIndex+1)%aktiveFotos.length; aktualisiereFoto(); vollbildImg.src=aktiveFotos[aktiverFotoIndex]; });
+
+// ── KOMMENTARE ───────────────────────────────────────────────
+
+const ADMIN_PW = 'hafen2026';
+let istAdmin = sessionStorage.getItem('hafen_admin') === '1';
+(function(){ const p=new URLSearchParams(window.location.search); if(p.get('admin')===ADMIN_PW){sessionStorage.setItem('hafen_admin','1');istAdmin=true;window.history.replaceState({},'',window.location.pathname);} })();
+
+const KommentarStore = {
+  laden(id) { try{return JSON.parse(localStorage.getItem('k_'+id)||'[]');}catch{return[];} },
+  speichern(id,k) { const a=this.laden(id);a.push(k);localStorage.setItem('k_'+id,JSON.stringify(a)); },
+  freischalten(id,kid) { const a=this.laden(id);const k=a.find(k=>k.id===kid);if(k){k.freigegeben=true;localStorage.setItem('k_'+id,JSON.stringify(a));} },
+  loeschen(id,kid) { localStorage.setItem('k_'+id,JSON.stringify(this.laden(id).filter(k=>k.id!==kid))); },
+  freigeschaltet(id) { return this.laden(id).filter(k=>k.freigegeben); },
+  pending(id) { return this.laden(id).filter(k=>!k.freigegeben); }
+};
+
+const POSITIONEN = [
+  {top:'8%',left:'4%',rot:-2},{top:'10%',right:'4%',rot:1.5},
+  {top:'45%',left:'3%',rot:1},{top:'50%',right:'3%',rot:-1.5},
+  {top:'25%',left:'30%',rot:2},{top:'65%',left:'20%',rot:-1}
+];
+
+let kommentareSichtbar = false;
+
+function kommentareZuruecksetzen(stationId) {
+  kommentareSichtbar = true; // beim Öffnen des Overlays direkt geöffnet
+  const zettel = document.getElementById('kommentar-notizzettel');
+  const toggle = document.getElementById('kommentar-foto-toggle');
+  const anzahl = document.getElementById('kommentar-anzahl');
+  if (zettel) zettel.classList.add('sichtbar');
+  const formular = document.getElementById('kommentar-formular');
+  if (formular) formular.classList.add('sichtbar');
+  if (toggle) toggle.classList.add('aktiv');
+  renderKommentare(stationId);
+  const n = KommentarStore.freigeschaltet(stationId).length + (istAdmin ? KommentarStore.pending(stationId).length : 0);
+  if (anzahl) anzahl.textContent = n > 0 ? n+(n===1?' Kommentar':' Kommentare') : '';
+}
+
+function renderKommentare(stationId) {
+  const zettel = document.getElementById('kommentar-notizzettel');
+  if (!zettel) return;
+  zettel.innerHTML = '';
+  const alle = [...KommentarStore.freigeschaltet(stationId), ...(istAdmin?KommentarStore.pending(stationId):[])];
+  alle.forEach((k,i) => {
+    const pos = POSITIONEN[i%POSITIONEN.length];
+    const z = document.createElement('div');
+    z.className = 'notizzettel';
+    if (!k.freigegeben) z.style.opacity='0.55';
+    Object.entries(pos).forEach(([p,v]) => { if(p==='rot') z.style.transform=`rotate(${v}deg)`; else z.style[p]=v; });
+    z.innerHTML = `<div class="notizzettel-text">${k.text}</div><div class="notizzettel-meta"><span>${k.name}</span><span>${k.datum}</span></div>
+      ${!k.freigegeben&&istAdmin?`<div style="display:flex;gap:4px;margin-top:4px;"><button class="nz-freischalten" data-id="${k.id}">✓</button><button class="nz-loeschen" data-id="${k.id}">✕</button></div>`:''}
+      ${k.freigegeben&&istAdmin?`<button class="nz-loeschen" data-id="${k.id}" style="margin-top:4px;">✕</button>`:''}`;
+    z.addEventListener('click', () => z.classList.toggle('expanded'));
+    zettel.appendChild(z);
+  });
+  zettel.querySelectorAll('.nz-freischalten').forEach(btn => { btn.addEventListener('click', e => { e.stopPropagation(); KommentarStore.freischalten(stationId,btn.dataset.id); renderKommentare(stationId); }); });
+  zettel.querySelectorAll('.nz-loeschen').forEach(btn => { btn.addEventListener('click', e => { e.stopPropagation(); KommentarStore.loeschen(stationId,btn.dataset.id); renderKommentare(stationId); }); });
+}
+
+const kommentarToggle = document.getElementById('kommentar-foto-toggle');
+if (kommentarToggle) {
+  kommentarToggle.addEventListener('click', () => {
+    if (!aktuelleStationId) return;
+    kommentareSichtbar = !kommentareSichtbar;
+    document.getElementById('kommentar-notizzettel').classList.toggle('sichtbar', kommentareSichtbar);
+    document.getElementById('kommentar-formular').classList.toggle('sichtbar', kommentareSichtbar);
+    kommentarToggle.classList.toggle('aktiv', kommentareSichtbar);
+    if (kommentareSichtbar) renderKommentare(aktuelleStationId);
+  });
+}
+
+document.getElementById('kommentar-senden').addEventListener('click', () => {
+  const text = document.getElementById('kommentar-text').value.trim();
+  const name = document.getElementById('kommentar-name').value.trim() || 'Anonym';
+  if (!text || !aktuelleStationId) return;
+  KommentarStore.speichern(aktuelleStationId, { id:Date.now().toString(), text, name, datum:new Date().toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'2-digit'}), freigegeben:istAdmin });
+  document.getElementById('kommentar-text').value = '';
+  document.getElementById('kommentar-name').value = '';
+  const n = KommentarStore.freigeschaltet(aktuelleStationId).length + (istAdmin?KommentarStore.pending(aktuelleStationId).length:0);
+  document.getElementById('kommentar-anzahl').textContent = n > 0 ? n+(n===1?' Kommentar':' Kommentare') : '';
+  document.getElementById('kommentar-text').placeholder = istAdmin ? '✓ Veröffentlicht.' : '✓ Danke! Wird nach Freischaltung angezeigt.';
+  setTimeout(() => { document.getElementById('kommentar-text').placeholder = 'Kommentar schreiben…'; }, 3000);
+  if (kommentareSichtbar) renderKommentare(aktuelleStationId);
+});
+
+// ── ARCHIV ──────────────────────────────────────────────────
+
+renderThemenBar();
+updateArchiv();
+
+let archivCols = 4;
+function setArchivCols(n) { archivCols=Math.min(Math.max(n,1),8); grid.style.columnCount=archivCols; }
+document.getElementById('zoom-in').addEventListener('click',  () => setArchivCols(archivCols-1));
+document.getElementById('zoom-out').addEventListener('click', () => setArchivCols(archivCols+1));
+
+// Menü
+const menuToggle = document.getElementById('menu-toggle');
+const menuDropdown = document.getElementById('menu-dropdown');
+if (menuToggle) {
+  menuToggle.addEventListener('click', e => { e.stopPropagation(); menuDropdown.classList.toggle('open'); });
+  document.addEventListener('click', () => menuDropdown.classList.remove('open'));
+}
+
+</script>
+
+
+<script>
+// ── STANDBY (aus script.js übernommen) ──
+// STANDBY / SCREENSAVER – schwimmende Überschrift bei Inaktivität
+// ============================================================
+(function () {
+  const IDLE_MS = 3000; // nach 3 s ohne Aktivität erscheint die Überschrift
+
+  // Nur der Text – keine flächige Überlagerung. Karte bleibt voll sichtbar.
+  const overlay = document.createElement('div');
+  overlay.id = 'standby';
+  const text = document.createElement('div');
+  text.id = 'standby-text';
+  text.innerHTML = 'Was<br> vom<br>Hafen<br> bleibt'; // zusammenhängender Block, zweizeilig
+  overlay.appendChild(text);
+  document.body.appendChild(overlay);
+
+  let idleTimer = null;
+  let aktiv     = false; // Standby sichtbar?
+  let rafId     = null;
+  let startTs   = null;
+  let lastTs    = null;
+  let posY      = 0;     // aktuelle vertikale Position (oben-Kante des Textblocks)
+
+  const SPEED = 0.4; // Aufwärtstempo (px pro 16ms) – wie die Intro-Fotos
+
+  // Nicht erscheinen, solange Intro oder Info-Panel offen sind
+  function blockiert() {
+    const panel = document.getElementById('info-panel');
+    if (panel && panel.classList.contains('open')) return true;
+    return false;
+  }
+
+  function zeigen() {
+    if (aktiv || blockiert()) return;
+    aktiv = true;
+    startTs = null;
+    lastTs = null;
+
+    // Voll sichtbarer Startpunkt: oben-Kante zwischen Bildschirmmitte und knapp über
+    // dem unteren Rand → der ganze Text ist sofort zu sehen, mal mittig, mal unten.
+    const H = window.innerHeight;
+    const blockH = text.offsetHeight || 200;
+    const mitte = (H - blockH) / 2;
+    const unten = H - blockH - 24;
+    posY = mitte + Math.random() * Math.max(0, unten - mitte);
+
+    overlay.classList.add('sichtbar');
+    rafId = requestAnimationFrame(schwimmen);
+  }
+
+  function verstecken() {
+    if (!aktiv) return;
+    aktiv = false;
+    overlay.classList.remove('sichtbar');
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = null;
+  }
+
+  // Bewegung wie die Fotos im Intro: von unten nach oben, mit leichtem seitlichem
+  // Schwingen, in Endlosschleife.
+  function schwimmen(ts) {
+    if (!aktiv) return;
+    if (startTs === null) { startTs = ts; lastTs = ts; }
+    const dt = Math.min(ts - lastTs, 50);
+    lastTs = ts;
+    const t = (ts - startTs) / 1000; // Sekunden
+
+    const H = window.innerHeight;
+    const blockH = text.offsetHeight || 200;
+
+    posY -= SPEED * (dt / 16);                 // nach oben
+    if (posY + blockH < -20) posY = H + 20;    // oben raus → unten wieder rein
+
+    const waveX = Math.sin(t * 1.1) * 14;      // sanftes seitliches Schwingen
+
+    text.style.transform = `translate(${waveX}px, ${posY}px)`;
+
+    rafId = requestAnimationFrame(schwimmen);
+  }
+
+  // Jede Nutzeraktivität blendet aus und startet den Timer neu
+  function aktivitaet() {
+    verstecken();
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(zeigen, IDLE_MS);
+  }
+
+  ['mousemove', 'mousedown', 'wheel', 'keydown', 'touchstart', 'touchmove', 'scroll', 'pointerdown']
+    .forEach(ev => window.addEventListener(ev, aktivitaet, { passive: true, capture: true }));
+
+  aktivitaet(); // Timer initial starten
+})();
+</script>
+</body>
+</html>      height: 40px;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #4A27EA;
+      color: #4A27EA;
+      font-family: 'ABC Camera Rounded Plain Bold Trial', Helvetica, Arial, sans-serif;
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    #archiv-zoom-controls button:last-child {
+      border-bottom: none;
+      border-top: none;
+    }
+
+    #archiv-zoom-controls button:hover {
+      background: #4b27ea22;
+    }
+
+    /* Zoom-Buttons ausblenden, wenn das Info-Overlay offen ist */
+    body:has(#info-panel.open) #archiv-zoom-controls {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="index.html">Karte</a>
+    <a href="#">Archiv</a>
+    <a href="kaffeekranz.html">Kaffeekranz</a>
+  </nav>
+</header>
+<div id="archiv-grid"></div>
+
+<div id="archiv-zoom-controls">
+  <button id="zoom-in">+</button>
+  <button id="zoom-out">−</button>
+</div>
+
+<div id="themen-bar"></div>
+
+<div id="info-panel">
+  <div id="info-panel-inner">
+    <div class="overlay-btn-group">
+      <button id="info-close"><svg class="btn-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="5" x2="15" y2="15"/><line x1="15" y1="5" x2="5" y2="15"/></svg></button>
+      <button id="info-foto-vollbild"><svg class="btn-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="15" x2="15" y2="5"/><polyline points="10,5 15,5 15,10"/><polyline points="10,15 5,15 5,10"/></svg></button>
+      <button id="kommentar-foto-toggle" title="Kommentare ein/ausblenden">
+        <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 1h14v10H9l-3 3v-3H1V1Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- 1. FOTO -->
+    <div id="info-foto-bereich">
+      <div id="info-foto-wrapper">
+        <img id="info-foto-img" src="" alt="" />
+        <div id="info-foto-controls">
+          <button id="info-foto-prev"><svg class="btn-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><polyline points="12,4 7,10 12,16"/></svg></button>
+          <button id="info-foto-next"><svg class="btn-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><polyline points="8,4 13,10 8,16"/></svg></button>
+        </div>
+      </div>
+      <div id="kommentar-notizzettel"></div>
+    </div>
+
+    <!-- ÜBERSCHRIFT sticky -->
+    <div id="info-name"></div>
+
+    <!-- 2. KASTEN + TEXT -->
+    <div id="info-scroll">
+      <div id="info-kasten">
+        <div id="info-kasten-links">
+          <span id="info-koordinaten"></span>
+          <span id="info-adresse"></span>
+        </div>
+        <div id="info-kasten-rechts">
+          <span id="info-fakten"></span>
+        </div>
+      </div>
+      <p id="info-beschreibung"></p>
+      <p id="info-quellen"></p>
+      <div id="info-scroll-spacer"></div>
+    </div>
+
     <!-- Untere Leisten: bleiben unten am Bildschirmrand -->
     <div id="info-leisten">
 
