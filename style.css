@@ -94,16 +94,16 @@ header {
   position: fixed;
   top: 0;
   width: 100%;
-  background: rgba(74, 39, 234, 0.6); /* #4A27EA transparent – Karte scheint durch */
+  background: rgba(74, 39, 234, 0.6);
   z-index: 2500;
   font-family: 'ABC Camera Rounded Plain Black Trial', Helvetica, Arial, sans-serif;
-  font-size: 25px;
+  font-size: clamp(18px, 5vw, 25px);   /* skaliert mit dem Bildschirm */
 }
 
 nav {
   display: flex;
   align-items: center;
-  padding: 12px 16px;
+  padding: 12px clamp(10px, 4vw, 16px); /* Außenabstand schrumpft mit */
   width: 100%;
   box-sizing: border-box;
 }
@@ -112,7 +112,7 @@ nav a {
   text-decoration: none;
   color: #fff;
   font-family: 'ABC Camera Rounded Plain Black Trial', Helvetica, Arial, sans-serif;
-  font-size: 21px;
+  font-size: clamp(14px, 4.2vw, 21px);  /* statt fix 21px */
   text-transform: uppercase;
   letter-spacing: 0.05em;
   line-height: 1;
@@ -124,9 +124,8 @@ nav a:first-child {
 }
 
 nav a:not(:first-child) {
-  margin-left: 24px;
+  margin-left: clamp(8px, 3vw, 24px);   /* statt fix 24px */
 }
-
 /* MAP */
 #map {
   position: absolute;
