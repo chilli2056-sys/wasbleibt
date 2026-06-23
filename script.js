@@ -827,40 +827,9 @@ if (kommentarSendenBtn) {
 // START
 // ============================================================
 
-// Kategorieleiste per Finger ziehen – reagiert sofort (1:1), ohne die
-// Erkennungs-Schwelle des nativen Touch-Scrollens. Vertikales Scrollen der
-// Seite bleibt nativ (touch-action: pan-y in der CSS).
-function leisteWischbarMachen(bar) {
-  if (!bar) return;
-  let startX = 0, startScroll = 0, aktiv = false, gewischt = false;
-
-  bar.addEventListener('touchstart', e => {
-    aktiv = true;
-    gewischt = false;
-    startX = e.touches[0].clientX;
-    startScroll = bar.scrollLeft;
-  }, { passive: true });
-
-  bar.addEventListener('touchmove', e => {
-    if (!aktiv) return;
-    const dx = e.touches[0].clientX - startX;
-    if (Math.abs(dx) > 3) gewischt = true;
-    bar.scrollLeft = startScroll - dx;   // folgt dem Finger sofort
-  }, { passive: true });
-
-  bar.addEventListener('touchend',   () => { aktiv = false; });
-  bar.addEventListener('touchcancel', () => { aktiv = false; });
-
-  // Wurde gewischt, soll der abschließende Tap keinen Chip auslösen
-  bar.addEventListener('click', e => {
-    if (gewischt) { e.preventDefault(); e.stopPropagation(); }
-  }, true);
-}
-
 setupThemenBar();
 setupFahrradBtn();
 setupZoomBtns();
-leisteWischbarMachen(document.getElementById('map-themen-bar'));
 
 // Direkte Klicks auf Punkte (umgeht Leaflets Marker-Überlappungs-Erkennung)
 document.getElementById('map').addEventListener('click', e => {
