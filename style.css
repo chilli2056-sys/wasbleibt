@@ -298,7 +298,7 @@ footer {
   overflow-y: hidden;
   align-items: center;
   -webkit-overflow-scrolling: touch;
-  touch-action: pan-y;        /* horizontal scrollt JS (sofort, ohne Schwelle); vertikal bleibt nativ */
+  touch-action: pan-x;        /* Wischen wird als horizontales Scrollen erkannt (Handy) */
   overscroll-behavior-x: contain;
 }
 
@@ -321,7 +321,7 @@ footer {
  -webkit-backdrop-filter: blur(5px);
   white-space: nowrap;
   text-transform: uppercase;
-  touch-action: pan-y; /* horizontales Wischen steuert JS (leisteWischbarMachen) */
+  touch-action: pan-x; /* Wischen auf einem Chip scrollt die Leiste, statt die Seite vertikal */
 }
 
 
@@ -341,16 +341,6 @@ footer {
 .themen-chip:nth-child(4n+1) { animation-delay: -2.3s; }
 .themen-chip:nth-child(4n+2) { animation-delay: -3.7s; }
 .themen-chip:nth-child(4n+3) { animation-delay: -5.1s; }
-
-/* Auf Touch-Geräten die Wackel-Animation der Chips abschalten:
-   ein dauerhaft animierter transform im Scrollbereich macht das horizontale
-   Wischen auf dem Handy unzuverlässig ("manchmal passiert nichts"). */
-@media (hover: none), (pointer: coarse) {
-  .themen-chip:hover,
-  .themen-chip.active {
-    animation: none;
-  }
-}
 /* Leaflet kantig */
 .leaflet-popup-content-wrapper,
 .leaflet-popup-tip {
