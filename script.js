@@ -1,341 +1,547 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Archiv</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <style>
-    #archiv-grid {
-      top: 60px;
-      bottom: 96px;
-    }
+const map = L.map('map', {
+  doubleClickZoom: false,
+  zoomControl: false,
+  maxZoom: 20
+}).setView([53.09, 8.78], 14);
 
-    @media (max-width: 700px) {
-      #archiv-grid {
-        bottom: 108px;
-        padding: 14px;
-      }
-    }
-
-    /* Polaroid-Look: Balken unter dem Foto, Name komplett im Balken */
-    .kachel-label {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      box-sizing: border-box;
-      background: #fff;
-      border: 1px solid #4A27EA;
-      border-top: none;
-      margin-top: 0;
-      padding: 6px 8px;
-    }
-    .kachel-label-text {
-      text-align: center;
-      font-family: 'ABC Camera Rounded Unlicensed Trial Black', Helvetica, Arial, sans-serif;
-      font-size: clamp(12px, 9cqw, 56px); /* skaliert mit der Kachelbreite */
-      line-height: 1.05;
-      color: #4A27EA;
-    }
-
-    /* Zoom-Buttons – gleicher Look & Ort wie die Karten-Buttons */
-    #archiv-zoom-controls {
-      position: fixed;
-      top: 52px;
-      right: 8px;
-      bottom: auto;
-      z-index: 2500;
-      display: flex;
-      flex-direction: column;
-      border: 1px solid #4A27EA;
-      border-radius: 999px !important;
-      overflow: hidden;
-      background: #4b27ea34;
-      backdrop-filter: blur(5px);
-    }
-
-    #archiv-zoom-controls button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      background: transparent;
-      border: none;
-      border-bottom: 1px solid #4A27EA;
-      color: #4A27EA;
-      font-family: 'ABC Camera Rounded Plain Bold Trial', Helvetica, Arial, sans-serif;
-      font-size: 20px;
-      line-height: 1;
-      cursor: pointer;
-      padding: 0;
-    }
-
-    #archiv-zoom-controls button:last-child {
-      border-bottom: none;
-      border-top: none;
-    }
-
-    #archiv-zoom-controls button:hover {
-      background: #4b27ea22;
-    }
-
-    /* Zoom-Buttons ausblenden, wenn das Info-Overlay offen ist */
-    body:has(#info-panel.open) #archiv-zoom-controls {
-      display: none !important;
-    }
-
-    /* ===== Archivseite: blauer Hintergrund ===== */
-    body { background: #4A27EA; }
-
-    /* Footer-Links: weiß, sonst blau auf blau = unsichtbar */
-    .footer-link { color: #fff; }
-
-    /* Themen-Chips als weiße Pillen (blau auf blau wäre unlesbar) */
-    #themen-bar .themen-chip {
-      background: #fff;
-      color: #4A27EA;
-      border-color: #fff;
-      -webkit-backdrop-filter: none;
-    }
-    #themen-bar .themen-chip.active {
-      background: #4A27EA;
-      color: #fff;
-      border-color: #fff;   /* heller Rand, damit die aktive Pille sich vom Grund abhebt */
-    }
-
-    /* Zoom-Buttons: weiße Pille mit blauer Schrift */
-    #archiv-zoom-controls {
-      background: #fff;
-      border-color: #fff;
-    }
-  </style>
-</head>
-<body>
-
-<header>
-  <nav>
-    <a href="index.html">Karte</a>
-    <a href="#">Archiv</a>
-    <a href="kaffeekranz.html">Kaffeekranz</a>
-  </nav>
-</header>
-<div id="archiv-grid"></div>
-
-<div id="archiv-zoom-controls">
-  <button id="zoom-in">+</button>
-  <button id="zoom-out">−</button>
-</div>
-
-<div id="themen-bar"></div>
-
-<div id="info-panel">
-  <div id="info-panel-inner">
-    <div class="overlay-btn-group">
-      <button id="info-close"><svg class="btn-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="5" x2="15" y2="15"/><line x1="15" y1="5" x2="5" y2="15"/></svg></button>
-      <button id="info-foto-vollbild"><svg class="btn-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="15" x2="15" y2="5"/><polyline points="10,5 15,5 15,10"/><polyline points="10,15 5,15 5,10"/></svg></button>
-      <button id="kommentar-foto-toggle" title="Kommentare ein/ausblenden">
-        <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M1 1h14v10H9l-3 3v-3H1V1Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
-        </svg>
-      </button>
-    </div>
-
-    <!-- 1. FOTO -->
-    <div id="info-foto-bereich">
-      <div id="info-foto-wrapper">
-        <img id="info-foto-img" src="" alt="" />
-        <div id="info-foto-controls">
-          <button id="info-foto-prev"><svg class="btn-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><polyline points="12,4 7,10 12,16"/></svg></button>
-          <button id="info-foto-next"><svg class="btn-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><polyline points="8,4 13,10 8,16"/></svg></button>
-        </div>
-      </div>
-      <div id="kommentar-notizzettel"></div>
-    </div>
-
-    <!-- ÜBERSCHRIFT sticky -->
-    <div id="info-name"></div>
-
-    <!-- 2. KASTEN + TEXT -->
-    <div id="info-scroll">
-      <div id="info-kasten">
-        <div id="info-kasten-links">
-          <span id="info-koordinaten"></span>
-          <span id="info-adresse"></span>
-        </div>
-        <div id="info-kasten-rechts">
-          <span id="info-fakten"></span>
-        </div>
-      </div>
-      <p id="info-beschreibung"></p>
-      <p id="info-quellen"></p>
-      <div id="info-scroll-spacer"></div>
-    </div>
-
-  </div>
-
-  <!-- Untere Leisten: liegen ÜBER dem Scrollbereich, nicht darin -->
-  <div id="info-leisten">
-
-    <!-- Kommentar-Formular -->
-    <div id="kommentar-formular">
-      <textarea id="kommentar-text" placeholder="Platz für deine Gedanken und Geschichten..." maxlength="300"></textarea>
-      <div id="kommentar-formular-footer">
-        <input id="kommentar-name" type="text" placeholder="Name (optional)" maxlength="40" />
-        <span id="kommentar-anzahl"></span>
-        <button id="kommentar-senden">Senden</button>
-      </div>
-    </div>
-
-    <!-- Stations-Leiste -->
-    <div id="stations-nav">
-      <button id="info-prev" type="button" aria-label="Vorherige Station"><svg width="28" height="28" viewBox="0 0 20 20" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><polyline points="12,4 7,10 12,16"/></svg></button>
-      <button id="info-next" type="button" aria-label="Nächste Station"><svg width="28" height="28" viewBox="0 0 20 20" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><polyline points="8,4 13,10 8,16"/></svg></button>
-    </div>
-
-  </div>
-</div>
-
-<div id="info-vollbild-overlay">
-  <button id="info-vollbild-close"><svg class="btn-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><line x1="5" y1="5" x2="15" y2="15"/><line x1="15" y1="5" x2="5" y2="15"/></svg></button>
-  <button id="info-vollbild-prev"><svg class="btn-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><polyline points="12,4 7,10 12,16"/></svg></button>
-  <img id="info-vollbild-img" src="" alt="" />
-  <button id="info-vollbild-next"><svg class="btn-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><polyline points="8,4 13,10 8,16"/></svg></button>
-</div>
-
-<footer>
-  <div class="footer-content">
-    <a href="about.html" class="footer-link">About</a>
-    <a href="impressum.html" class="footer-link">Impressum</a>
-    <a href="datenschutz.html" class="footer-link">Datenschutz</a>
-  </div>
-</footer>
-
-<script src="stations.js"></script>
-<script src="texte.js"></script>
-<script>
-const grid = document.getElementById('archiv-grid');
-const themenBar = document.getElementById('themen-bar');
+L.tileLayer(
+  'https://maps.geoapify.com/v1/tile/toner/{z}/{x}/{y}.png?apiKey=f4be76cd0a3340e893714aa6d9052957',
+  {
+    attribution: 'Powered by <a href="https://www.geoapify.com/" target="_blank">Geoapify</a> | \u00a9 <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> \u00a9 <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors',
+    maxZoom: 20,
+    crossOrigin: true
+  }
+).addTo(map);
 
 const filters = {
-  selectedThemen: []
+  selectedThemen: [],
+  selectedRoute: null
 };
 
-function toggleThema(thema) {
+const markerObjects = [];
+let routeLayer = null;
+
+const route20Stations = stations.filter(station =>
+  (station.routen || []).includes('fahrradroute')
+);
+
+// ============================================================
+// THEMEN- UND ROUTENLEISTE
+// ============================================================
+
+function setupThemenBar() {
+  const bar = document.getElementById('map-themen-bar');
+  if (!bar || typeof kategorien === 'undefined') return;
+
+  bar.innerHTML = '';
+
+  // FOTOS-Toggle als erster Button
+  const fotoChip = document.createElement('button');
+  fotoChip.className = 'themen-chip active';
+  fotoChip.textContent = 'Fotos';
+  fotoChip.addEventListener('click', () => {
+    const mapEl = document.getElementById('map');
+    mapEl.classList.toggle('marker-nur-punkte');
+    fotoChip.classList.toggle('active');
+  });
+  bar.appendChild(fotoChip);
+
+  kategorien.forEach(kat => {
+    const chip = document.createElement('button');
+    chip.className = 'themen-chip';
+    chip.textContent = kat.label;
+    chip.dataset.thema = kat.wert;
+
+    chip.addEventListener('click', () => {
+      handleThemaClick(kat.wert, chip);
+      updateMap();
+    });
+
+    bar.appendChild(chip);
+  });
+}
+
+// Fahrrad-Button (oben rechts) schaltet die Route ein/aus
+function setupFahrradBtn() {
+  const btn = document.getElementById('fahrrad-btn');
+  if (!btn) return;
+  btn.addEventListener('click', () => {
+    if (filters.selectedRoute === 'fahrradroute') {
+      filters.selectedRoute = null;
+      btn.classList.remove('active');
+      clearRoute();
+    } else {
+      filters.selectedRoute = 'fahrradroute';
+      btn.classList.add('active');
+      show20kmRoute();
+    }
+  });
+}
+
+// Zoom-Buttons
+function setupZoomBtns() {
+  const zoomIn = document.getElementById('zoom-in-btn');
+  const zoomOut = document.getElementById('zoom-out-btn');
+  if (zoomIn) zoomIn.addEventListener('click', () => map.zoomIn());
+  if (zoomOut) zoomOut.addEventListener('click', () => map.zoomOut());
+}
+
+function handleThemaClick(thema, chip) {
   const index = filters.selectedThemen.indexOf(thema);
+
   if (index > -1) {
     filters.selectedThemen.splice(index, 1);
+    chip.classList.remove('active');
   } else {
     filters.selectedThemen.push(thema);
+    chip.classList.add('active');
   }
-  renderThemenBar();
-  updateArchiv();
 }
 
 function filterStations(allStations) {
-  if (filters.selectedThemen.length === 0) return allStations;
+  if (filters.selectedThemen.length === 0) {
+    return allStations;
+  }
+
   return allStations.filter(station => {
     const stationThemen = station.themen || [];
     return filters.selectedThemen.some(thema => stationThemen.includes(thema));
   });
 }
 
-function renderThemenBar() {
-  themenBar.innerHTML = '';
-  (typeof kategorien !== 'undefined' ? kategorien : [])
-    .forEach(kat => {
-      const chip = document.createElement('button');
-      chip.className = 'themen-chip';
-      chip.textContent = kat.label;
-      if (filters.selectedThemen.includes(kat.wert)) chip.classList.add('active');
-      chip.addEventListener('click', () => toggleThema(kat.wert));
-      themenBar.appendChild(chip);
-    });
+// ============================================================
+// ROUTEN
+// ============================================================
+
+function clearRoute() {
+  if (routeLayer) {
+    map.removeLayer(routeLayer);
+    routeLayer = null;
+  }
 }
 
-function renderArchiv(filteredStations) {
-  grid.innerHTML = '';
+function show20kmRoute() {
+  clearRoute();
 
-  if (filteredStations.length === 0) {
-    grid.innerHTML = `
-      <p style="padding:10px;background:transparent;display:inline-block;border:1px solid black;">
-        Keine Orte für diese Auswahl gefunden.
-      </p>
-    `;
+  const routePoints = route20Stations
+    .map(station => station.coords)
+    .filter(Boolean);
+
+  if (routePoints.length < 2) {
     return;
   }
 
-  filteredStations.forEach(station => {
-    const kachel = document.createElement('div');
-    kachel.className = 'kachel';
+  routeLayer = L.polyline(routePoints, {
+    color: 'black',
+    weight: 4,
+    opacity: 1
+  }).addTo(map);
 
-    const fotoHtml = station.foto
-      ? `<img src="${station.foto}" alt="${station.name}" />`
-      : `<div class="kachel-placeholder"><span>${station.name}</span></div>`;
-
-    kachel.innerHTML = `
-      ${fotoHtml}
-      <div class="kachel-label"><span class="kachel-label-text">${station.name}</span></div>
-    `;
-
-    kachel.addEventListener('click', () => openDetail(station));
-    grid.appendChild(kachel);
+  map.fitBounds(routeLayer.getBounds(), {
+    padding: [30, 30]
   });
 }
 
-function updateArchiv() {
-  const filtered = filterStations(stations);
-  renderArchiv(filtered);
+// ============================================================
+// MARKER
+// ============================================================
+
+// ── HIER die Markergröße einstellen ──────────────────────────────────────
+// Referenzgröße (bei vollem Zoom) = clamp(MIN, fensterabhängig, MAX) in PIXELN.
+// Statt reiner vw-Skalierung: wächst mit dem Fenster, ist aber nach unten und
+// oben in px begrenzt → wirkt auf Handy UND Laptop stimmig.
+const MARKER_PREF_VW = 30;    // bevorzugte Größe als Fensteranteil (vw)
+const MARKER_MIN_PX  = 210;   // niemals kleiner (schmale Handys)
+const MARKER_MAX_PX  = 320;   // niemals größer (breite Laptops/Monitore)
+
+// Zoom-Verkleinerung relativ zur Referenzgröße:
+// 1 = volle Größe bei ZOOM_MAX, ZOOM_OUT_FAKTOR bei ZOOM_MIN (voll rausgezoomt).
+const ZOOM_MIN = 12;
+const ZOOM_MAX = 18;
+const ZOOM_OUT_FAKTOR = 0.22; // Fotogröße bei voll rausgezoomt (Anteil der vollen Größe); kleiner = stärker schrumpfen
+
+// Linie (Strich) – Länge variiert pro Station, damit sich Fotos weniger überlappen.
+const LINIE_MIN   = 0.20;     // kürzeste Linie (Anteil der Markergröße)
+const LINIE_MAX   = 1.10;     // längste Linie
+const LINIE_DICKE = 5;        // Liniendicke in px (bei vollem Zoom; skaliert mit)
+
+// Maximaler horizontaler Versatz des Fotos vom Koordinatenpunkt (als Anteil von W).
+// Größere Werte → stärkere Schräge, weniger Überlappung; Box wird proportional breiter.
+const MAX_OFFSET_FAKTOR = 0.70;
+
+// Goldene-Winkel-Konstante für maximale Gleichverteilung (Sonnenblumenmuster):
+// Jede Station bekommt einen einzigartigen, optimal gestreuten Offset + Linienlänge.
+const GOLDENER_WINKEL    = 2.39996323; // 2π / φ² in Radiant
+const GOLDENER_SCHNITT_T = 0.6180339887; // (√5−1)/2
+
+// Punkt am Linienende
+const PUNKT_GROESSE    = 22;  // Durchmesser in px bei vollem Zoom (kleinste Darstellung)
+const PUNKT_OUT_FAKTOR = 2.0; // Punkt bei voll rausgezoomt = 2× so groß wie bei vollem Zoom
+// ─────────────────────────────────────────────────────────────────────────
+
+// Referenzgröße in px bei vollem Zoom – fensterabhängig, aber geclamped.
+function refSizePx() {
+  const vwPx = MARKER_PREF_VW * window.innerWidth / 100;
+  return Math.max(MARKER_MIN_PX, Math.min(MARKER_MAX_PX, vwPx));
 }
 
-// ── INFO-PANEL (gleich wie Karte) ────────────────────────────
+// Skalierungsfaktor für den aktuellen (oder Ziel-)Zoom. Für alle Marker gleich.
+function sizeFactor(zoom) {
+  const clamped = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, zoom));
+  const t = (clamped - ZOOM_MIN) / (ZOOM_MAX - ZOOM_MIN); // 0 raus … 1 rein
+  return ZOOM_OUT_FAKTOR + t * (1 - ZOOM_OUT_FAKTOR);      // ZOOM_OUT_FAKTOR … 1
+}
+
+// Feste Referenz-Maße einer Station (zoomunabhängig). Alles in PIXELN.
+function getMarkerMetrics(station) {
+  const SIZE = refSizePx(); // Referenzgröße in px; Zoom läuft über CSS-scale
+  const ratio = station._imgRatio || 0.75;
+  const sqrtRatio = Math.sqrt(ratio);
+  const W = SIZE / sqrtRatio;   // Foto-Breite in px
+  const H = SIZE * sqrtRatio;   // Foto-Höhe in px
+
+  // Goldene-Winkel-Verteilung: Station i bekommt einen optimal gestreuten Wert,
+  // sodass benachbarte Stationen (im Array) möglichst verschiedene Positionen haben.
+  // Überschreibbar pro Station über station.offsetFactor / station.lineFactor.
+  if (station._offsetFactor === undefined) {
+    if (station.offsetFactor !== undefined) {
+      station._offsetFactor = station.offsetFactor;
+    } else {
+      const idx = (typeof stations !== 'undefined') ? stations.indexOf(station) : -1;
+      station._offsetFactor = idx >= 0
+        ? Math.cos(idx * GOLDENER_WINKEL)  // gleichmäßig auf -1…+1 verteilt
+        : Math.random() * 2 - 1;
+    }
+  }
+  if (station._lineFactor === undefined) {
+    if (station.lineFactor !== undefined) {
+      station._lineFactor = station.lineFactor;
+    } else {
+      const idx = (typeof stations !== 'undefined') ? stations.indexOf(station) : -1;
+      const t   = idx >= 0 ? (idx * GOLDENER_SCHNITT_T) % 1 : Math.random();
+      station._lineFactor = LINIE_MIN + t * (LINIE_MAX - LINIE_MIN);
+    }
+  }
+  const LINE_H = SIZE * station._lineFactor; // Linienlänge in px
+
+  // Offset und Box-Geometrie: MAX_OFFSET_FAKTOR bestimmt, wie weit das Foto
+  // seitlich schwingen kann. Box wird entsprechend breiter, Anker bleibt korrekt.
+  const offset   = station._offsetFactor * MAX_OFFSET_FAKTOR * W;
+  const boxW     = (2 * MAX_OFFSET_FAKTOR + 1) * W;   // px
+  const boxH     = H + LINE_H;                         // px
+  const centerX  = (MAX_OFFSET_FAKTOR + 0.5) * W;     // px – Koordinatenpunkt (Ankerpunkt)
+  const fotoLeft = MAX_OFFSET_FAKTOR * W + offset;     // px
+
+  return {
+    W, H, LINE_H, boxW, boxH, centerX, fotoLeft, offset,
+    boxWpx:    boxW,
+    boxHpx:    boxH,
+    anchorXpx: centerX
+  };
+}
+
+// Marker EINMAL bauen (Foto wird nur hier erzeugt → kein Neuladen beim Zoom)
+function createMarkerForStation(station) {
+  const m = getMarkerMetrics(station);
+  const scale = sizeFactor(map.getZoom());
+
+  // Foto-Rahmen so dick wie die Linie
+  const fotoStyle = `left:${m.fotoLeft}px;width:${m.W}px;height:${m.H}px;border:${LINIE_DICKE}px solid #4A27EA;`;
+  const foto = station.foto
+    ? `<img class="foto-pin-img" src="${station.foto}" style="${fotoStyle}" />`
+    : `<div class="foto-pin-fallback" style="${fotoStyle}">
+        <span>${station.name}</span>
+       </div>`;
+
+  // Schräge Linie: von der Koordinate (centerX, boxH) zur Foto-Unterkante-Mitte
+  // (centerX + offset, H). Je nach Versatz neigt sie sich nach rechts oder links.
+  const laenge = Math.sqrt(m.offset * m.offset + m.LINE_H * m.LINE_H);     // Länge in px
+  const winkel = Math.atan2(m.offset, m.LINE_H) * 180 / Math.PI;           // ° (rechts = positiv)
+  const linie = `<div class="foto-pin-linie" style="left:calc(${m.centerX}px - ${LINIE_DICKE / 2}px);top:${m.boxH - laenge}px;width:${LINIE_DICKE}px;height:${laenge}px;transform:rotate(${winkel}deg);"></div>`;
+
+  const punkt = `<div class="foto-pin-punkt" data-station-id="${station.id}" style="left:${m.centerX}px;top:${m.boxH}px;width:${PUNKT_GROESSE}px;height:${PUNKT_GROESSE}px;"></div>`;
+
+  return L.divIcon({
+    html: `<div class="foto-pin-wrapper" style="width:${m.boxW}px;height:${m.boxH}px;transform:scale(${scale});">${foto}${linie}${punkt}</div>`,
+    className: 'foto-pin-marker',
+    iconSize:   [m.boxWpx, m.boxHpx],
+    iconAnchor: [m.anchorXpx, m.boxHpx]
+  });
+}
+
+// Bestehenden Marker NUR skalieren – kein DOM-Neubau, kein Foto-Neuladen.
+// instant=true setzt die Größe ohne den 0.25s-Übergang (für Pinch-Zoom-Ende).
+function applyMarkerScale(obj, zoom, instant) {
+  const el = obj.marker.getElement();
+  if (!el) return; // nicht sichtbar / noch nicht im DOM
+  const s = sizeFactor(zoom);
+
+  const wrapper = el.querySelector('.foto-pin-wrapper');
+  if (wrapper) {
+    if (instant) {
+      // Größe sofort setzen (ohne Übergang) → auf dem Handy kein sichtbares
+      // Nachjustieren nach dem Pinch-Zoom. Übergang danach wieder aktivieren.
+      wrapper.style.transition = 'none';
+      wrapper.style.transform  = `scale(${s})`;
+      requestAnimationFrame(() => { wrapper.style.transition = ''; });
+    } else {
+      wrapper.style.transform = `scale(${s})`;
+    }
+  }
+
+  // Punkt wird beim Rauszoomen GRÖSSER (gerendert PUNKT_GROESSE bei vollem
+  // Zoom bis PUNKT_GROESSE*PUNKT_OUT_FAKTOR bei voll raus). Fotos schrumpfen,
+  // der Punkt bleibt dadurch gut sichtbar.
+  const punkt = el.querySelector('.foto-pin-punkt');
+  if (punkt) {
+    const t = (s - ZOOM_OUT_FAKTOR) / (1 - ZOOM_OUT_FAKTOR); // 0 raus … 1 rein
+    const renderZiel = PUNKT_GROESSE * (PUNKT_OUT_FAKTOR + t * (1 - PUNKT_OUT_FAKTOR));
+    const dotCss = renderZiel / s; // CSS-Größe, damit gerendert (×s) = renderZiel
+    punkt.style.width  = dotCss + 'px';
+    punkt.style.height = dotCss + 'px';
+  }
+}
+
+// Markergeometrie an eine neue Fensterbreite anpassen – OHNE das DOM/Foto neu
+// zu bauen (kein Nachladen, kein Flackern). Es werden nur die Maße der schon
+// vorhandenen Elemente und Leaflets Anker (über margin/size am Icon-Element)
+// aktualisiert. Genau das, was setIcon intern auch macht – nur ohne Neubau.
+function updateMarkerGeometry(obj) {
+  const el = obj.marker.getElement();
+  if (!el) return; // nicht im DOM → wird beim Wiedereinblenden frisch gebaut
+  const m = getMarkerMetrics(obj.station);
+
+  // Leaflet-Anker/Größe direkt am Marker-Element (statt setIcon → kein Neubau)
+  el.style.width      = m.boxWpx + 'px';
+  el.style.height     = m.boxHpx + 'px';
+  el.style.marginLeft = (-m.anchorXpx) + 'px';
+  el.style.marginTop  = (-m.boxHpx) + 'px';
+  const ico = obj.marker.options.icon; // Optionen mitziehen → konsistent bei späterem Neubau
+  if (ico) {
+    ico.options.iconSize   = [m.boxWpx, m.boxHpx];
+    ico.options.iconAnchor = [m.anchorXpx, m.boxHpx];
+  }
+
+  const wrapper = el.querySelector('.foto-pin-wrapper');
+  if (wrapper) { wrapper.style.width = m.boxW + 'px'; wrapper.style.height = m.boxH + 'px'; }
+
+  const foto = el.querySelector('.foto-pin-img, .foto-pin-fallback');
+  if (foto) { foto.style.left = m.fotoLeft + 'px'; foto.style.width = m.W + 'px'; foto.style.height = m.H + 'px'; }
+
+  const laenge = Math.sqrt(m.offset * m.offset + m.LINE_H * m.LINE_H);
+  const winkel = Math.atan2(m.offset, m.LINE_H) * 180 / Math.PI;
+  const linie = el.querySelector('.foto-pin-linie');
+  if (linie) {
+    linie.style.left      = `calc(${m.centerX}px - ${LINIE_DICKE / 2}px)`;
+    linie.style.top       = (m.boxH - laenge) + 'px';
+    linie.style.height    = laenge + 'px';
+    linie.style.transform = `rotate(${winkel}deg)`;
+  }
+
+  const punkt = el.querySelector('.foto-pin-punkt');
+  if (punkt) { punkt.style.left = m.centerX + 'px'; punkt.style.top = m.boxH + 'px'; }
+
+  applyMarkerScale(obj, map.getZoom()); // Scale + Punktgröße neu setzen
+  obj.marker.update();                  // Position mit neuem Anker setzen
+}
+
+function attachEvents(marker, station) {
+  marker.on('click', e => {
+    L.DomEvent.stopPropagation(e);
+    addCard(station);
+  });
+}
+
+// Bilder vorladen → Ratios → Marker bauen
+const stationsMitFoto = stations.filter(s => s.foto);
+let geladen = 0;
+let setupGestartet = false;
+
+function markerSetupStarten() {
+  if (setupGestartet) return; // nur einmal ausführen
+  setupGestartet = true;
+  stations.forEach(station => {
+    const icon = createMarkerForStation(station);
+    const marker = L.marker(station.coords, { icon });
+    attachEvents(marker, station);
+    marker.addTo(map);
+    markerObjects.push({ station, marker });
+  });
+  updateMap();
+}
+
+if (stationsMitFoto.length === 0) {
+  markerSetupStarten();
+} else {
+  stationsMitFoto.forEach(station => {
+    const img = new Image();
+    img.onload = () => {
+      station._imgRatio = img.naturalHeight / img.naturalWidth;
+      geladen++;
+      if (geladen === stationsMitFoto.length) markerSetupStarten();
+    };
+    img.onerror = () => {
+      geladen++;
+      if (geladen === stationsMitFoto.length) markerSetupStarten();
+    };
+    img.src = station.foto;
+  });
+  // Sicherheitsnetz: Falls ein Bild weder lädt noch fehlschlägt (hängt),
+  // werden die Marker trotzdem spätestens nach 4 s erzeugt.
+  setTimeout(() => {
+    if (!setupGestartet) {
+      console.warn('Marker-Setup per Timeout gestartet – ein Bild hat nicht geantwortet.');
+      markerSetupStarten();
+    }
+  }, 4000);
+}
+
+// Skalierung schon beim START der Zoom-Animation auf den ZIEL-Zoom setzen –
+// so wächst/schrumpft der Marker synchron mit der Karte (kein Sprung am Ende).
+map.on('zoomanim', e => {
+  markerObjects.forEach(obj => applyMarkerScale(obj, e.zoom));
+});
+
+// Sicherheitsnetz für Pinch/Abschluss: am Ende exakten Zoom setzen + Sichtbarkeit.
+map.on('zoomend', updateMap);
+
+// ── Marker-Anker an die Fensterbreite koppeln ───────────────────────────
+// iconSize/iconAnchor werden in px aus window.innerWidth gebaut. Ändert sich die
+// BREITE (Fenster ziehen, Gerät drehen), passen Anker und Darstellung nicht mehr
+// zusammen → Marker säßen versetzt, bis neu geladen wird. Wir passen die Maße
+// hier IN PLACE an (kein Foto-Neubau → kein Flackern/Nachladen beim Zoomen).
+let markerResizeTimer = null;
+let letzteFensterbreite = window.innerWidth;
+
+function markerAnkerNeuberechnen() {
+  // Nur bei spürbarer Breitenänderung (Mini-Schwankungen mobiler Browser ignorieren)
+  if (Math.abs(window.innerWidth - letzteFensterbreite) < 30) return;
+  letzteFensterbreite = window.innerWidth;
+  markerObjects.forEach(obj => {
+    if (obj.marker.getElement()) {
+      updateMarkerGeometry(obj);                                 // sichtbar: in place, kein Neuladen
+    } else {
+      obj.marker.setIcon(createMarkerForStation(obj.station));   // ausgeblendet: neu bauen (unsichtbar → kein Flackern)
+    }
+  });
+}
+
+window.addEventListener('resize', () => {
+  clearTimeout(markerResizeTimer);
+  markerResizeTimer = setTimeout(markerAnkerNeuberechnen, 200);
+});
+window.addEventListener('orientationchange', () => {
+  // innerWidth steht nach der Drehung erst leicht verzögert korrekt zur Verfügung
+  setTimeout(markerAnkerNeuberechnen, 300);
+});
+
+function updateMap() {
+  const filtered = filterStations(stations);
+  const zoom = map.getZoom();
+  markerObjects.forEach(obj => {
+    const visible = filtered.some(s => s.id === obj.station.id);
+    if (visible) {
+      if (!map.hasLayer(obj.marker)) obj.marker.addTo(map);
+      applyMarkerScale(obj, zoom, true); // am Zoom-Ende sofort (kein Nachkriechen auf Handy)
+      obj.marker.update();               // Position sicher aus den Koordinaten neu setzen
+    } else {
+      if (map.hasLayer(obj.marker)) map.removeLayer(obj.marker);
+    }
+  });
+}
+
+// ============================================================
+// INFO-KARTEN
+// ============================================================
+// ============================================================
+// INFO-PANEL
+// ============================================================
 
 const infoPanel        = document.getElementById('info-panel');
-const infoClose        = document.getElementById('info-close');
+const infoPanelClose   = document.getElementById('info-close');
 const infoFotoImg      = document.getElementById('info-foto-img');
+const infoFotoZaehler  = document.getElementById('info-foto-zaehler');
 const infoPrev         = document.getElementById('info-foto-prev');
 const infoNext         = document.getElementById('info-foto-next');
 const infoVollbild     = document.getElementById('info-foto-vollbild');
 const infoName         = document.getElementById('info-name');
 const infoBeschreibung = document.getElementById('info-beschreibung');
 const infoFakten       = document.getElementById('info-fakten');
-const infoAdresse      = document.getElementById('info-adresse');
 const infoQuellen      = document.getElementById('info-quellen');
 const infoKoordinaten  = document.getElementById('info-koordinaten');
+const infoAdresse      = document.getElementById('info-adresse');
+
 const vollbildOverlay  = document.getElementById('info-vollbild-overlay');
 const vollbildImg      = document.getElementById('info-vollbild-img');
 const vollbildClose    = document.getElementById('info-vollbild-close');
 const vollbildPrev     = document.getElementById('info-vollbild-prev');
 const vollbildNext     = document.getElementById('info-vollbild-next');
 
-let aktiveFotos = [], aktiverFotoIndex = 0;
+let aktiveFotos = [];
+let aktiverFotoIndex = 0;
 
 function aktualisiereFoto() {
-  if (aktiveFotos.length === 0) { infoFotoImg.style.display='none'; document.getElementById('info-foto-controls').style.display='none'; return; }
+  if (aktiveFotos.length === 0) {
+    infoFotoImg.style.display = 'none';
+    document.getElementById('info-foto-controls').style.display = 'none';
+    return;
+  }
+
   infoFotoImg.style.display = 'block';
   infoFotoImg.src = aktiveFotos[aktiverFotoIndex];
   vollbildImg.src = aktiveFotos[aktiverFotoIndex];
-  const m = aktiveFotos.length > 1;
-  document.getElementById('info-foto-controls').style.display = m ? 'flex' : 'none';
-  infoPrev.style.display = m ? 'flex' : 'none';
-  infoNext.style.display = m ? 'flex' : 'none';
+
+  // Nach dem Laden exakt korrigieren (schlägt den Vorab-Schätzwert)
+  infoFotoImg.onload = syncFotoWrapperHoehe;
+  if (infoFotoImg.complete && infoFotoImg.naturalHeight > 0) syncFotoWrapperHoehe();
+
+  const mehrere = aktiveFotos.length > 1;
+  document.getElementById('info-foto-controls').style.display = mehrere ? 'flex' : 'none';
+  infoPrev.style.display = mehrere ? 'flex' : 'none';
+  infoNext.style.display = mehrere ? 'flex' : 'none';
 }
 
 let aktuelleStationId = null;
+let aktuelleStation   = null; // für Foto-Wrapper-Höhen-Sync
 
-function openDetail(station) {
+// Wrapper-Höhe exakt auf die geladene Bildgröße setzen – behebt das mobile
+// Problem, dass #info-name (bottom:0) bei noch nicht geladenem Bild am oberen
+// Rand des null-hohen Wrappers erscheint statt am unteren Fotorand.
+function syncFotoWrapperHoehe() {
+  const wrapper = document.getElementById('info-foto-wrapper');
+  if (!wrapper) return;
+  const h = infoFotoImg.offsetHeight;
+  if (h > 0) wrapper.style.height = h + 'px';
+}
+
+function addCard(station) {
   aktuelleStationId = station.id;
-  aktiveFotos = station.fotos && station.fotos.length > 0 ? station.fotos : (station.foto ? [station.foto] : []);
+  aktuelleStation   = station;
+
+  // Wrapper sofort mit erwarteter Bildhöhe vorbelegen, damit #info-name
+  // (bottom:0) schon korrekt sitzt bevor das Bild fertig geladen ist.
+  const fotoWrapper = document.getElementById('info-foto-wrapper');
+  if (fotoWrapper) {
+    const ratio  = station._imgRatio;
+    const availW = fotoWrapper.offsetWidth || (window.innerWidth - 40);
+    const maxH   = window.innerHeight * (window.innerWidth <= 700 ? 0.40 : 0.50);
+    fotoWrapper.style.height = ratio
+      ? Math.min(availW * ratio, maxH) + 'px'
+      : ''; // kein Ratio → Auto (img bestimmt Höhe selbst)
+  }
+
+  aktiveFotos = station.fotos && station.fotos.length > 0
+    ? station.fotos
+    : (station.foto ? [station.foto] : []);
+
   aktiverFotoIndex = 0;
+
   infoName.innerHTML = '<span class="name-inner">'
     + (station.name || '').replace(/&/g,'&amp;').replace(/</g,'&lt;')
     + '</span>';
   infoBeschreibung.innerHTML = renderBeschreibung(
     (typeof texte !== 'undefined' && texte[station.id]) ? texte[station.id] : (station.info || '')
   );
-  if (infoAdresse) infoAdresse.textContent = station.adresse || '';
   if (infoFakten) {
     if (station.fakten && station.fakten.length > 0) {
       infoFakten.innerHTML = station.fakten
@@ -353,14 +559,27 @@ function openDetail(station) {
       ? '<span class="quellen-titel">Quellen</span>' + q.map(t => esc(t)).join('<br>')
       : '';
   }
-  if (infoKoordinaten) infoKoordinaten.textContent = station.coords ? station.coords[0].toFixed(4)+' N / '+station.coords[1].toFixed(4)+' O' : '';
+  if (infoKoordinaten) infoKoordinaten.textContent = station.coords
+    ? station.coords[0].toFixed(4) + ' N / ' + station.coords[1].toFixed(4) + ' O'
+    : '';
+  if (infoAdresse) infoAdresse.textContent = station.adresse || '';
+
   aktualisiereFoto();
-  kommentareZuruecksetzen(station.id);
+
+  // Kommentare zurücksetzen
+  if (typeof kommentareZuruecksetzen === 'function') kommentareZuruecksetzen(station.id);
+
   infoPanel.classList.add('open');
+  const kartenButtons = document.getElementById('karten-buttons');
+  if (kartenButtons) kartenButtons.style.display = 'none';
 }
 
-infoClose.addEventListener('click', () => {
+infoPanelClose.addEventListener('click', () => {
   infoPanel.classList.remove('open');
+  const kartenButtons = document.getElementById('karten-buttons');
+  if (kartenButtons) kartenButtons.style.display = 'flex';
+  const fotoWrapper = document.getElementById('info-foto-wrapper');
+  if (fotoWrapper) fotoWrapper.style.height = '';
 });
 
 // ── Stations-Pfeile: zwischen Stationen wechseln ──
@@ -369,7 +588,7 @@ function wechsleStation(richtung) {
   const idx = stations.findIndex(s => s.id === aktuelleStationId);
   if (idx === -1) return;
   const neu = stations[(idx + richtung + stations.length) % stations.length];
-  openDetail(neu);
+  addCard(neu);
   const inner = document.getElementById('info-panel-inner');
   if (inner) inner.scrollTop = 0;
 }
@@ -378,30 +597,65 @@ const infoNextBtn = document.getElementById('info-next');
 if (infoPrevBtn) infoPrevBtn.addEventListener('click', () => wechsleStation(-1));
 if (infoNextBtn) infoNextBtn.addEventListener('click', () => wechsleStation(1));
 
+// Swipe auf dem Foto
 let swipeStartX = 0;
-infoFotoImg.addEventListener('touchstart', e => { swipeStartX = e.touches[0].clientX; }, {passive:true});
+infoFotoImg.addEventListener('touchstart', e => {
+  swipeStartX = e.touches[0].clientX;
+}, { passive: true });
 infoFotoImg.addEventListener('touchend', e => {
   const dx = e.changedTouches[0].clientX - swipeStartX;
   if (Math.abs(dx) > 40 && aktiveFotos.length > 1) {
-    aktiverFotoIndex = dx < 0 ? (aktiverFotoIndex+1)%aktiveFotos.length : (aktiverFotoIndex-1+aktiveFotos.length)%aktiveFotos.length;
+    aktiverFotoIndex = dx < 0
+      ? (aktiverFotoIndex + 1) % aktiveFotos.length
+      : (aktiverFotoIndex - 1 + aktiveFotos.length) % aktiveFotos.length;
     aktualisiereFoto();
   }
-}, {passive:true});
+}, { passive: true });
 
-infoPrev.addEventListener('click', () => { aktiverFotoIndex=(aktiverFotoIndex-1+aktiveFotos.length)%aktiveFotos.length; aktualisiereFoto(); });
-infoNext.addEventListener('click', () => { aktiverFotoIndex=(aktiverFotoIndex+1)%aktiveFotos.length; aktualisiereFoto(); });
-infoVollbild.addEventListener('click', () => { vollbildImg.src=aktiveFotos[aktiverFotoIndex]; vollbildOverlay.classList.add('open'); });
-vollbildClose.addEventListener('click', () => vollbildOverlay.classList.remove('open'));
-vollbildPrev.addEventListener('click', () => { aktiverFotoIndex=(aktiverFotoIndex-1+aktiveFotos.length)%aktiveFotos.length; aktualisiereFoto(); vollbildImg.src=aktiveFotos[aktiverFotoIndex]; });
-vollbildNext.addEventListener('click', () => { aktiverFotoIndex=(aktiverFotoIndex+1)%aktiveFotos.length; aktualisiereFoto(); vollbildImg.src=aktiveFotos[aktiverFotoIndex]; });
+infoPrev.addEventListener('click', () => {
+  aktiverFotoIndex = (aktiverFotoIndex - 1 + aktiveFotos.length) % aktiveFotos.length;
+  aktualisiereFoto();
+});
 
-// ── KOMMENTARE ───────────────────────────────────────────────
+infoNext.addEventListener('click', () => {
+  aktiverFotoIndex = (aktiverFotoIndex + 1) % aktiveFotos.length;
+  aktualisiereFoto();
+});
 
-// ---- Supabase-Konfiguration (identisch zur Karte/script.js) ----
+infoVollbild.addEventListener('click', () => {
+  vollbildImg.src = aktiveFotos[aktiverFotoIndex];
+  vollbildOverlay.classList.add('open');
+});
+
+vollbildClose.addEventListener('click', () => {
+  vollbildOverlay.classList.remove('open');
+});
+
+vollbildPrev.addEventListener('click', () => {
+  aktiverFotoIndex = (aktiverFotoIndex - 1 + aktiveFotos.length) % aktiveFotos.length;
+  aktualisiereFoto();
+  vollbildImg.src = aktiveFotos[aktiverFotoIndex];
+});
+
+vollbildNext.addEventListener('click', () => {
+  aktiverFotoIndex = (aktiverFotoIndex + 1) % aktiveFotos.length;
+  aktualisiereFoto();
+  vollbildImg.src = aktiveFotos[aktiverFotoIndex];
+});
+
+// ============================================================
+// KOMMENTARE
+// ============================================================
+
+// ---- Supabase-Konfiguration ----
+// Den anon-public-Key aus Supabase → Project Settings → API hier einsetzen:
 const SUPABASE_URL  = 'https://frxclqyeimupmaiuvndl.supabase.co';
 const SUPABASE_ANON = 'sb_publishable_zeBajWW8Ab2TjAYboip_yg_il422nwf';
 const KOMMENTAR_API = SUPABASE_URL + '/rest/v1/kommentare';
 
+// Header passend zum Key-Typ bauen:
+// - Legacy anon-Key ist ein JWT (beginnt mit "eyJ") und darf auch im Authorization-Header stehen.
+// - Neuer publishable Key (sb_publishable_…) darf NUR im apikey-Header stehen, nicht als Bearer.
 function buildHeaders(extra) {
   const h = { 'apikey': SUPABASE_ANON, 'Content-Type': 'application/json' };
   if (SUPABASE_ANON.indexOf('eyJ') === 0) {
@@ -451,6 +705,7 @@ async function sendeKommentar(stationId, name, text) {
 
 let kommentareSichtbar = false;
 
+// Zufällige aber stabile Positionen pro Kommentar
 const POSITIONEN = [
   { top: '8%',  left: '4%',   rot: -2   },
   { top: '10%', right: '4%',  rot: 1.5  },
@@ -496,6 +751,7 @@ async function renderKommentare(stationId) {
       else z.style[prop] = val;
     });
 
+    // Inhalt per textContent setzen – kein HTML aus Nutzereingaben einschleusbar
     const textEl = document.createElement('div');
     textEl.className = 'notizzettel-text';
     textEl.textContent = k.text;
@@ -521,18 +777,20 @@ async function renderKommentare(stationId) {
     ? alle.length + (alle.length === 1 ? ' Kommentar' : ' Kommentare') : '';
 }
 
-const kommentarToggle = document.getElementById('kommentar-foto-toggle');
-if (kommentarToggle) {
-  kommentarToggle.addEventListener('click', () => {
+// Sprechblasen-Toggle
+const kommentarFotoToggle = document.getElementById('kommentar-foto-toggle');
+if (kommentarFotoToggle) {
+  kommentarFotoToggle.addEventListener('click', () => {
     if (!aktuelleStationId) return;
     kommentareSichtbar = !kommentareSichtbar;
     document.getElementById('kommentar-notizzettel').classList.toggle('sichtbar', kommentareSichtbar);
     document.getElementById('kommentar-formular').classList.toggle('sichtbar', kommentareSichtbar);
-    kommentarToggle.classList.toggle('aktiv', kommentareSichtbar);
+    kommentarFotoToggle.classList.toggle('aktiv', kommentareSichtbar);
     if (kommentareSichtbar) renderKommentare(aktuelleStationId);
   });
 }
 
+// Kommentar senden
 const kommentarSendenBtn = document.getElementById('kommentar-senden');
 if (kommentarSendenBtn) {
   kommentarSendenBtn.addEventListener('click', async () => {
@@ -548,12 +806,12 @@ if (kommentarSendenBtn) {
     try {
       ok = await sendeKommentar(aktuelleStationId, name, text);
     } finally {
-      kommentarSendenBtn.disabled = false;
+      kommentarSendenBtn.disabled = false;   // Button wird IMMER wieder freigegeben
     }
 
     if (!ok) {
       textEl.placeholder = '⚠ Konnte nicht gesendet werden. Bitte nochmal versuchen.';
-      setTimeout(() => { textEl.placeholder = 'Platz für deine Gedanken und Geschichten...'; }, 4000);
+      setTimeout(() => { textEl.placeholder = 'Kommentar schreiben…'; }, 4000);
       return;
     }
 
@@ -561,33 +819,31 @@ if (kommentarSendenBtn) {
     nameEl.value = '';
     // Neuer Kommentar ist noch nicht freigegeben → erscheint erst nach Freischaltung
     textEl.placeholder = '✓ Danke! Wird nach Freischaltung angezeigt.';
-    setTimeout(() => { textEl.placeholder = 'Platz für deine Gedanken und Geschichten...'; }, 3000);
+    setTimeout(() => { textEl.placeholder = 'Kommentar schreiben…'; }, 3000);
   });
 }
 
-// ── ARCHIV ──────────────────────────────────────────────────
+// ============================================================
+// START
+// ============================================================
 
-renderThemenBar();
-updateArchiv();
+setupThemenBar();
+setupFahrradBtn();
+setupZoomBtns();
 
-let archivCols = 4;
-function setArchivCols(n) { archivCols=Math.min(Math.max(n,1),8); grid.style.columnCount=archivCols; }
-document.getElementById('zoom-in').addEventListener('click',  () => setArchivCols(archivCols-1));
-document.getElementById('zoom-out').addEventListener('click', () => setArchivCols(archivCols+1));
-
-// Menü
-const menuToggle = document.getElementById('menu-toggle');
-const menuDropdown = document.getElementById('menu-dropdown');
-if (menuToggle) {
-  menuToggle.addEventListener('click', e => { e.stopPropagation(); menuDropdown.classList.toggle('open'); });
-  document.addEventListener('click', () => menuDropdown.classList.remove('open'));
-}
-
-</script>
-
-
-<script>
-// ── STANDBY (aus script.js übernommen) ──
+// Direkte Klicks auf Punkte (umgeht Leaflets Marker-Überlappungs-Erkennung)
+document.getElementById('map').addEventListener('click', e => {
+  const punkt = e.target.closest('.foto-pin-punkt');
+  if (!punkt) return;
+  const id = Number(punkt.dataset.stationId);
+  const station = stations.find(s => s.id === id);
+  if (station) {
+    e.stopPropagation();
+    addCard(station);
+  }
+}, true);
+updateMap();
+// ============================================================
 // STANDBY / SCREENSAVER – schwimmende Überschrift bei Inaktivität
 // ============================================================
 (function () {
@@ -598,7 +854,7 @@ if (menuToggle) {
   overlay.id = 'standby';
   const text = document.createElement('div');
   text.id = 'standby-text';
-  text.innerHTML = 'Was<br> vom<br>Hafen<br> bleibt'; // zusammenhängender Block, zweizeilig
+  text.innerHTML = 'Was<br>vom<br>Hafen<br>bleibt'; // zusammenhängender Block, zweizeilig
   overlay.appendChild(text);
   document.body.appendChild(overlay);
 
@@ -613,6 +869,8 @@ if (menuToggle) {
 
   // Nicht erscheinen, solange Intro oder Info-Panel offen sind
   function blockiert() {
+    const intro = document.getElementById('intro');
+    if (intro && !intro.classList.contains('gone')) return true;
     const panel = document.getElementById('info-panel');
     if (panel && panel.classList.contains('open')) return true;
     return false;
@@ -678,6 +936,3 @@ if (menuToggle) {
 
   aktivitaet(); // Timer initial starten
 })();
-</script>
-</body>
-</html>
