@@ -292,11 +292,14 @@ footer {
   padding: 8px 12px;
   z-index: 1000;
   display: flex;
+  flex-wrap: nowrap;          /* Chips bleiben in einer Reihe und laufen über */
   gap: 8px;
   overflow-x: auto;
   overflow-y: hidden;
   align-items: center;
   -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;        /* Wischen wird als horizontales Scrollen erkannt (Handy) */
+  overscroll-behavior-x: contain;
 }
 
 #themen-bar::-webkit-scrollbar,
@@ -912,7 +915,7 @@ margin-right: 5px;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 10px 12px;
+  padding: 8px 12px;
   border-right: 1px solid #4A27EA;
   color: #4A27EA;
   
@@ -922,7 +925,7 @@ margin-right: 5px;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 10px 12px;
+  padding: 8px 12px;
 }
 
 /* Wrapper: Überschrift + Stations-Pfeile (übernimmt das sticky/Overlap der Überschrift) */
@@ -1020,7 +1023,7 @@ margin-right: 5px;
 .fakten-trennlinie {
   border: none;
   border-top: 1px solid #4A27EA;
-  margin: 4px -12px;
+  margin: 8px -12px; /* gleicher Abstand wie der Innenrand → Text überall gleich weit von Linie/Rand */
 }
 
 #info-scroll {
