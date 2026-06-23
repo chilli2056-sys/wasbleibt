@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Archiv</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=4">
+  <link rel="stylesheet" href="style.css?v=5">
   <style>
     #archiv-grid {
       top: 60px;
@@ -567,38 +567,8 @@ if (kommentarSendenBtn) {
 
 // ── ARCHIV ──────────────────────────────────────────────────
 
-// Kategorieleiste per Finger ziehen – reagiert sofort (1:1), ohne die
-// Erkennungs-Schwelle des nativen Touch-Scrollens.
-function leisteWischbarMachen(bar) {
-  if (!bar) return;
-  let startX = 0, startScroll = 0, aktiv = false, gewischt = false;
-
-  bar.addEventListener('touchstart', e => {
-    aktiv = true;
-    gewischt = false;
-    startX = e.touches[0].clientX;
-    startScroll = bar.scrollLeft;
-  }, { passive: true });
-
-  bar.addEventListener('touchmove', e => {
-    if (!aktiv) return;
-    const dx = e.touches[0].clientX - startX;
-    if (Math.abs(dx) > 3) gewischt = true;
-    bar.scrollLeft = startScroll - dx;   // folgt dem Finger sofort
-  }, { passive: true });
-
-  bar.addEventListener('touchend',   () => { aktiv = false; });
-  bar.addEventListener('touchcancel', () => { aktiv = false; });
-
-  // Wurde gewischt, soll der abschließende Tap keinen Chip auslösen
-  bar.addEventListener('click', e => {
-    if (gewischt) { e.preventDefault(); e.stopPropagation(); }
-  }, true);
-}
-
 renderThemenBar();
 updateArchiv();
-leisteWischbarMachen(document.getElementById('themen-bar'));
 
 let archivCols = 4;
 function setArchivCols(n) { archivCols=Math.min(Math.max(n,1),8); grid.style.columnCount=archivCols; }
