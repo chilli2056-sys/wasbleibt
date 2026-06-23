@@ -321,6 +321,7 @@ footer {
  -webkit-backdrop-filter: blur(5px);
   white-space: nowrap;
   text-transform: uppercase;
+  touch-action: pan-x; /* Wischen auf einem Chip scrollt die Leiste, statt die Seite vertikal */
 }
 
 
