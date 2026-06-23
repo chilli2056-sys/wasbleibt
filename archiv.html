@@ -86,6 +86,31 @@
     body:has(#info-panel.open) #archiv-zoom-controls {
       display: none !important;
     }
+
+    /* ===== Archivseite: blauer Hintergrund ===== */
+    body { background: #4A27EA; }
+
+    /* Footer-Links: weiß, sonst blau auf blau = unsichtbar */
+    .footer-link { color: #fff; }
+
+    /* Themen-Chips als weiße Pillen (blau auf blau wäre unlesbar) */
+    #themen-bar .themen-chip {
+      background: #fff;
+      color: #4A27EA;
+      border-color: #fff;
+      -webkit-backdrop-filter: none;
+    }
+    #themen-bar .themen-chip.active {
+      background: #4A27EA;
+      color: #fff;
+      border-color: #fff;   /* heller Rand, damit die aktive Pille sich vom Grund abhebt */
+    }
+
+    /* Zoom-Buttons: weiße Pille mit blauer Schrift */
+    #archiv-zoom-controls {
+      background: #fff;
+      border-color: #fff;
+    }
   </style>
 </head>
 <body>
