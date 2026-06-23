@@ -372,60 +372,128 @@ vollbildNext.addEventListener('click', () => { aktiverFotoIndex=(aktiverFotoInde
 
 // ── KOMMENTARE ───────────────────────────────────────────────
 
-const ADMIN_PW = 'hafen2026';
-let istAdmin = sessionStorage.getItem('hafen_admin') === '1';
-(function(){ const p=new URLSearchParams(window.location.search); if(p.get('admin')===ADMIN_PW){sessionStorage.setItem('hafen_admin','1');istAdmin=true;window.history.replaceState({},'',window.location.pathname);} })();
+// ---- Supabase-Konfiguration (identisch zur Karte/script.js) ----
+const SUPABASE_URL  = 'https://frxclqyeimupmaiuvndl.supabase.co';
+const SUPABASE_ANON = 'sb_publishable_zeBajWW8Ab2TjAYboip_yg_il422nwf';
+const KOMMENTAR_API = SUPABASE_URL + '/rest/v1/kommentare';
 
-const KommentarStore = {
-  laden(id) { try{return JSON.parse(localStorage.getItem('k_'+id)||'[]');}catch{return[];} },
-  speichern(id,k) { const a=this.laden(id);a.push(k);localStorage.setItem('k_'+id,JSON.stringify(a)); },
-  freischalten(id,kid) { const a=this.laden(id);const k=a.find(k=>k.id===kid);if(k){k.freigegeben=true;localStorage.setItem('k_'+id,JSON.stringify(a));} },
-  loeschen(id,kid) { localStorage.setItem('k_'+id,JSON.stringify(this.laden(id).filter(k=>k.id!==kid))); },
-  freigeschaltet(id) { return this.laden(id).filter(k=>k.freigegeben); },
-  pending(id) { return this.laden(id).filter(k=>!k.freigegeben); }
-};
+function buildHeaders(extra) {
+  const h = { 'apikey': SUPABASE_ANON, 'Content-Type': 'application/json' };
+  if (SUPABASE_ANON.indexOf('eyJ') === 0) {
+    h['Authorization'] = 'Bearer ' + SUPABASE_ANON;
+  }
+  return Object.assign(h, extra || {});
+}
 
-const POSITIONEN = [
-  {top:'8%',left:'4%',rot:-2},{top:'10%',right:'4%',rot:1.5},
-  {top:'45%',left:'3%',rot:1},{top:'50%',right:'3%',rot:-1.5},
-  {top:'25%',left:'30%',rot:2},{top:'65%',left:'20%',rot:-1}
-];
+function formatDatum(iso) {
+  const d = iso ? new Date(iso) : new Date();
+  return d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: '2-digit' });
+}
+
+// Nur freigegebene Kommentare einer Station laden
+async function ladeKommentare(stationId) {
+  const url = KOMMENTAR_API
+    + '?station_id=eq.' + encodeURIComponent(stationId)
+    + '&freigegeben=eq.true'
+    + '&order=created_at.asc'
+    + '&select=id,name,text,created_at';
+  try {
+    const res = await fetch(url, { headers: buildHeaders() });
+    if (!res.ok) { console.error('Supabase laden:', res.status, await res.text()); return []; }
+    const rows = await res.json();
+    return rows.map(r => ({ id: r.id, name: r.name, text: r.text, datum: formatDatum(r.created_at) }));
+  } catch (e) {
+    console.error('Supabase laden (Netzwerk):', e);
+    return [];
+  }
+}
+
+// Neuen Kommentar absenden – immer unbestätigt (freigegeben = false)
+async function sendeKommentar(stationId, name, text) {
+  try {
+    const res = await fetch(KOMMENTAR_API, {
+      method: 'POST',
+      headers: buildHeaders({ 'Prefer': 'return=minimal' }),
+      body: JSON.stringify({ station_id: String(stationId), name: name, text: text, freigegeben: false })
+    });
+    if (!res.ok) { console.error('Supabase senden:', res.status, await res.text()); return false; }
+    return true;
+  } catch (e) {
+    console.error('Supabase senden (Netzwerk):', e);
+    return false;
+  }
+}
 
 let kommentareSichtbar = false;
 
-function kommentareZuruecksetzen(stationId) {
+const POSITIONEN = [
+  { top: '8%',  left: '4%',   rot: -2   },
+  { top: '10%', right: '4%',  rot: 1.5  },
+  { top: '45%', left: '3%',   rot: 1    },
+  { top: '50%', right: '3%',  rot: -1.5 },
+  { top: '25%', left: '30%',  rot: 2    },
+  { top: '65%', left: '20%',  rot: -1   },
+  { top: '30%', right: '20%', rot: 0.5  },
+  { top: '70%', right: '15%', rot: -2   },
+];
+
+async function kommentareZuruecksetzen(stationId) {
   kommentareSichtbar = true; // beim Öffnen des Overlays direkt geöffnet
   const zettel = document.getElementById('kommentar-notizzettel');
-  const toggle = document.getElementById('kommentar-foto-toggle');
-  const anzahl = document.getElementById('kommentar-anzahl');
-  if (zettel) zettel.classList.add('sichtbar');
+  const toggleBtn = document.getElementById('kommentar-foto-toggle');
+  if (!zettel) return;
+
+  zettel.classList.add('sichtbar');
   const formular = document.getElementById('kommentar-formular');
   if (formular) formular.classList.add('sichtbar');
-  if (toggle) toggle.classList.add('aktiv');
-  renderKommentare(stationId);
-  const n = KommentarStore.freigeschaltet(stationId).length + (istAdmin ? KommentarStore.pending(stationId).length : 0);
-  if (anzahl) anzahl.textContent = n > 0 ? n+(n===1?' Kommentar':' Kommentare') : '';
+  if (toggleBtn) toggleBtn.classList.add('aktiv');
+
+  await renderKommentare(stationId);
 }
 
-function renderKommentare(stationId) {
+async function renderKommentare(stationId) {
   const zettel = document.getElementById('kommentar-notizzettel');
   if (!zettel) return;
+
+  const alle = await ladeKommentare(stationId);
+  // Falls inzwischen eine andere Station geöffnet wurde: Ergebnis verwerfen
+  if (stationId !== aktuelleStationId) return;
+
   zettel.innerHTML = '';
-  const alle = [...KommentarStore.freigeschaltet(stationId), ...(istAdmin?KommentarStore.pending(stationId):[])];
-  alle.forEach((k,i) => {
-    const pos = POSITIONEN[i%POSITIONEN.length];
+
+  alle.forEach((k, i) => {
+    const pos = POSITIONEN[i % POSITIONEN.length];
     const z = document.createElement('div');
     z.className = 'notizzettel';
-    if (!k.freigegeben) z.style.opacity='0.55';
-    Object.entries(pos).forEach(([p,v]) => { if(p==='rot') z.style.transform=`rotate(${v}deg)`; else z.style[p]=v; });
-    z.innerHTML = `<div class="notizzettel-text">${k.text}</div><div class="notizzettel-meta"><span>${k.name}</span><span>${k.datum}</span></div>
-      ${!k.freigegeben&&istAdmin?`<div style="display:flex;gap:4px;margin-top:4px;"><button class="nz-freischalten" data-id="${k.id}">✓</button><button class="nz-loeschen" data-id="${k.id}">✕</button></div>`:''}
-      ${k.freigegeben&&istAdmin?`<button class="nz-loeschen" data-id="${k.id}" style="margin-top:4px;">✕</button>`:''}`;
+
+    Object.entries(pos).forEach(([prop, val]) => {
+      if (prop === 'rot') z.style.transform = `rotate(${val}deg)`;
+      else z.style[prop] = val;
+    });
+
+    const textEl = document.createElement('div');
+    textEl.className = 'notizzettel-text';
+    textEl.textContent = k.text;
+
+    const metaEl = document.createElement('div');
+    metaEl.className = 'notizzettel-meta';
+    const nameSpan = document.createElement('span');
+    nameSpan.textContent = k.name;
+    const datumSpan = document.createElement('span');
+    datumSpan.textContent = k.datum;
+    metaEl.appendChild(nameSpan);
+    metaEl.appendChild(datumSpan);
+
+    z.appendChild(textEl);
+    z.appendChild(metaEl);
+
     z.addEventListener('click', () => z.classList.toggle('expanded'));
     zettel.appendChild(z);
   });
-  zettel.querySelectorAll('.nz-freischalten').forEach(btn => { btn.addEventListener('click', e => { e.stopPropagation(); KommentarStore.freischalten(stationId,btn.dataset.id); renderKommentare(stationId); }); });
-  zettel.querySelectorAll('.nz-loeschen').forEach(btn => { btn.addEventListener('click', e => { e.stopPropagation(); KommentarStore.loeschen(stationId,btn.dataset.id); renderKommentare(stationId); }); });
+
+  const anzahl = document.getElementById('kommentar-anzahl');
+  if (anzahl) anzahl.textContent = alle.length > 0
+    ? alle.length + (alle.length === 1 ? ' Kommentar' : ' Kommentare') : '';
 }
 
 const kommentarToggle = document.getElementById('kommentar-foto-toggle');
@@ -440,19 +508,37 @@ if (kommentarToggle) {
   });
 }
 
-document.getElementById('kommentar-senden').addEventListener('click', () => {
-  const text = document.getElementById('kommentar-text').value.trim();
-  const name = document.getElementById('kommentar-name').value.trim() || 'Anonym';
-  if (!text || !aktuelleStationId) return;
-  KommentarStore.speichern(aktuelleStationId, { id:Date.now().toString(), text, name, datum:new Date().toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'2-digit'}), freigegeben:istAdmin });
-  document.getElementById('kommentar-text').value = '';
-  document.getElementById('kommentar-name').value = '';
-  const n = KommentarStore.freigeschaltet(aktuelleStationId).length + (istAdmin?KommentarStore.pending(aktuelleStationId).length:0);
-  document.getElementById('kommentar-anzahl').textContent = n > 0 ? n+(n===1?' Kommentar':' Kommentare') : '';
-  document.getElementById('kommentar-text').placeholder = istAdmin ? '✓ Veröffentlicht.' : '✓ Danke! Wird nach Freischaltung angezeigt.';
-  setTimeout(() => { document.getElementById('kommentar-text').placeholder = 'Platz für deine Gedanken und Geschichten...'; }, 3000);
-  if (kommentareSichtbar) renderKommentare(aktuelleStationId);
-});
+const kommentarSendenBtn = document.getElementById('kommentar-senden');
+if (kommentarSendenBtn) {
+  kommentarSendenBtn.addEventListener('click', async () => {
+    const textEl = document.getElementById('kommentar-text');
+    const nameEl = document.getElementById('kommentar-name');
+    if (!textEl || !nameEl) return;
+    const text = textEl.value.trim();
+    const name = nameEl.value.trim() || 'Anonym';
+    if (!text || !aktuelleStationId) return;
+
+    kommentarSendenBtn.disabled = true;
+    let ok = false;
+    try {
+      ok = await sendeKommentar(aktuelleStationId, name, text);
+    } finally {
+      kommentarSendenBtn.disabled = false;
+    }
+
+    if (!ok) {
+      textEl.placeholder = '⚠ Konnte nicht gesendet werden. Bitte nochmal versuchen.';
+      setTimeout(() => { textEl.placeholder = 'Platz für deine Gedanken und Geschichten...'; }, 4000);
+      return;
+    }
+
+    textEl.value = '';
+    nameEl.value = '';
+    // Neuer Kommentar ist noch nicht freigegeben → erscheint erst nach Freischaltung
+    textEl.placeholder = '✓ Danke! Wird nach Freischaltung angezeigt.';
+    setTimeout(() => { textEl.placeholder = 'Platz für deine Gedanken und Geschichten...'; }, 3000);
+  });
+}
 
 // ── ARCHIV ──────────────────────────────────────────────────
 
