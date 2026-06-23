@@ -4,7 +4,93 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kaffeekranz – Was vom Hafen bleibt</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=6">
+  <style>
+    /* Blaues Fenster wie das Kommentarfeld */
+    body { background: #4A27EA; }
+
+    main { padding: 80px 24px 90px; max-width: 600px; margin: 0 auto; }
+
+    main h1 {
+      font-family: 'ABC Camera Rounded Plain Black Trial', Helvetica, Arial, sans-serif;
+      font-size: 30px;
+      line-height: 1.1;
+      color: #fff;
+      margin: 0 0 10px;
+    }
+
+    .kaffee-intro {
+      font-family: 'ABC Camera Rounded Plain Bold Trial', Helvetica, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+      color: #fff;
+      margin: 0 0 32px;
+    }
+
+    .form-group { margin-bottom: 18px; }
+
+    .form-group label {
+      display: block;
+      font-family: 'ABC Camera Rounded Plain Bold Trial', Helvetica, Arial, sans-serif;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    /* Felder hell wie im Kommentarfeld: weißer Grund, blaue Schrift */
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      border: 1px solid #4A27EA;
+      padding: 10px 12px;
+      font-family: 'ABC Camera Rounded Plain Bold Trial', Helvetica, Arial, sans-serif;
+      font-size: 15px;
+      background: #fff;
+      color: #4A27EA;
+      box-sizing: border-box;
+      resize: vertical;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: rgba(74, 39, 234, 0.5);
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #4A27EA;
+    }
+
+    /* Senden-Button wie im Kommentarfeld: weiße Pille, blaue Schrift */
+    #kontakt-senden {
+      background: #fff;
+      color: #4A27EA;
+      border: 1px solid #fff;
+      border-radius: 999px !important;
+      padding: 12px 32px;
+      font-family: 'ABC Camera Rounded Plain Bold Trial', Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    #kontakt-senden:hover { background: #ece8ff; }
+
+    #kontakt-bestaetigung {
+      margin-top: 14px;
+      font-family: 'ABC Camera Rounded Plain Bold Trial', Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    /* Footer-Links auf blauem Grund lesbar */
+    .footer-link { color: #fff; }
+  </style>
 </head>
 <body>
 
@@ -16,10 +102,10 @@
   </nav>
 </header>
 
-<main style="padding: 60px 30px 80px; max-width: 600px;">
+<main>
 
-  <h1 style="font-family: 'Romense', Helvetica, Arial, sans-serif; font-size: 22px; text-transform: uppercase; color: #1F4E79; margin-bottom: 8px;">Kaffeekranz</h1>
-  <p style="font-family: 'Heming', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 1.7; margin-bottom: 32px; color: #555;">Schreib mir, ich freuen mich über neue Orte, Geschichten und Erinnerungen zum Hafen.</p>
+  <h1>Kaffeekranz</h1>
+  <p class="kaffee-intro">Schreib mir, ich freue mich über neue Orte, Geschichten und Erinnerungen zum Hafen.</p>
 
   <form id="kontakt-form">
 
@@ -58,63 +144,6 @@
   </div>
 </footer>
 
-<style>
-  .form-group {
-    margin-bottom: 20px;
-  }
-
-  .form-group label {
-    display: block;
-    font-family: 'Romense', Helvetica, Arial, sans-serif;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: #888;
-    margin-bottom: 6px;
-  }
-
-  .form-group input,
-  .form-group textarea {
-    width: 100%;
-    border: 1px solid black;
-    padding: 10px 12px;
-    font-family: 'Heming', Helvetica, Arial, sans-serif;
-    font-size: 15px;
-    background: white;
-    color: black;
-    box-sizing: border-box;
-    resize: vertical;
-  }
-
-  .form-group input:focus,
-  .form-group textarea:focus {
-    outline: none;
-    border-color: #1F4E79;
-  }
-
-  #kontakt-senden {
-    background: black;
-    color: white;
-    border: none;
-    padding: 12px 32px;
-    font-family: 'Romense', Helvetica, Arial, sans-serif;
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    cursor: pointer;
-    margin-top: 8px;
-  }
-
-  #kontakt-senden:hover { background: #1F4E79; }
-
-  #kontakt-bestaetigung {
-    margin-top: 14px;
-    font-family: 'Heming', Helvetica, Arial, sans-serif;
-    font-size: 14px;
-    color: #555;
-  }
-</style>
-
 <script>
   document.getElementById('kontakt-form').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -127,10 +156,13 @@
       return;
     }
 
-    // Mailto-Fallback — ersetze durch echte Backend-URL wenn vorhanden
+    // ▼▼▼ HIER deine echte E-Mail-Adresse eintragen ▼▼▼
+    const EMPFAENGER = 'DEINE@EMAIL.DE';
+    // ▲▲▲ sonst geht die Anfrage ins Leere ▲▲▲
+
     const betreff = encodeURIComponent(document.getElementById('f-betreff').value || 'Nachricht vom Kaffeekranz');
-    const body = encodeURIComponent(`Name: ${name}\n\n${nachricht}`);
-    window.location.href = `mailto:DEINE@EMAIL.DE?subject=${betreff}&body=${body}`;
+    const body = encodeURIComponent(`Name: ${name}\nE-Mail: ${email}\n\n${nachricht}`);
+    window.location.href = `mailto:${EMPFAENGER}?subject=${betreff}&body=${body}`;
 
     document.getElementById('kontakt-bestaetigung').textContent = '✓ Dein E-Mail-Programm öffnet sich gleich.';
   });
