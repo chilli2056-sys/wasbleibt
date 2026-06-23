@@ -962,7 +962,8 @@ margin-right: 5px;
   gap: 8px;
   pointer-events: none;      /* freier Bereich blockiert nichts dahinter */
 }
-#info-leisten > * { pointer-events: auto; }
+#info-leisten > * { pointer-events: none; }                   /* geschlossen: fängt KEINE Berührungen ab (sonst blockiert es die Kategorieleiste darunter) */
+#info-panel.open #info-leisten > * { pointer-events: auto; }  /* nur im offenen Panel bedienbar */
 
 /* Stations-Leiste – jetzt im Pill-Look der anderen Buttons */
 #stations-nav {
