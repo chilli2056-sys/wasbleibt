@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Archiv</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=6">
+  <link rel="stylesheet" href="style.css?v=7">
   <style>
     #archiv-grid {
       top: 60px;
@@ -93,17 +93,20 @@
     /* Footer-Links: weiß, sonst blau auf blau = unsichtbar */
     .footer-link { color: #fff; }
 
-    /* Themen-Chips als weiße Pillen (blau auf blau wäre unlesbar) */
+    /* Themen-Chips: weißes Frosted-Glass auf blauem Grund */
     #themen-bar .themen-chip {
-      background: #fff;
-      color: #4A27EA;
-      border-color: #fff;
-      -webkit-backdrop-filter: none;
+      background: rgba(255, 255, 255, 0.35);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.6);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
     }
     #themen-bar .themen-chip.active {
-      background: #4A27EA;
-      color: #fff;
-      border-color: #fff;   /* heller Rand, damit die aktive Pille sich vom Grund abhebt */
+      background: rgba(255, 255, 255, 0.80);
+      color: #4A27EA;
+      border-color: rgba(255, 255, 255, 0.9);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
     }
 
     /* Zoom-Buttons: weiße Pille mit blauer Schrift */
