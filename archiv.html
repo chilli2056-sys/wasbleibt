@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Archiv</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=7">
+  <link rel="stylesheet" href="style.css?v=8">
   <style>
     #archiv-grid {
       top: 60px;
@@ -578,6 +578,19 @@ if (kommentarSendenBtn) {
 
 renderThemenBar();
 updateArchiv();
+
+// Aktiver Nav-Link ("Archiv") schließt das Info-Panel statt die Seite neu zu laden.
+document.querySelectorAll('nav a').forEach(a => {
+  if (a.getAttribute('href') === '#') {
+    a.addEventListener('click', e => {
+      const panel = document.getElementById('info-panel');
+      if (panel && panel.classList.contains('open')) {
+        e.preventDefault();
+        panel.classList.remove('open');
+      }
+    });
+  }
+});
 
 let archivCols = 4;
 function setArchivCols(n) { archivCols=Math.min(Math.max(n,1),8); grid.style.columnCount=archivCols; }
