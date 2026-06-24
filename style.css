@@ -802,7 +802,7 @@ body:has(#info-panel.open) #archiv-zoom-controls {
 
 #info-panel {
   position: fixed;
-  top: 0;
+  top: 45px;           /* beginnt unterhalb des Headers → Header immer klickbar */
   left: 0;
   right: 0;
   bottom: 0;
