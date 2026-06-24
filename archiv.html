@@ -366,6 +366,8 @@ function openDetail(station) {
   aktualisiereFoto();
   kommentareZuruecksetzen(station.id);
   infoPanel.classList.add('open');
+  const inner = document.getElementById('info-panel-inner');
+  if (inner) inner.scrollTop = 0;  // immer ganz oben starten
 }
 
 infoClose.addEventListener('click', () => {
