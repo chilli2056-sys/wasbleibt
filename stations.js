@@ -64,7 +64,7 @@ const stations = [
   },
   {
     id: 3,
-    name: "ehemaliges Zoll\u00ADamt Hansa",
+    name: "ehemaliges Zoll\u00ADamt Hansator",
     coords: [53.08903121948242, 8.78400707244873],
     info: "ehemalige Zollkantine",
     adresse: "Hansator 1",
