@@ -570,6 +570,8 @@ function addCard(station) {
   if (typeof kommentareZuruecksetzen === 'function') kommentareZuruecksetzen(station.id);
 
   infoPanel.classList.add('open');
+  const inner = document.getElementById('info-panel-inner');
+  if (inner) inner.scrollTop = 0;  // immer ganz oben starten
   const kartenButtons = document.getElementById('karten-buttons');
   if (kartenButtons) kartenButtons.style.display = 'none';
 }
