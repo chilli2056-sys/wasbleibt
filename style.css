@@ -1,6 +1,8 @@
 * {
   border-radius: 0 !important;
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 
@@ -34,6 +36,15 @@
 }
 
 
+
+@font-face {
+  font-family: 'Young Serif';
+  src: url('fonts/YoungSerif-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @font-face {
   font-family: 'Libre Baskerville';
   src: url('fonts/LibreBaskerville-Regular.ttf') format('truetype');
@@ -62,6 +73,22 @@
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+
+/* Typografie-System
+   Romense 72pt = 96px  → Header
+   Romense 50pt = 67px  → Footer, Buttons
+   Heming  62pt = 83px  → Überschriften
+   Heming  52pt = 69px  → Fließtext
+   Heming  52pt bold    → Markierungen
+   Heming  32pt = 43px  → Fußnoten / Fakten
+*/
+
+body {
+  margin: 0;
+  font-family: 'ABC Gramercy', Helvetica, Arial, sans-serif;
+  font-size: 16px; /* Heming 52pt → 16px */
+}
+
 
 
 /* HEADER */
@@ -1047,7 +1074,7 @@ margin-right: 5px;
     animation: drift-bottom-mobile 6s ease-in-out infinite;
   }
   .name-inner {
-    font-size: clamp(45px, 12vw, 60px); /* ⬅ HANDY-Überschriftgröße hier ändern */
+    font-size: clamp(55px, 12vw, 60px); /* ⬅ HANDY-Überschriftgröße hier ändern */
   }
 }
 
