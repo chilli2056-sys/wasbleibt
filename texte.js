@@ -50,7 +50,9 @@ Heute befinden sich das Grundstück und das markante Bauwerk im Besitz der Wirts
   6: [{ intro: "TEXT COMING SOON..." }],
 
   // Altes Hafenbecken
-  7: [{ intro: "TEXT COMING SOON..." }],
+  7: [{ intro: "Ein ehemaliger Hafenmitarbeiter berichtet..." },
+    {antwort: "Eine meiner erste Erinnerung an den Hafenbereich ist das ehemalige Hafenbecken des Überseehafens. Es wurde im Jahr 1998 mit dem Sand der Außenweser bei Baggerarbeiten zugeschüttet." },
+  ],
 
   // Ulrichsschuppen
   8: [{ intro: "TEXT COMING SOON..." }],
@@ -59,7 +61,12 @@ Heute befinden sich das Grundstück und das markante Bauwerk im Besitz der Wirts
   9: [{ intro: "TEXT COMING SOON..." }],
 
   // Gleise Überseehafen
-  10: [{ intro: "TEXT COMING SOON..." }],
+  10: [{ intro: "Ein ehemaliger Mitarbeiter des Weserbahnhofs erzählt..." },
+    { frage:   "Welche Erinneurngen verbinden sie mit den Orten?" },
+     { antwort:   "1982 gab es für die Unterhaltung der Gleisanlagen in den Hafengebieten noch drei getrennte Dienststellen.Einmal die Bahnmeisterei Bremen-Inlandshafen, die sich erstreckte von der DB-Grenze in Oslebshausen bis zum Bereich des Holzhafen.Dann die Bahnmeisterei Bremen-Zollausschluß im Anschluss an den Holzhafen bis zur DB-Strecke Richtung Delmenhorst, sowie die Bahnmeisterei Bremen-Grolland vomBahnhof Bremen-Neustadt nach Bremen-Rablinghausen. Im Zuge der Umstrukturierung wurde die Hafenbahnmeistereien dann zusammengelegt.Meine Erinnerung an diesem Ort sind die ehemaligen Mitarbeiter der DB und der alte Lokschuppen mit einer Drehscheibe . Es herrschte eine laute Betriebsamkeit, sei es auf der Straße oder auf den Gleisen. Viel Ladeverkehr an den Speichern und Schuppen rund um die Hafenbacken." },
+ { frage:   "Und wie fühlt es sich heute an, wenn sie hier stehen und die meisten Spuren verschwunden sind?" },
+{ antwort:   "Was ist noch vom Hafen geblieben seit ich das erste Mal hier war? Mir fehlt dieses Gefühl in einem Hafenbereich zu kommen, mit vielen Gleisen, Speicher, Schuppen und Kajen, nachdem hier ja auch immer mehr alte Gebäude abgerissen wurden und durch neue Büro- und Wohngebäude ersetzt wurden. " },    
+],
 
   // Gleissysteme Überseehafen
   12: [{ intro: "TEXT COMING SOON..." }],
@@ -102,7 +109,7 @@ Heute befinden sich das Grundstück und das markante Bauwerk im Besitz der Wirts
          { frage:   "Ja, das kann ich mir vorstellen. " },
          { antwort:   "Das aller ungemütlichste war, beschädigte oder zu dünn gewordene Stahlplatten im Boden auszuwechseln. Die mussten da erstmal rausgeschnitten werden mit dem Schneidbrenner überm Kopf. Wir hatten einen dicken Anzug aus so einer Art dicken Segelstoff. Ja, und Arbeitsschuhe und Handschuhe. Und dann sitzen sie dort und schneiden eine Platte aus und die blühenden Brocken fallen immer so auf dem Kopf." },
          { frage:   "Und sie hatten keinen Helm auf? " },
-         { antwort:   "Doch, sicher, so ein Kopf ist schnell verbrannt. Ich habe aber schon auch andere Geschichten gehört von den beiden anderen Herren, wie das mit der Sicherheit lief damals. Also 1957 auf der Werfanlage, da war weder eine Pflicht, für Arbeitsschuhe noch für Helme. Da liefen die Leute mit der Kappe rum und auch mit einfachen Arbeitsklamotten. Das hat sich dann durch viele Unfälle bemerkbar gemacht, man hat daraus gelernt, verbessert und gab es dann auch Vorschriften, was da gemacht werden muss und so weiter. Heute läuft da jeder Mensch mit einem Helm auf der Werft rum. Das ist halt selbstverständlich. " },
+         { antwort:   "Doch, sicher, so ein Kopf ist schnell verbrannt. Ich habe aber schon auch andere Geschichten gehört von den beiden anderen Herren, wie das mit der Sicherheit lief damals. Also 1957 auf der Werftanlage, da war weder eine Pflicht, für Arbeitsschuhe noch für Helme. Da liefen die Leute mit der Kappe rum und auch mit einfachen Arbeitsklamotten. Das hat sich dann durch viele Unfälle bemerkbar gemacht, man hat daraus gelernt, verbessert und gab es dann auch Vorschriften, was da gemacht werden muss und so weiter. Heute läuft da jeder Mensch mit einem Helm auf der Werft rum. Das ist halt selbstverständlich. " },
    { antwort:   "Aber wie gesagt, 1957 war das alles noch einfacher. Auch auf der Warnowwerft in Warnemünde, wo ich gelernt habe, da waren im Monat mindestens ein Toter und so fünf bis sieben schwerverletzte; Fuß ab und solche Sachen. Das war normal. Und das war dann bei der AG Weser auch noch so. Das war dann hier nicht besser. Übrigens, als ich hier anfing, stellte ich fest, dass bis auf den letzten Handgriff, alles das gleiche war wie wir das da auch gemacht hatten. Und dann habe ich da gesagt, das und das und da sagt er, ja, das haben die doch hier vom Osten eingeführt. Ich habe hier auf der AG-Weser mehrere Leute wieder getroffen, die auf der Warnowwerft in Warnemünde gearbeitet hatten. Und da hatten wir noch zwei Lehrlingsausbilder, die ganz überzeugte SED-Leute waren. Die waren von der Sozialistische Einheitspartei der Regierung, die politische Gruppe der DDR, da waren die Genossen, die beiden Ausbilder. Eines Tages waren sie weg und hier traf ich sie wieder. " },
         ],
 
