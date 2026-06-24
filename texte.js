@@ -1,4 +1,3 @@
-
 //
 // ── ZWEI SCHREIBWEISEN ──────────────────────────────────────
 // A) Normaler Text  → String, komplett 100 % blau:
@@ -23,22 +22,24 @@ const texte = {
   1998 wurden bei der Weserufer-Sanierung zwei der vier Löwenköpfe auf dem Flussgrund wiederentdeckt.`,
 
   // Ehemalige Kellogg's-Fabrik
-  2: [{ intro:   "TEXT COMING SOON..." }],
+  2: [{ intro: "TEXT COMING SOON..." }],
 
   // ehemalige Zollkantine
-  3: [{ intro:   "Über die Zollämter und das Essen und Trinken in der Dienstzeit..." },
-        { antwort: "Alkohol war damals sowieso unter der arbeitenden Bevölkerung Problem. Im Schuppen gab es sogar einen Bierautomaten. " }, 
-       { frage:   "Ach krass. " },
-       { antwort: "Also das war mal. Ich habe mal gehört, das ist durch die Erlebnisse aus Kriegszeiten. Die Leute lebten ja noch und haben dann gearbeitet. Nach diesen schweren Zeiten haben die angefangen wirklich viel Alkohol zu trinken. Das war wirklich ein Problem. Und es gab überall Alkohol, auch im öffentlichen Dienst. Bei uns beim Zoll wurde auch ganz gerne einer genippt, während der Dienstleistung. Das ist echt eine andere Zeit gewesen, das war fast normal. Wenn einer Geburtstag hatte, der musste schon eine Flasche mitbringen. Also das war so, das gibt es eben heute nicht mehr. Die sind vorbei, die Zeiten." },
-      { antwort: "...Als ich anfing, gab es 12 Zollämter. Zollamt Hansa war ein Zollamt, Zollamt Oberweser war eigenständiges Zollamt. Zollamt Überseestadt war eigenständig, Zollamt Neustädter Hafen. In Hemelingen gab es einen Zollarm, in Vegesack, ich glaube 12 Zollämter gab es einfach in den 70ern. Und heute gibt es nur noch ein einziges in Bremen."},
-      { frage:   "Und die haben dann alle in der Zollkantine auch gegessen, oder?" },
-      { antwort:   "Nicht alle, nur die am Hansa-Tor, wo wir waren. Da gab es eine Kantine oben, und da war auch eine Dame, die war beschäftigt. Die war dort nebenbei, ich weiß gar nicht, ich glaube die war eigentlich Angestellte beim Zoll, wurde aber abgestellt um für die Kollegen mal was zu kochen. Es gab einfaches Essen, Bockwurst und so. Aber es gab auf jeder Dienststelle Mittag. Beim Zollamt Europahafen z.B., da haben die Kollegen im kleinen Kocher irgendwas gemacht. Überall haben die Kollegen selber gekocht und im Neustädter Hafen war auch eine Kantine eingerichtet. Und da wurden dann Kollegen abgestellt zum, da gab es eine Fritteuse, für Bockwürstchen. Da wechselte der Küchendienst ab. Zum Küchendienst wurde man freiwillig abgestellt, dann durfte man etwas eher nach Hause gehen. Heute undenkbar. Ja, ja, das gibt es nicht mehr." },
-      { antwort:   "Aber das war ganz nett. Es gab auf jeder Dienststelle eine Kochecke und es gab auch Kühlschränke. Das gibt es heute nicht mehr. Ich war zum Schluss beim Hauptzollamt. Da gab es so eine Teeküche mit einem Kühlschrank. Und da konnte man sich einen Tee oder Kaffee machen. Ja. Aber nicht mal Sitzgelegenheiten. Also man musste, am Arbeitsplatz dann essen oder dort Kaffee trinken und war eher für sich allein. Also, das wär damals undenkbar gewesen. Beim Hansa-Tor, da haben die auch vorne am Zolltor, wo die Kontrolle stattfand - da waren die Wachtmeister im einfachen Dienst tätig - die haben da immer auf dem Posten draußen einen Grill oder Elektrogrill aufgebaut und dann gebrutzelt oder gegrillt.
-      { frage:   "Ich stelle mir das viel gemeinschaftlicher vor, als es heute ist. " },
-     { frage:   "Ja, es wurde auch viel unternommen, gemeinsam zum Freimarkt gegangen, Kohlfahrten gemacht, Kohlabende zusammen. Ja, das war schon dann so auch ein Stück Heimat und Leben, was dann wegbrach als das so weniger wurde. " }, 
-     ]
+  3: [
+    { intro:   "Über die Zollämter und das Essen und Trinken in der Dienstzeit..." },
+    { antwort: "Alkohol war damals sowieso unter der arbeitenden Bevölkerung Problem. Im Schuppen gab es sogar einen Bierautomaten." },
+    { frage:   "Ach krass." },
+    { antwort: "Also das war mal. Ich habe mal gehört, das ist durch die Erlebnisse aus Kriegszeiten. Die Leute lebten ja noch und haben dann gearbeitet. Nach diesen schweren Zeiten haben die angefangen wirklich viel Alkohol zu trinken. Das war wirklich ein Problem. Und es gab überall Alkohol, auch im öffentlichen Dienst. Bei uns beim Zoll wurde auch ganz gerne einer genippt, während der Dienstleistung. Das ist echt eine andere Zeit gewesen, das war fast normal. Wenn einer Geburtstag hatte, der musste schon eine Flasche mitbringen. Also das war so, das gibt es eben heute nicht mehr. Die sind vorbei, die Zeiten." },
+    { antwort: "...Als ich anfing, gab es 12 Zollämter. Zollamt Hansa war ein Zollamt, Zollamt Oberweser war eigenständiges Zollamt. Zollamt Überseestadt war eigenständig, Zollamt Neustädter Hafen. In Hemelingen gab es einen Zollarm, in Vegesack, ich glaube 12 Zollämter gab es einfach in den 70ern. Und heute gibt es nur noch ein einziges in Bremen." },
+    { frage:   "Und die haben dann alle in der Zollkantine auch gegessen, oder?" },
+    { antwort: "Nicht alle, nur die am Hansa-Tor, wo wir waren. Da gab es eine Kantine oben, und da war auch eine Dame, die war beschäftigt. Die war dort nebenbei, ich weiß gar nicht, ich glaube die war eigentlich Angestellte beim Zoll, wurde aber abgestellt um für die Kollegen mal was zu kochen. Es gab einfaches Essen, Bockwurst und so. Aber es gab auf jeder Dienststelle Mittag. Beim Zollamt Europahafen z.B., da haben die Kollegen im kleinen Kocher irgendwas gemacht. Überall haben die Kollegen selber gekocht und im Neustädter Hafen war auch eine Kantine eingerichtet. Und da wurden dann Kollegen abgestellt zum, da gab es eine Fritteuse, für Bockwürstchen. Da wechselte der Küchendienst ab. Zum Küchendienst wurde man freiwillig abgestellt, dann durfte man etwas eher nach Hause gehen. Heute undenkbar. Ja, ja, das gibt es nicht mehr." },
+    { antwort: "Aber das war ganz nett. Es gab auf jeder Dienststelle eine Kochecke und es gab auch Kühlschränke. Das gibt es heute nicht mehr. Ich war zum Schluss beim Hauptzollamt. Da gab es so eine Teeküche mit einem Kühlschrank. Und da konnte man sich einen Tee oder Kaffee machen. Ja. Aber nicht mal Sitzgelegenheiten. Also man musste, am Arbeitsplatz dann essen oder dort Kaffee trinken und war eher für sich allein. Also, das wär damals undenkbar gewesen. Beim Hansa-Tor, da haben die auch vorne am Zolltor, wo die Kontrolle stattfand - da waren die Wachtmeister im einfachen Dienst tätig - die haben da immer auf dem Posten draußen einen Grill oder Elektrogrill aufgebaut und dann gebrutzelt oder gegrillt." },
+    { frage:   "Ich stelle mir das viel gemeinschaftlicher vor, als es heute ist." },
+    { frage:   "Ja, es wurde auch viel unternommen, gemeinsam zum Freimarkt gegangen, Kohlfahrten gemacht, Kohlabende zusammen. Ja, das war schon dann so auch ein Stück Heimat und Leben, was dann wegbrach als das so weniger wurde." },
+  ],
+
   // Molenfeuer
-  4: [{ intro:   "TEXT COMING SOON..." }],
+  4: [{ intro: "TEXT COMING SOON..." }],
 
   // ehemaliges Kühlhaus
   5: `Das ehemalige Kühllager in der Bremer Überseestadt entstand zwischen 1946 und 1949 in der unmittelbaren Nachkriegszeit. Angesichts der damals befürchteten Lebensmittel- und insbesondere Fleischknappheit plante die Stadt Bremen den Bau großer Kühlkapazitäten, um tiefgefrorene Warenlieferungen – unter anderem aus den USA – über längere Zeit lagern zu können. Noch während der Bauarbeiten verbesserte sich jedoch die Versorgungslage, sodass die ursprünglichen Pläne nur teilweise verwirklicht wurden und einige der vorgesehenen Nutzungen bereits früh wieder an Bedeutung verloren.
@@ -46,23 +47,22 @@ Trotzdem prägte das Kühllager über Jahrzehnte die Hafenlandschaft der Überse
 Heute befinden sich das Grundstück und das markante Bauwerk im Besitz der Wirtschaftsförderung Bremen (WFB). Ein geplanter Abriss wurde bislang nicht umgesetzt, da das Gebäude stark schadstoffbelastet ist und ein Rückbau mit erheblichem Aufwand verbunden wäre. Stattdessen gibt es Überlegungen, den Standort künftig als Energieleitzentrale zu nutzen, die die umliegenden Industrie- und Gewerbeflächen versorgen soll. Wann diese Pläne umgesetzt werden, ist derzeit jedoch noch offen.`,
 
   // Hafencasino
-  6: [{ intro:   "TEXT COMING SOON..." }],
+  6: [{ intro: "TEXT COMING SOON..." }],
 
   // Altes Hafenbecken
   7: ``,
 
   // Ulrichsschuppen
-  8:  [{ intro:   "TEXT COMING SOON..." }],
+  8: [{ intro: "TEXT COMING SOON..." }],
 
   // Gästehaus
-  9:  [{ intro:   "TEXT COMING SOON..." }],
+  9: [{ intro: "TEXT COMING SOON..." }],
 
   // Gleise Überseehafen
-  10:  [{ intro:   "TEXT COMING SOON..." }],
-
+  10: [{ intro: "TEXT COMING SOON..." }],
 
   // Gleissysteme Überseehafen
-  12: [{ intro:   "TEXT COMING SOON..." }],
+  12: [{ intro: "TEXT COMING SOON..." }],
 
   // Vieh-Laderampe  ── INTERVIEW ──
   13: [
@@ -72,29 +72,29 @@ Heute befinden sich das Grundstück und das markante Bauwerk im Besitz der Wirts
   ],
 
   // Bunker Hornisse
-  14:  [{ intro:   "TEXT COMING SOON..." }],
+  14: [{ intro: "TEXT COMING SOON..." }],
 
   // ehemaliger Zollzaun Bremen
   15: [
     { intro:   "Ein ehemaliger Zollbeamter erzählt." },
-    { antwort:   "Und ja, dann sind wir Streife gelaufen, nachts sogar zum Teil alleine durch den Hafen am Zaun entlang. Das wäre heute undenkbar." },
-    { frage: "Aber dann auch an den Hafenbecken entlang, oder? " },
-    { antwort:   "Ja, also hoch, runter, quer rüber. Erst gab es den Dienst nach Vorschrift, da wurde vorgeschrieben, wo man hergehen sollte. Und dann gab es auch später nach Ermessen. Da konnte man sich aussuchen, wie man wollte oder wo man kontrolliert." },
-{ frage: "Was war dann so die Hauptware, die geschmuggelt wurde, Drogen oder eher Zigaretten und Alkohol?  " },
-  { antwort: "Die Seeleute, die hatten zum Beispiel Zigaretten aus Ägypten, die kosten da ja nichts. Ja. Aber hier bei uns ja durch die hohe Steuer ja schon. Und die versuchten dann die rauszuschmuggeln oder zu verscheuern, z.B. im Golden City, eine der Hafenkneipen. Die Hafenarbeiter haben das auch versucht, die haben aber auch dann im Raum geraucht oder die Zigaretten in versteuerte Schachteln umgepackt. Das konnte man nicht nachweisen. Und dann gab es auch Diebstahl im Hafen. Es gab ja genug Waren, die damals auch schon aus allen Ländern kamen. Nicht nur Kaffee, Tabak und Baumwolle, was ja hier das Hauptgeschäft war. Auch kleine Sachen aus China. Ich hatte auch mal einen Fall, dass jemand da aus dem Speicher 1hier rauskam, mit einem Karton unter dem Arm. Das wird ja normalerweise im LKW verladen, aber mit einem einzelnen Karton, das war ungewöhnlich. Den haben wir dann beobachtet, der fuhr weg mit dem Fahrrad, glaube ich. Den haben wir dann den Abend festgehalten." },
-  { frage: "Was war da drin?" },
-  { antwort: "Eine Kindernähmaschine. Das wollte er rausschmuggeln, nur die Kindernähmaschine. Wir dachten dann, dass er Kinder hat. Der Mann war ein Hafenarbeiter, dort haben wir dann eine Hausdurchsuchung gemacht, bei ihm und dann auch im Keller. Und dann haben wir im Keller Unmengen an Spielzeug gefunden. In Kartons verpackt. Aus, weiß nicht, Japan war das, glaube ich, viel Kinderspielzeug. Also nicht nur diese Nähmaschine, anderes Spielzeug auch. Und da haben wir ihn dann gefragt warum und er meinte das habe ich für meine Enkelkinder. Da haben wir dann gefragt, wie alt die seien und er meinte Nee, die gibt es noch nicht, aber wenn es mal so weit ist. Dann hat er immer mal wieder ein bisschen was abgeschleppt. Zur Seite geschafft von dem Spielzeug. Das war eine verrückte Nacht." },
-{ antwort: "Ja. Und man versuchte z.B. auch Roh-Kaffee rauszuschmuggeln. Den konnte man zuhause selber rösten. Ja, ja. Rohkaffee-schmuggel wurde viel versucht. Aber im generellen war Hafendiebstahl bei der BLG (Bremer-Lagerhaus-Gesellschaft) eigentlich eher selten, weil da war die BLG rigoros. Jemand, der was gestohlen hatte, der wurde gleich entlassen." }
-],
+    { antwort: "Und ja, dann sind wir Streife gelaufen, nachts sogar zum Teil alleine durch den Hafen am Zaun entlang. Das wäre heute undenkbar." },
+    { frage:   "Aber dann auch an den Hafenbecken entlang, oder?" },
+    { antwort: "Ja, also hoch, runter, quer rüber. Erst gab es den Dienst nach Vorschrift, da wurde vorgeschrieben, wo man hergehen sollte. Und dann gab es auch später nach Ermessen. Da konnte man sich aussuchen, wie man wollte oder wo man kontrolliert." },
+    { frage:   "Was war dann so die Hauptware, die geschmuggelt wurde, Drogen oder eher Zigaretten und Alkohol?" },
+    { antwort: "Die Seeleute, die hatten zum Beispiel Zigaretten aus Ägypten, die kosten da ja nichts. Ja. Aber hier bei uns ja durch die hohe Steuer ja schon. Und die versuchten dann die rauszuschmuggeln oder zu verscheuern, z.B. im Golden City, eine der Hafenkneipen. Die Hafenarbeiter haben das auch versucht, die haben aber auch dann im Raum geraucht oder die Zigaretten in versteuerte Schachteln umgepackt. Das konnte man nicht nachweisen. Und dann gab es auch Diebstahl im Hafen. Es gab ja genug Waren, die damals auch schon aus allen Ländern kamen. Nicht nur Kaffee, Tabak und Baumwolle, was ja hier das Hauptgeschäft war. Auch kleine Sachen aus China. Ich hatte auch mal einen Fall, dass jemand da aus dem Speicher 1 hier rauskam, mit einem Karton unter dem Arm. Das wird ja normalerweise im LKW verladen, aber mit einem einzelnen Karton, das war ungewöhnlich. Den haben wir dann beobachtet, der fuhr weg mit dem Fahrrad, glaube ich. Den haben wir dann den Abend festgehalten." },
+    { frage:   "Was war da drin?" },
+    { antwort: "Eine Kindernähmaschine. Das wollte er rausschmuggeln, nur die Kindernähmaschine. Wir dachten dann, dass er Kinder hat. Der Mann war ein Hafenarbeiter, dort haben wir dann eine Hausdurchsuchung gemacht, bei ihm und dann auch im Keller. Und dann haben wir im Keller Unmengen an Spielzeug gefunden. In Kartons verpackt. Aus, weiß nicht, Japan war das, glaube ich, viel Kinderspielzeug. Also nicht nur diese Nähmaschine, anderes Spielzeug auch. Und da haben wir ihn dann gefragt warum und er meinte das habe ich für meine Enkelkinder. Da haben wir dann gefragt, wie alt die seien und er meinte Nee, die gibt es noch nicht, aber wenn es mal so weit ist. Dann hat er immer mal wieder ein bisschen was abgeschleppt. Zur Seite geschafft von dem Spielzeug. Das war eine verrückte Nacht." },
+    { antwort: "Ja. Und man versuchte z.B. auch Roh-Kaffee rauszuschmuggeln. Den konnte man zuhause selber rösten. Ja, ja. Rohkaffee-schmuggel wurde viel versucht. Aber im generellen war Hafendiebstahl bei der BLG (Bremer-Lagerhaus-Gesellschaft) eigentlich eher selten, weil da war die BLG rigoros. Jemand, der was gestohlen hatte, der wurde gleich entlassen." },
+  ],
 
   // damals AG-Weser
   16: ``,
 
   // ehemalige Hafenschule
-  17:  [{ intro:   "TEXT COMING SOON..." }],
+  17: [{ intro: "TEXT COMING SOON..." }],
 
   // Unterstand
-  18: [{ intro:   "TEXT COMING SOON..." }],
+  18: [{ intro: "TEXT COMING SOON..." }],
 
 };
 
