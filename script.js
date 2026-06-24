@@ -831,6 +831,24 @@ setupThemenBar();
 setupFahrradBtn();
 setupZoomBtns();
 
+// Aktiver Nav-Link ("Karte") schließt das Info-Panel statt die Seite neu zu laden.
+// So kommt man aus der Detailansicht zurück zur Kartenübersicht ohne Reload.
+document.querySelectorAll('nav a').forEach(a => {
+  if (a.getAttribute('href') === '#') {
+    a.addEventListener('click', e => {
+      const panel = document.getElementById('info-panel');
+      if (panel && panel.classList.contains('open')) {
+        e.preventDefault();
+        panel.classList.remove('open');
+        const kartenButtons = document.getElementById('karten-buttons');
+        if (kartenButtons) kartenButtons.style.display = 'flex';
+        const fotoWrapper = document.getElementById('info-foto-wrapper');
+        if (fotoWrapper) fotoWrapper.style.height = '';
+      }
+    });
+  }
+});
+
 // Direkte Klicks auf Punkte (umgeht Leaflets Marker-Überlappungs-Erkennung)
 document.getElementById('map').addEventListener('click', e => {
   const punkt = e.target.closest('.foto-pin-punkt');
