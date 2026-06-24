@@ -26,7 +26,7 @@ const texte = {
 
   // ehemalige Zollkantine
   3: [
-    { intro:   "Über die Zollämter und das Essen und Trinken in der Dienstzeit..." },
+    { intro:   "Ein ehemaliger Zollbeamter erzählt über die Zollämter und das Essen und Trinken in der Dienstzeit..." },
     { antwort: "Alkohol war damals sowieso unter der arbeitenden Bevölkerung Problem. Im Schuppen gab es sogar einen Bierautomaten." },
     { frage:   "Ach krass." },
     { antwort: "Also das war mal. Ich habe mal gehört, das ist durch die Erlebnisse aus Kriegszeiten. Die Leute lebten ja noch und haben dann gearbeitet. Nach diesen schweren Zeiten haben die angefangen wirklich viel Alkohol zu trinken. Das war wirklich ein Problem. Und es gab überall Alkohol, auch im öffentlichen Dienst. Bei uns beim Zoll wurde auch ganz gerne einer genippt, während der Dienstleistung. Das ist echt eine andere Zeit gewesen, das war fast normal. Wenn einer Geburtstag hatte, der musste schon eine Flasche mitbringen. Also das war so, das gibt es eben heute nicht mehr. Die sind vorbei, die Zeiten." },
