@@ -285,7 +285,16 @@
     pointer-events: none;     /* Bewegungssteuerung/Ziehen nicht blockieren */
   }
 
-  #intro-text p {
+  /* Frage: groß wie Interview-Intro */
+  #intro-frage {
+    font-family: 'ABC Camera Rounded Plain Black Trial', Helvetica, Arial, sans-serif;
+    font-size: 25px;
+    line-height: 1.1;
+    color: #4A27EA;
+    margin: 0 0 4px;
+  }
+  /* Beschreibung: kleine Camera Bold, direkt darunter */
+  #intro-beschreibung {
     font-family: 'ABC Camera Rounded Plain Bold Trial', Helvetica, Arial, sans-serif;
     font-size: clamp(11px, 3.2vw, 15px);
     line-height: 1.4;
@@ -301,8 +310,8 @@
 
   <!-- Beschreibungstext – immer im Vordergrund, linksbündig -->
   <div id="intro-text">
-    <p>Wie erinnern wir Orte im städtischen Wandel?<br><br>
-    Ein kollektives Erinnerungs&shy;archiv im digitalen Raum. Orte, Gedanken, Erinnerungen und Geschichten des Bremer Hafengebiets im Wandel der städtischen Entwicklung.</p>
+    <p id="intro-frage">Wie erinnern wir Orte im städtischen Wandel?</p>
+    <p id="intro-beschreibung">Ein kollektives Erinnerungs&shy;archiv im digitalen Raum. Orte, Gedanken, Erinnerungen und Geschichten des Bremer Hafengebiets im Wandel der städtischen Entwicklung.</p>
   </div>
 
   <div id="intro-pull-area">
