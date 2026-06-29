@@ -277,27 +277,36 @@
   /* ── Intro-Beschreibungstext oben links ── */
   #intro-text {
     position: absolute;
-    top: 0;                   /* ganz oben */
+    top: 0;
     left: 0;
     width: clamp(160px, 48vw, 340px);
     padding: 10px 16px 16px;
     z-index: 6;
     pointer-events: none;
-    /* Blur-Hintergrund der Textform folgt – kein hartes Rechteck */
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
   }
-  /* Weicher weißer Schleier hinter dem Text – organische Form via Maske */
-  #intro-text::before {
-    content: '';
+  /* Blur-Ebene: liegt hinter dem Text, läuft nach außen auf 0 aus */
+  #intro-blur {
     position: absolute;
-    inset: 0;
-    z-index: -1;
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-    -webkit-mask-image: radial-gradient(ellipse 90% 85% at 25% 30%, transparent 0%, black 50%, transparent 80%);
-    mask-image: radial-gradient(ellipse 90% 85% at 25% 30%, transparent 0%, black 50%, transparent 80%);
+    top: 0;
+    left: 0;
+    width: clamp(200px, 56vw, 400px);
+    height: clamp(180px, 40vh, 320px);
+    z-index: 5;
+    pointer-events: none;
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    -webkit-mask-image: radial-gradient(ellipse 70% 65% at 18% 22%,
+      rgba(0,0,0,0.9) 0%,
+      rgba(0,0,0,0.6) 30%,
+      rgba(0,0,0,0.2) 60%,
+      transparent 100%);
+    mask-image: radial-gradient(ellipse 70% 65% at 18% 22%,
+      rgba(0,0,0,0.9) 0%,
+      rgba(0,0,0,0.6) 30%,
+      rgba(0,0,0,0.2) 60%,
+      transparent 100%);
   }
+
 
   /* Frage: groß wie Interview-Intro */
   #intro-frage {
@@ -321,6 +330,9 @@
   <div id="intro-schleier"></div>
   <div id="intro-hintergrund"></div>
   <div id="intro-river"></div>
+
+  <!-- Blur-Ebene hinter dem Text – läuft nach außen auf 0 aus -->
+  <div id="intro-blur"></div>
 
   <!-- Beschreibungstext – immer im Vordergrund, linksbündig -->
   <div id="intro-text">
