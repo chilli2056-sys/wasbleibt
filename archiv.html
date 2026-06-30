@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Archiv</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=18">
+  <link rel="stylesheet" href="style.css?v=24">
   <style>
     #archiv-grid {
       top: 60px;
@@ -405,6 +405,7 @@ infoFotoImg.addEventListener('touchend', e => {
 infoPrev.addEventListener('click', () => { aktiverFotoIndex=(aktiverFotoIndex-1+aktiveFotos.length)%aktiveFotos.length; aktualisiereFoto(); });
 infoNext.addEventListener('click', () => { aktiverFotoIndex=(aktiverFotoIndex+1)%aktiveFotos.length; aktualisiereFoto(); });
 infoVollbild.addEventListener('click', () => { vollbildImg.src=aktiveFotos[aktiverFotoIndex]; vollbildOverlay.classList.add('open'); });
+infoFotoImg.addEventListener('click', () => { vollbildImg.src=aktiveFotos[aktiverFotoIndex]; vollbildOverlay.classList.add('open'); });
 vollbildClose.addEventListener('click', () => vollbildOverlay.classList.remove('open'));
 vollbildPrev.addEventListener('click', () => { aktiverFotoIndex=(aktiverFotoIndex-1+aktiveFotos.length)%aktiveFotos.length; aktualisiereFoto(); vollbildImg.src=aktiveFotos[aktiverFotoIndex]; });
 vollbildNext.addEventListener('click', () => { aktiverFotoIndex=(aktiverFotoIndex+1)%aktiveFotos.length; aktualisiereFoto(); vollbildImg.src=aktiveFotos[aktiverFotoIndex]; });
@@ -644,7 +645,7 @@ if (menuToggle) {
   overlay.id = 'standby';
   const text = document.createElement('div');
   text.id = 'standby-text';
-  text.innerHTML = 'Was<br> vom<br>Hafen<br> bleibt'; // zusammenhängender Block, zweizeilig
+  text.innerHTML = 'Was<br><span class="standby-vom">vom</span>Hafen<br>bleibt';
   overlay.appendChild(text);
   document.body.appendChild(overlay);
 
