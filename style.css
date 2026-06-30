@@ -1087,7 +1087,7 @@ margin-right: 5px;
 #info-foto-bereich {
   position: relative;
   background: white;
-  z-index: 21;          /* über #info-name (20), damit Notizzettel darin nicht gedeckelt werden */
+  z-index: 2;
   width: 100%;
   box-sizing: border-box;
   padding: 20px max(12px, calc(50% - 31ch));
@@ -1310,9 +1310,12 @@ margin-right: 5px;
 
 #kommentar-notizzettel {
   display: none;
-  position: absolute;
-  inset: 20px;
-  z-index: 25;          /* über #info-name (z-index 20), damit lange Notizen nicht dahinter verschwinden */
+  position: fixed;       /* fixed statt absolute: unabhängig vom Eltern-Stacking-Context, liegt über allem */
+  left: 20px;
+  right: 20px;
+  top: 60px;              /* unterhalb des Headers */
+  bottom: 90px;            /* oberhalb der unteren Leisten */
+  z-index: 3000;          /* über Header (2500) und Info-Panel (2000) */
   pointer-events: none;
 }
 
