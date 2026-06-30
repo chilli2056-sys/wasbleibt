@@ -249,9 +249,8 @@ const stations = [
     fakten: ["Hauptnutzungszeit: 1944–1945",
   "Unvollendeter U-Boot-Bunker.",
   "Errichtet durch Zwangsarbeiter im Zweiten Weltkrieg."],
-    foto: "fotos/hornisse/hornisse3.jpg",
+    foto: "fotos/hornisse/hornisse2.jpg",
     fotos: [
-      "fotos/hornisse/hornisse1.jpg",
       "fotos/hornisse/hornisse2.jpg",
       "fotos/hornisse/hornisse3.jpg"
     ],
