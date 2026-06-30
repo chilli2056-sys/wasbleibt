@@ -961,7 +961,7 @@ margin-right: 5px;
   z-index: 30;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0;
   pointer-events: none;      /* freier Bereich blockiert nichts dahinter */
 }
 #info-leisten > * { pointer-events: none; }                   /* geschlossen: fängt KEINE Berührungen ab (sonst blockiert es die Kategorieleiste darunter) */
@@ -970,6 +970,7 @@ margin-right: 5px;
 /* Stations-Leiste – jetzt im Pill-Look der anderen Buttons */
 #stations-nav {
   height: 40px;
+  margin-top: 5px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -988,6 +989,46 @@ margin-right: 5px;
   color: #4A27EA;                     /* blaue Pfeile statt weiß */
   display: flex;
   align-items: center;
+}
+
+/* Kommentar-Trigger – schmaler Balken über dem Pfeil-Button */
+#kommentar-trigger {
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  border: 1px solid #4A27EA;
+  border-radius: 999px !important;
+  background: #4b27ea34;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  cursor: pointer;
+  font-family: 'ABC Camera Rounded Plain Bold Trial', Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #4A27EA;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-radius 0.35s ease, background 0.2s ease, color 0.2s ease;
+}
+#kommentar-trigger:hover {
+  background: #4A27EA;
+  color: #fff;
+  border-color: #4A27EA;
+}
+/* Wenn Formular offen: Trigger oben gerade → verschmilzt mit Formular darüber */
+#kommentar-trigger.aktiv {
+  background: #4A27EA;
+  color: #fff;
+  border-color: #4A27EA;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-left-radius: 20px !important;
+  border-bottom-right-radius: 20px !important;
+  border-top: none;
 }
 #stations-nav svg path,
 #stations-nav svg polyline {
@@ -1341,20 +1382,31 @@ margin-right: 5px;
    ============================================================ */
 
 #kommentar-formular {
-  position: static;          /* sitzt jetzt im #info-leisten-Container, unten am Rand */
-  background: #4A27EA; /* außen vollblau */
-  border-top: 1px solid #4A27EA;
-  border-radius: 18px !important;  /* leichte Ecken, passt zum Pill-Look daneben */
+  position: static;
+  background: #4A27EA;
+  border: 1px solid #4A27EA;
+  border-bottom: none;           /* nahtlos am Trigger darunter */
+  border-radius: 20px 20px 0 0 !important;  /* oben leicht abgerundet, passend zum Trigger */
   padding: 10px max(12px, calc(50% - 31ch));
   font-size: 16px;
-  font-family: 'Young Serif', Georgia, 'Times New Roman', serif; /* gleiche ch-Breite wie der Text */
-  display: none;
+  font-family: 'Young Serif', Georgia, 'Times New Roman', serif;
+  display: flex;
   flex-direction: column;
   gap: 8px;
+  /* Aufklapp-Animation */
+  max-height: 0;
+  overflow: hidden;
+  padding-top: 0;
+  padding-bottom: 0;
+  opacity: 0;
+  transition: max-height 0.35s ease, opacity 0.25s ease, padding 0.35s ease;
 }
 
 #kommentar-formular.sichtbar {
-  display: flex;
+  max-height: 200px;
+  opacity: 1;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 #kommentar-text {
