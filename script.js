@@ -778,6 +778,18 @@ async function renderKommentare(stationId) {
     metaEl.appendChild(nameSpan);
     metaEl.appendChild(datumSpan);
 
+    // Schließen-Button: blendet diesen Zettel aus (nicht löschen, kommt beim
+    // erneuten Öffnen der Station wieder)
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'notizzettel-close';
+    closeBtn.setAttribute('aria-label', 'Notiz schließen');
+    closeBtn.textContent = '\u00d7';
+    closeBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      z.style.display = 'none';
+    });
+
+    z.appendChild(closeBtn);
     z.appendChild(textEl);
     z.appendChild(metaEl);
 
