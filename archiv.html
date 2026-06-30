@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Archiv</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=24">
+  <link rel="stylesheet" href="style.css?v=29">
   <style>
     #archiv-grid {
       top: 60px;
@@ -526,6 +526,18 @@ async function renderKommentare(stationId) {
     metaEl.appendChild(nameSpan);
     metaEl.appendChild(datumSpan);
 
+    // Schließen-Button: blendet diesen Zettel aus (nicht löschen, kommt beim
+    // erneuten Öffnen der Station wieder)
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'notizzettel-close';
+    closeBtn.setAttribute('aria-label', 'Notiz schließen');
+    closeBtn.textContent = '\u00d7';
+    closeBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      z.style.display = 'none';
+    });
+
+    z.appendChild(closeBtn);
     z.appendChild(textEl);
     z.appendChild(metaEl);
 
