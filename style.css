@@ -1310,9 +1310,9 @@ margin-right: 5px;
 
 #kommentar-notizzettel {
   display: none;
-  position: fixed;       /* fixed statt absolute: unabhängig vom Eltern-Stacking-Context, liegt über allem */
-  left: 20px;
-  right: 20px;
+  position: fixed;       /* jetzt außerhalb von #info-panel-inner (kein transform-Vorfahre mehr) */
+  left: 10px;
+  right: 10px;
   top: 60px;              /* unterhalb des Headers */
   bottom: 90px;            /* oberhalb der unteren Leisten */
   z-index: 3000;          /* über Header (2500) und Info-Panel (2000) */
@@ -1331,7 +1331,7 @@ margin-right: 5px;
   padding: 8px 10px;
   width: fit-content;
   height: fit-content;   /* Höhe nur so hoch wie der Inhalt */
-  max-width: 200px;      /* langer Text bricht um statt übers Foto zu laufen */
+  max-width: 260px;      /* langer Text bricht um statt übers Foto zu laufen */
   font-family: 'ABC Camera Rounded Plain Bold Trial', Helvetica, Arial, sans-serif; /* wie Infokasten */
   font-size: 16px;
   line-height: 1.4;
@@ -1346,6 +1346,20 @@ margin-right: 5px;
 .notizzettel:nth-child(n+5) { top: 30%; left: 15%; transform: rotate(-1deg); }
 
 .notizzettel:hover { z-index: 9; transform: rotate(0deg) scale(1.04) !important; }
+
+.notizzettel-close {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.7);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+.notizzettel-close:hover { color: #fff; }
 
 .notizzettel-text {
   color: white;
