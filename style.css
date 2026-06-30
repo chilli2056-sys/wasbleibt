@@ -1087,7 +1087,7 @@ margin-right: 5px;
 #info-foto-bereich {
   position: relative;
   background: white;
-  z-index: 2;
+  z-index: 21;          /* über #info-name (20), damit Notizzettel darin nicht gedeckelt werden */
   width: 100%;
   box-sizing: border-box;
   padding: 20px max(12px, calc(50% - 31ch));
