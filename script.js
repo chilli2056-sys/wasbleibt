@@ -629,6 +629,12 @@ infoVollbild.addEventListener('click', () => {
   vollbildOverlay.classList.add('open');
 });
 
+// Klick/Tap direkt auf das Foto öffnet ebenfalls die Vollbildansicht
+infoFotoImg.addEventListener('click', () => {
+  vollbildImg.src = aktiveFotos[aktiverFotoIndex];
+  vollbildOverlay.classList.add('open');
+});
+
 vollbildClose.addEventListener('click', () => {
   vollbildOverlay.classList.remove('open');
 });
@@ -896,7 +902,7 @@ updateMap();
   overlay.id = 'standby';
   const text = document.createElement('div');
   text.id = 'standby-text';
-  text.innerHTML = 'Was<br>vom<br>Hafen<br>bleibt'; // zusammenhängender Block, zweizeilig
+  text.innerHTML = 'Was<br><span class="standby-vom">vom</span>Hafen<br>bleibt';
   overlay.appendChild(text);
   document.body.appendChild(overlay);
 
