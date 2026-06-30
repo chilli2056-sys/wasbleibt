@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bremen Route</title>
+  <title>Was vom Hafen bleibt Bremen</title>
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-  <link rel="stylesheet" href="style.css?v=9">
+  <link rel="stylesheet" href="style.css?v=18">
   <style>
     #map {
       position: fixed !important;
@@ -111,13 +111,16 @@
 
     <!-- Kommentar-Formular -->
     <div id="kommentar-formular">
-      <textarea id="kommentar-text" placeholder="Kommentar schreiben…" maxlength="300"></textarea>
+      <textarea id="kommentar-text" placeholder="Platz für deine Gedanken und Geschichten…" maxlength="300"></textarea>
       <div id="kommentar-formular-footer">
         <input id="kommentar-name" type="text" placeholder="Name (optional)" maxlength="40" />
         <span id="kommentar-anzahl"></span>
         <button id="kommentar-senden">Senden</button>
       </div>
     </div>
+
+    <!-- Kommentar-Trigger -->
+    <div id="kommentar-trigger">Kommentar schreiben</div>
 
     <!-- Stations-Leiste -->
     <div id="stations-nav">
@@ -337,7 +340,7 @@
   <!-- Beschreibungstext – immer im Vordergrund, linksbündig -->
   <div id="intro-text">
     <p id="intro-frage">Wie erinnern wir Orte im städtischen Wandel?</p>
-    <p id="intro-beschreibung">Ein kollektives Erinnerungs&shy;archiv im digitalen Raum. Orte, Gedanken, Erinnerungen und Geschichten des Bremer Hafengebiets im Wandel der städtischen Entwicklung.</p>
+    <p id="intro-beschreibung">Ein kollektives&shy; Erinnerungsarchiv. Orte, Gedanken, Erinnerungen und Geschichten des Bremer Hafengebiets.</p>
   </div>
 
   <div id="intro-pull-area">
