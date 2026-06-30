@@ -1310,12 +1310,9 @@ margin-right: 5px;
 
 #kommentar-notizzettel {
   display: none;
-  position: fixed;       /* jetzt außerhalb von #info-panel-inner (kein transform-Vorfahre mehr) */
-  left: 10px;
-  right: 10px;
-  top: 60px;              /* unterhalb des Headers */
-  bottom: 90px;            /* oberhalb der unteren Leisten */
-  z-index: 3000;          /* über Header (2500) und Info-Panel (2000) */
+  position: absolute;    /* scrollt mit dem Foto mit */
+  inset: 10px;
+  z-index: 8;
   pointer-events: none;
 }
 
