@@ -317,7 +317,7 @@ footer {
   background: #4b27ea34;
   color: #4A27EA;
   font-family: 'ABC Camera Rounded Plain Bold Trial', Helvetica, Arial, sans-serif;
-  font-size: 25px;
+  font-size: clamp(18px, 5vw, 21px);  /* gleich wie Header-Nav, skaliert mit dem Bildschirm */
   line-height: 1;
   cursor: pointer;
  -webkit-backdrop-filter: blur(5px);
@@ -1019,6 +1019,12 @@ margin-right: 5px;
   color: #fff;
   border-color: #4A27EA;
 }
+/* Wenn bereits geöffnet (aktiv): Hover zeigt wieder die Ausgangsfarbe */
+#kommentar-trigger.aktiv:hover {
+  background: #4b27ea34;
+  color: #4A27EA;
+  border-color: #4A27EA;
+}
 /* Wenn Formular offen: Trigger oben gerade → verschmilzt mit Formular darüber */
 #kommentar-trigger.aktiv {
   background: #4A27EA;
@@ -1100,6 +1106,7 @@ margin-right: 5px;
   object-fit: contain;
   display: block;
   aspect-ratio: auto 4/3;
+  cursor: pointer;   /* zeigt: Klick öffnet Vollbild */
 }
 
 @media (max-width: 700px) {
@@ -1600,4 +1607,10 @@ margin-right: 5px;
   white-space: nowrap;
   user-select: none;
   will-change: transform;
+}
+
+/* "vom" als eigene Zeile, rechtsbündig zum Block */
+.standby-vom {
+  display: block;
+  text-align: right;
 }
