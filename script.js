@@ -720,15 +720,20 @@ const POSITIONEN = [
 ];
 
 async function kommentareZuruecksetzen(stationId) {
-  kommentareSichtbar = true; // beim Öffnen des Overlays direkt geöffnet
+  kommentareSichtbar = false; // Eingabefeld startet zugeklappt
   const zettel = document.getElementById('kommentar-notizzettel');
   const toggleBtn = document.getElementById('kommentar-foto-toggle');
+  const trigger = document.getElementById('kommentar-trigger');
+  const formular = document.getElementById('kommentar-formular');
   if (!zettel) return;
 
+  // Notizzettel sichtbar + Toggle aktiv (blau)
   zettel.classList.add('sichtbar');
-  const formular = document.getElementById('kommentar-formular');
-  if (formular) formular.classList.add('sichtbar');
   if (toggleBtn) toggleBtn.classList.add('aktiv');
+
+  // Eingabefeld zugeklappt + Trigger inaktiv
+  if (formular) formular.classList.remove('sichtbar');
+  if (trigger) trigger.classList.remove('aktiv');
 
   await renderKommentare(stationId);
 }
@@ -779,16 +784,33 @@ async function renderKommentare(stationId) {
     ? alle.length + (alle.length === 1 ? ' Kommentar' : ' Kommentare') : '';
 }
 
-// Sprechblasen-Toggle
+// ── Kommentar-Trigger (Balken über dem Pfeil-Button) – steuert NUR das Eingabefeld ──
+const kommentarTrigger = document.getElementById('kommentar-trigger');
+if (kommentarTrigger) {
+  kommentarTrigger.addEventListener('click', () => {
+    if (!aktuelleStationId) return;
+    kommentareSichtbar = !kommentareSichtbar;
+    document.getElementById('kommentar-formular').classList.toggle('sichtbar', kommentareSichtbar);
+    kommentarTrigger.classList.toggle('aktiv', kommentareSichtbar);
+    if (kommentareSichtbar) {
+      setTimeout(() => {
+        const ta = document.getElementById('kommentar-text');
+        if (ta) ta.focus();
+      }, 350);
+    }
+  });
+}
+
+// Toggle oben rechts – steuert NUR die Notizzettel (geschriebene Kommentare)
+let zettelSichtbar = true; // startet immer sichtbar
 const kommentarFotoToggle = document.getElementById('kommentar-foto-toggle');
 if (kommentarFotoToggle) {
   kommentarFotoToggle.addEventListener('click', () => {
     if (!aktuelleStationId) return;
-    kommentareSichtbar = !kommentareSichtbar;
-    document.getElementById('kommentar-notizzettel').classList.toggle('sichtbar', kommentareSichtbar);
-    document.getElementById('kommentar-formular').classList.toggle('sichtbar', kommentareSichtbar);
-    kommentarFotoToggle.classList.toggle('aktiv', kommentareSichtbar);
-    if (kommentareSichtbar) renderKommentare(aktuelleStationId);
+    zettelSichtbar = !zettelSichtbar;
+    document.getElementById('kommentar-notizzettel').classList.toggle('sichtbar', zettelSichtbar);
+    kommentarFotoToggle.classList.toggle('aktiv', zettelSichtbar);
+    if (zettelSichtbar) renderKommentare(aktuelleStationId);
   });
 }
 
