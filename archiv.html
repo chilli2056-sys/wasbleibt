@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Archiv</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=9">
+  <link rel="stylesheet" href="style.css?v=18">
   <style>
     #archiv-grid {
       top: 60px;
@@ -197,6 +197,9 @@
         <button id="kommentar-senden">Senden</button>
       </div>
     </div>
+
+    <!-- Kommentar-Trigger -->
+    <div id="kommentar-trigger">Kommentar schreiben</div>
 
     <!-- Stations-Leiste -->
     <div id="stations-nav">
@@ -474,15 +477,17 @@ const POSITIONEN = [
 ];
 
 async function kommentareZuruecksetzen(stationId) {
-  kommentareSichtbar = true; // beim Öffnen des Overlays direkt geöffnet
+  kommentareSichtbar = false; // Eingabefeld startet zugeklappt
   const zettel = document.getElementById('kommentar-notizzettel');
   const toggleBtn = document.getElementById('kommentar-foto-toggle');
+  const trigger = document.getElementById('kommentar-trigger');
+  const formular = document.getElementById('kommentar-formular');
   if (!zettel) return;
 
   zettel.classList.add('sichtbar');
-  const formular = document.getElementById('kommentar-formular');
-  if (formular) formular.classList.add('sichtbar');
   if (toggleBtn) toggleBtn.classList.add('aktiv');
+  if (formular) formular.classList.remove('sichtbar');
+  if (trigger) trigger.classList.remove('aktiv');
 
   await renderKommentare(stationId);
 }
@@ -532,15 +537,32 @@ async function renderKommentare(stationId) {
     ? alle.length + (alle.length === 1 ? ' Kommentar' : ' Kommentare') : '';
 }
 
+// ── Kommentar-Trigger – steuert NUR das Eingabefeld ──
+const kommentarTrigger = document.getElementById('kommentar-trigger');
+if (kommentarTrigger) {
+  kommentarTrigger.addEventListener('click', () => {
+    if (!aktuelleStationId) return;
+    kommentareSichtbar = !kommentareSichtbar;
+    document.getElementById('kommentar-formular').classList.toggle('sichtbar', kommentareSichtbar);
+    kommentarTrigger.classList.toggle('aktiv', kommentareSichtbar);
+    if (kommentareSichtbar) {
+      setTimeout(() => {
+        const ta = document.getElementById('kommentar-text');
+        if (ta) ta.focus();
+      }, 350);
+    }
+  });
+}
+
+let zettelSichtbar = true;
 const kommentarToggle = document.getElementById('kommentar-foto-toggle');
 if (kommentarToggle) {
   kommentarToggle.addEventListener('click', () => {
     if (!aktuelleStationId) return;
-    kommentareSichtbar = !kommentareSichtbar;
-    document.getElementById('kommentar-notizzettel').classList.toggle('sichtbar', kommentareSichtbar);
-    document.getElementById('kommentar-formular').classList.toggle('sichtbar', kommentareSichtbar);
-    kommentarToggle.classList.toggle('aktiv', kommentareSichtbar);
-    if (kommentareSichtbar) renderKommentare(aktuelleStationId);
+    zettelSichtbar = !zettelSichtbar;
+    document.getElementById('kommentar-notizzettel').classList.toggle('sichtbar', zettelSichtbar);
+    kommentarToggle.classList.toggle('aktiv', zettelSichtbar);
+    if (zettelSichtbar) renderKommentare(aktuelleStationId);
   });
 }
 
