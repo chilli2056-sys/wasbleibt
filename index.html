@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Was vom Hafen bleibt Bremen</title>
+  <title>Was vom Hafen bleibt Bremene</title>
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-  <link rel="stylesheet" href="style.css?v=18">
+  <link rel="stylesheet" href="style.css?v=24">
   <style>
     #map {
       position: fixed !important;
@@ -340,7 +340,7 @@
   <!-- Beschreibungstext – immer im Vordergrund, linksbündig -->
   <div id="intro-text">
     <p id="intro-frage">Wie erinnern wir Orte im städtischen Wandel?</p>
-    <p id="intro-beschreibung">Ein kollektives&shy; Erinnerungsarchiv. Orte, Gedanken, Erinnerungen und Geschichten des Bremer Hafengebiets.</p>
+    <p id="intro-beschreibung">Ein kollektives Erinnerungsarchiv. Orte, Gedanken, Erinnerungen und Geschichten des Bremer Hafengebiets.</p>
   </div>
 
   <div id="intro-pull-area">
@@ -480,10 +480,6 @@
     && typeof DeviceOrientationEvent.requestPermission === 'function';
 
   if (brauchtFreigabe || isTouch) {
-    // iOS: Freigabe per Nutzergeste nötig.
-    // Android: keine Abfrage, aber Button trotzdem zeigen, damit die
-    // Aktivierung zuverlässig per Tap passiert (manche Browser liefern
-    // Sensordaten erst nach einer Nutzergeste).
     gyroBtn.style.display = 'block';
   } else {
     // Desktop: Maus steuert die Neigung bereits.
