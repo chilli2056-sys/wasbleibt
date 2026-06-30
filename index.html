@@ -6,7 +6,7 @@
   <title>Was vom Hafen bleibt Bremene</title>
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-  <link rel="stylesheet" href="style.css?v=28">
+  <link rel="stylesheet" href="style.css?v=29">
   <style>
     #map {
       position: fixed !important;
@@ -82,6 +82,7 @@
           <button id="info-foto-next"><svg class="btn-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><polyline points="8,4 13,10 8,16"/></svg></button>
         </div>
       </div>
+      <div id="kommentar-notizzettel"></div>
     </div>
 
     <!-- ÜBERSCHRIFT sticky – klebt unter dem Header beim Runterscrollen -->
@@ -104,10 +105,6 @@
     </div>
 
   </div>
-
-  <!-- Notizzettel: außerhalb von #info-panel-inner, damit transform dort kein
-       neues Containing Block für position:fixed-Verhalten erzwingt -->
-  <div id="kommentar-notizzettel"></div>
 
   <!-- Untere Leisten: liegen ÜBER dem Scrollbereich, nicht darin -->
   <div id="info-leisten">
