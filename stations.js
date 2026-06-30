@@ -183,7 +183,7 @@ const stations = [
   },
   {
     id: 10,
-    name: "Gleise Übersee\u00ADhafen",
+    name: "Gleise ehemaliger Übersee\u00ADhafen",
     coords: [53.09562608474965, 8.773603436532781],
     info: "ehemalige Gleise",
     adresse: "Überseetor",
@@ -201,7 +201,7 @@ const stations = [
   
   {
     id: 12,
-    name: "Gleis\u00ADsysteme Übersee\u00ADhafen",
+    name: "Gleis\u00ADsysteme am Speicher XI",
     coords: [53.098333863533085, 8.766805371713273],
     info: "ehemalige Gleise",
     adresse: "Am Speicher XI",
@@ -214,7 +214,7 @@ const stations = [
       "fotos/Gleisespeicher/Gleisehfk.jpg",
        "fotos/Gleisespeicher/speicher_histo.jpg"
     ],
-    themen: ["industrie"],
+    themen: ["gleise"],
     routen: ["fahrradroute"],
   },
   {
@@ -298,7 +298,7 @@ const stations = [
       "fotos/agweser/agweser4.jpg",
       "fotos/agweser/agweser_histo.jpg"
     ],
-    themen: ["Arbeitsorte"],
+    themen: ["Arbeitsorte", "Hafenreste"],
     routen: ["fahrradroute"],
   },
 
@@ -327,13 +327,12 @@ const stations = [
     id: 18,
     name: "Unter\u00ADstand",
     coords: [53.09916471448399,8.774514902390651],
-    info: "ehemaliger Unterstand für Sexarbeiterinnen",
+    info: "ehemaliger Unterstand/ Wetterschutz für Sexarbeiterinnen",
     adresse: "Cuxhavener Straße",
-    fakten: ["Hauptnutzungszeit: 1872–1983",
-  "Nutzung beendet: 1983",
-  "Eine der größten Werften Deutschlands.",
-  "Bau von Handels- und Kriegsschiffen.",
-  "Stilllegung nach der Werftenkrise."],
+    fakten: ["Ausweisung Cux. Str. als offizieller Straßenstrich: 1976",
+  "Hauptphase ca 1990–2004",
+  "Witterungsschutz und kurze Aufenthaltsmöglichkeit",
+  "Teil städtischer Maßnahmen, sollte Sicherheit und Arbeitsbedingungen verbessern",],
     foto: "fotos/sexarbeiterinnen/unterstand.jpg",
     fotos: [
       "fotos/sexarbeiterinnen/unterstand.jpg",
