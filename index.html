@@ -459,6 +459,8 @@
   // ── SENSOR ──
   let tiltZiel = 0;   // roher Zielwert (-1..1) von Maus oder Sensor
   let tiltX    = 0;   // geglätteter Wert, der die Bewegung steuert
+  let tiltYZiel = 0; // Vorwärts/Rückwärts-Neigung
+  let tiltY     = 0; // geglättet
   // Maus-Parallax nur auf echten Zeigegeräten – auf Touch-Geräten erzeugt
   // ein synthetisches mousemove beim Tippen sonst einen falschen Anfangsruck.
   if (!(('ontouchstart' in window) || navigator.maxTouchPoints > 0)) {
@@ -484,7 +486,8 @@
       const g = e.accelerationIncludingGravity;
       if (!g || g.x == null) return;
       motionOk = true;
-      tiltZiel = Math.max(-1, Math.min(1, g.x / 5));    // Bewegung folgt der Kipprichtung
+      tiltZiel  = Math.max(-1, Math.min(1, g.x / 5));    // links/rechts
+      tiltYZiel = Math.max(-1, Math.min(1, (g.y + 9.8) / 5)); // vorwärts kippen → positiv
     });
 
     // Fallback: deviceorientation (gamma). Nur aktiv, solange devicemotion
@@ -534,11 +537,13 @@
     const dt = Math.min(ts - lastTime, 50);
     lastTime = ts;
 
-    // Sensorwert weich nachziehen → flüssige, nicht zappelige Bewegung
+    // Sensorwerte weich nachziehen → flüssige, nicht zappelige Bewegung
     tiltX += (tiltZiel - tiltX) * 0.10;
+    tiltY += (tiltYZiel - tiltY) * 0.08;
 
     containerData.forEach(c => {
-      c.y -= c.speed * (dt / 16);
+      const dynSpeed = c.speed * (1 + Math.max(0, tiltY) * 4); // vorwärts kippen → bis 5× schneller
+      c.y -= dynSpeed * (dt / 16);
       if (c.y + c.ch < -20) { c.y = H + c.ch; c.x = W * 0.15 + Math.random() * (W * 0.75); }
       const wave   = Math.sin(ts * c.dFreq + c.dOff) * c.dAmp;
       const sensor = tiltX * TILT_CONTAINER;
