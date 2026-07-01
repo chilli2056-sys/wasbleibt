@@ -418,7 +418,7 @@
 
   for (let i = 0; i < anzahl; i++) {
     const fotoSrc = fotos[i % Math.max(fotos.length, 1)];
-    const startX  = W * 0.38 + Math.random() * (W * 0.55);  // Fotos nach rechts – Text links frei
+    const startX = W * 0.3 + Math.random() * (W * 0.6);  // Fotos nach rechts – Text links frei
     const startY  = (i / anzahl) * STROM_H;   // gleichmäßig verteilt, kein Zufallsversatz
     const speed   = 0.4;   // alle gleich schnell → kein Auseinanderdriften
     const dAmp    = 8 + Math.random() * 14;
