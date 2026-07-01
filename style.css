@@ -133,12 +133,12 @@ nav a:not(:first-child) {
 }
 /* MAP */
 #map {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  height: calc(100vh - 40px - 48px);
+  height: 100dvh;  /* dynamic viewport height für iOS Safari */
   -webkit-user-select: none;
   user-select: none;
 }
