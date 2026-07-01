@@ -4,11 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#4A27EA" />
-  <title>Was vom Hafen bleibt Bremen</title>
+  <title>Was vom Hafen bleibt Bremene</title>
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-  <link rel="stylesheet" href="style.css?v=33">
+  <link rel="stylesheet" href="style.css?v=35">
   <style>
+    body { background: #4A27EA; } /* blauer Hintergrund damit Header-Verlauf nicht grau wirkt */
     #map {
       position: fixed !important;
       top: 0 !important;
@@ -274,11 +275,6 @@
   #intro-gyro-btn:active {
     background: #4A27EA;
     color: white;
-  }
-
-  /* Solange Intro offen: Header transparent – Verlauf übernimmt den blauen Hintergrund nahtlos */
-  body:has(#intro:not(.gone)) header {
-    background: transparent;
   }
 
   /* ── Intro-Beschreibungstext oben links ── */
