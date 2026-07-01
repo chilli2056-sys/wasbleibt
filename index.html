@@ -542,7 +542,8 @@
     tiltY += (tiltYZiel - tiltY) * 0.08;
 
     containerData.forEach(c => {
-      const dynSpeed = c.speed * (1 + Math.max(0, tiltY) * 4); // vorwärts kippen → bis 5× schneller
+      // tiltY: vorwärts kippen → positiv → schneller; gerade halten → ~0 → sehr langsam; rückwärts → negativ → stopp
+      const dynSpeed = c.speed * Math.max(0, tiltY + 0.2) * 5;
       c.y -= dynSpeed * (dt / 16);
       if (c.y + c.ch < -20) { c.y = H + c.ch; c.x = W * 0.15 + Math.random() * (W * 0.75); }
       const wave   = Math.sin(ts * c.dFreq + c.dOff) * c.dAmp;
