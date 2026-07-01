@@ -431,11 +431,15 @@
   const SIZE = Math.max(INTRO_MIN_PX, Math.min(INTRO_MAX_PX, W * INTRO_PREF_VW / 100));
   const containerData = [];
 
+  // Gleichmäßige Verteilung: Fotos lückenlos von unten nach oben.
+  // Gesamtstrecke = anzahl × SIZE, verteilt über H + Puffer damit kein Leerraum entsteht.
+  const STROM_H = anzahl * SIZE;   // Gesamthöhe des Fotostroms
+
   for (let i = 0; i < anzahl; i++) {
     const fotoSrc = fotos[i % Math.max(fotos.length, 1)];
     const startX  = W * 0.38 + Math.random() * (W * 0.55);  // Fotos nach rechts – Text links frei
-    const startY  = (i / anzahl) * H * 1.6 + Math.random() * 60;
-    const speed   = 0.25 + Math.random() * 0.35;
+    const startY  = (i / anzahl) * STROM_H;   // gleichmäßig verteilt, kein Zufallsversatz
+    const speed   = 0.4;   // alle gleich schnell → kein Auseinanderdriften
     const dAmp    = 8 + Math.random() * 14;
     const dFreq   = 0.0008 + Math.random() * 0.0006;
     const dOff    = Math.random() * Math.PI * 2;
@@ -551,7 +555,7 @@
 
     containerData.forEach(c => {
       c.y -= c.speed * (dt / 16);
-      if (c.y + c.ch < -20) { c.y = H + Math.random() * 80; c.x = Math.random() * (W - c.cw); }
+      if (c.y + c.ch < -20) { c.y = H + c.ch; c.x = W * 0.38 + Math.random() * (W * 0.55); } // direkt unten wieder einreihen
       const wave   = Math.sin(ts * c.dFreq + c.dOff) * c.dAmp;
       const sensor = tiltX * TILT_CONTAINER;
       c.el.style.left = (c.x + wave + sensor) + 'px';
