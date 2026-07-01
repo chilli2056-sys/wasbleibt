@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Was vom Hafen bleibt Bremen</title>
+  <title>Was vom Hafen bleibt Bremene</title>
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <link rel="stylesheet" href="style.css?v=29">
@@ -261,7 +261,7 @@
     padding: 8px 18px;
     border: 1px solid #4A27EA;
     border-radius: 999px !important;   /* Pill wie die Themen-Chips, überschreibt globale border-radius:0 */
-    background: #4b27ea34;             /* halbtransparentes Lila wie die Chips */
+    background: rgba(255,255,255,0.75);  /* opaker statt blur – friert nie ein */
     color: #4A27EA;
     font-family: 'ABC Camera Rounded Plain Bold Trial', Helvetica, Arial, sans-serif;
     font-size: 18px;
@@ -269,11 +269,7 @@
     text-transform: uppercase;
     white-space: nowrap;
     cursor: pointer;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
     -webkit-tap-highlight-color: transparent;
-    will-change: transform;   /* zwingt Browser, Blur-Cache kontinuierlich zu aktualisieren */
-    transform: translateZ(0); /* GPU-Layer erzwingen → kein eingefrorener Blur-Snapshot auf iOS */
   }
 
   #intro-gyro-btn:active {
