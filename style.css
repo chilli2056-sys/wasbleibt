@@ -347,6 +347,10 @@ footer {
 .themen-chip:nth-child(4n+2) { animation-delay: -3.7s; }
 .themen-chip:nth-child(4n+3) { animation-delay: -5.1s; }
 /* Leaflet kantig */
+.leaflet-container {
+  background: #4A27EA !important;  /* blauer Hintergrund statt grauem Leaflet-Standard */
+}
+
 .leaflet-popup-content-wrapper,
 .leaflet-popup-tip {
   border-radius: 0 !important;
