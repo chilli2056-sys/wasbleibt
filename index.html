@@ -3,10 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#4A27EA" />
   <title>Was vom Hafen bleibt Bremene</title>
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-  <link rel="stylesheet" href="style.css?v=29">
+  <link rel="stylesheet" href="style.css?v=32">
   <style>
     #map {
       position: fixed !important;
@@ -275,6 +276,11 @@
     color: white;
   }
 
+  /* Solange Intro offen: Header transparent – Verlauf übernimmt den blauen Hintergrund nahtlos */
+  body:has(#intro:not(.gone)) header {
+    background: transparent;
+  }
+
   /* ── Intro-Beschreibungstext oben links ── */
   /* Frage: volle Bildschirmbreite */
   /* Gemeinsamer Container: Frage + Beschreibung übereinander,
@@ -297,30 +303,8 @@
   }
   /* Beschreibung: schmal, direkt unter der Frage */
   #intro-text {
-    width: clamp(200px, 65vw, 340px);
+    width: clamp(200px, 65vw, 540px);
     padding-top: 6px;
-  }
-  /* Blur-Ebene: liegt hinter dem gesamten Text, läuft nach außen auf 0 aus */
-  #intro-blur {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: clamp(200px, 60vw, 420px);
-    height: clamp(260px, 55vh, 420px);  /* hoch genug für Frage + Beschreibung */
-    z-index: 5;
-    pointer-events: none;
-    -webkit-backdrop-filter: blur(14px);
-    backdrop-filter: blur(14px);
-    -webkit-mask-image: radial-gradient(ellipse 70% 70% at 18% 30%,
-      rgba(0,0,0,0.9) 0%,
-      rgba(0,0,0,0.6) 35%,
-      rgba(0,0,0,0.2) 65%,
-      transparent 100%);
-    mask-image: radial-gradient(ellipse 70% 70% at 18% 30%,
-      rgba(0,0,0,0.9) 0%,
-      rgba(0,0,0,0.6) 35%,
-      rgba(0,0,0,0.2) 65%,
-      transparent 100%);
   }
 
 
@@ -351,8 +335,8 @@
   /* Beschreibung: kleine Camera Bold, direkt unter der Frage */
   #intro-beschreibung {
     font-family: 'ABC Camera Rounded Plain black Trial', Helvetica, Arial, sans-serif;
-    font-size: clamp(15px, 4vw, 20px);
-    line-height: 1.4;
+    font-size: clamp(17px, 4vw, 30px);
+    line-height: 1.2;
     color: #fff;
     margin: 0;
   }
@@ -373,7 +357,7 @@
       <p id="intro-frage">Wie erinnern wir Orte im städtischen Wandel?</p>
     </div>
     <div id="intro-text">
-      <p id="intro-beschreibung">Ein kollektives Erinnerungsarchiv. Orte, Gedanken, Erinnerungen und Geschichten des Bremer Hafengebiets.</p>
+      <p id="intro-beschreibung">Ein kollektives Erinnerungs&shy;archiv. Orte, Gedanken, Erinnerungen und Geschichten des Bremer Hafengebiets.</p>
     </div>
   </div>
 
