@@ -96,7 +96,10 @@ header {
   position: fixed;
   top: 0;
   width: 100%;
-  background: rgba(74, 39, 234, 0.6);
+  background: linear-gradient(to bottom,
+    rgba(74,39,234,0.9) 0%,
+    rgba(74,39,234,0.6) 50%,
+    rgba(74,39,234,0) 100%);
   z-index: 2500;
   font-family: 'ABC Camera Rounded Plain Black Trial', Helvetica, Arial, sans-serif;
   font-size: clamp(18px, 5vw, 25px);   /* skaliert mit dem Bildschirm */
@@ -105,7 +108,7 @@ header {
 nav {
   display: flex;
   align-items: center;
-  padding: 12px clamp(8px, 3vw, 12px); /* Außenabstand schrumpft mit */
+  padding: 12px clamp(8px, 3vw, 12px) 20px; /* unten mehr Platz für den Verlauf */
   width: 100%;
   box-sizing: border-box;
 }
